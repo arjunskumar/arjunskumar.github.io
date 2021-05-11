@@ -127,23 +127,22 @@
          clear: both;
       }
 
-     /* .zoom_animate { 
+      /* .zoom_animate { 
             width: 350px; 
             height: 600px; 
             overflow: hidden; 
             margin: left; 
         } */
-      
-        
-        .zoom_animate img { 
-            width: 340px; 
-            transition: 0.5s all ease-in-out; 
-        } 
-      
-        .zoom_animate:hover img { 
-            transform: scale(1.5); 
-        } 
 
+
+      .zoom_animate img {
+         width: 340px;
+         transition: 0.5s all ease-in-out;
+      }
+
+      .zoom_animate:hover img {
+         transform: scale(1.5);
+      }
    </style>
 
    <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -178,10 +177,12 @@
                      <li><a href="#" data-nav-section="experience">Work Experience</a></li>
                      <li><a href="#" data-nav-section="education">Education</a></li>
                      <li><a href="#" data-nav-section="skills">Skills</a></li>
-                     <li><a href="#" data-nav-section="certificates"><Certifications></a></li>
+                     <li><a href="#" data-nav-section="certificates">
+                           <Certifications>
+                        </a></li>
                      <li><a href="#" data-nav-section="publications">Publications</a></li>
-                     <li><a href="#" data-nav-section="recommendations">Recommendations</a></li> 
-                     <li><a href="#" data-nav-section="achievements">Achievements</a></li> 
+                     <li><a href="#" data-nav-section="recommendations">Recommendations</a></li>
+                     <li><a href="#" data-nav-section="achievements">Achievements</a></li>
                      <li><a href="#" data-nav-section="projects">Projects</a></li>
                      <li><a href="#" data-nav-section="contact">Contact</a></li>
                   </ul>
@@ -249,10 +250,16 @@
 
                                  <hr>
 
-                                An engineer specialized in Robotics and Machine Learning, whose working experience spans from top-ranking multinational companies to mid-level and startup entrepreneurial ventures to top-notch research institutions like Nanyang Technological University, Singapore.</p>
+                                 An engineer specialized in Robotics and Machine Learning, whose working experience
+                                 spans from top-ranking multinational companies to mid-level and startup entrepreneurial
+                                 ventures to top-notch research institutions like Nanyang Technological University,
+                                 Singapore.</p>
 
-                                Currently, I'm working as a Senior Engineer in (Machine Learning & Robotics) at Ignitarium Technologies, Kerala, India. My journey towards professional and research excellence began with a Master's degree in Robotics. I'm deeply interested in Computer vision, Deep learning, Path planning, Robot autonomy and Product development.
-                                 
+                                 Currently, I'm working as a Senior Engineer in (Machine Learning & Robotics) at
+                                 Ignitarium Technologies, Kerala, India. My journey towards professional and research
+                                 excellence began with a Master's degree in Robotics. I'm deeply interested in Computer
+                                 vision, Deep learning, Path planning, Robot autonomy and Product development.
+
                               </div>
                            </div>
                         </div>
@@ -351,18 +358,20 @@
                                           (April 2019 - Present)</span></h2>
                                     <p><strong>Senior Engineer (Machine Learning & Robotics)</strong> </p>
 
-                                    <li> Working on the fine-tuning of ROS navigation stack to work with RPLidar A1M8.
+                                    <li> Currently porting and optimizing ORB SLAM2 using DSP and GPU’s.
                                     </li>
-                                    <li> Worked on the ROS integeration of Texas Instruments Jacinto<sup>TM</sup> J7
-                                       automotive processor platform with Turlebot2. </li>
-                                    <li> Gained exposure working with Texas Instruments Deep Learning Library (TIDL)
-                                       for Custom Object Segmentation and Detection. </li>
-                                    <li> Worked on the integeration of visual-SLAM and Visual Odometry algorithms targeted
-                                       for Nvidia Jetson platform based F1/10 Autonomous Car.</li>
-                                    <li> Worked on training and evaluation of Deep Neural Network models using Keras
-                                       in Carla Simulator.</li>
-                                    <li> Developed classification, object detection, semantic segmentation neural
-                                       networks using Transfer Learning targeted for ARM & x86 devices. </li>
+                                    <li> Improved autonomous navigation of Turtlebot2 with fused laser scans from RGBD
+                                       camera and a 2D Lidar on Texas
+                                       Instruments Jacinto<sup>TM</sup> J7
+                                       automotive processor platform. </li>
+                                    <li>Implemented ROS wrapper for OpenVX based computer vision algorithms. </li>
+                                    <li> Developed object classification, object detection, semantic segmentation neural
+                                       networks using Transfer Learning
+                                       targeted for ARM & x86 devices.</li>
+                                    <li> Mentored intern on the development of tele-operation of Kobuki robot using
+                                       Micro-ROS.</li>
+                                    <li> Mentored intern on the development of ROS based F1-10 car using Nivdia Jetson
+                                       Nano. </li>
                                  </div>
                               </div>
                            </article>
@@ -377,20 +386,19 @@
                                           Singapore</a> <span> (August 2018 - April 2019)</span></h2>
                                     <p><strong>Research Associate (Flight Mechanics and Control labs) </strong> </p>
                                     <li> Gained hands-on experience with real-world deployment of Visual Inertial
-                                       Odometry (VIO) and Simultaneous Localization and Mapping (SLAM)
-                                       algorithms such as DSO, ORB-SLAM, ROVIO, VINS-Mono, RVIO, and MSCKF-VIO
-                                       and benchmarked their performances on Nvidia Jetson TX2. </li>
-                                    <li> Worked on the navigation of autonomous Micro Aerial Vehicles (MAV) in a GPS
-                                       denied environment
-                                       using only On-board Camera and IMU and achieved an average absolute trajectory
-                                       error of 0.025m
-                                       by fusing VIO  and Pixhawk IMU.</li>
-                                    <li> Integrated custom Micro Aerial Vehicle with Stereo Camera, Nvidia Jetson
-                                       TX2 and Pixhawk under ROS platform.</li>
-                                    <li> Implemented VIO algorithms with Double Input Type-I and Type-II fuzzy logic
-                                       controllers and simulated their performances under various flight speeds in
-                                       Gazebo.</li>
-                                    <li> Gained experience working with Motion Capture system.</li>
+                                       Odometry (VIO) and SLAM algorithms
+                                       such as DSO, ORB-SLAM, ROVIO, VINS-Mono, RVIO, and MSCKF-VIO and benchmarked
+                                       their performances on
+                                       Nvidia Jetson TX2. </li>
+                                    <li> Built custom Micro Aerial Vehicle with Stereo Camera, Nvidia Jetson TX2 and
+                                       Pixhawk under ROS platform and
+                                       improved the localization of the vehicle in a GPS denied environment by refining
+                                       the existing visual SLAM as well
+                                       as fusing PixHawk IMU.</li>
+                                    <li> Implemented VIO algorithms with Double Input Type-I and Type- II fuzzy logic
+                                       controllers and simulated their
+                                       performances under various flight speeds in Gazebo.</li>
+
                                  </div>
                               </div>
                            </article>
@@ -405,20 +413,18 @@
                                     <h2><a href="https://addverb.com//">Addverb Technologies, India</a> <span> (January
                                           2018 - August 2018)</span></h2>
                                     <p><strong>Engineer (Robotics)</strong> </p>
-                                    
-                                    <li>Resposible for the development of Robotic perception tasks and demonstrated ability to lead research projects and identify the potential
-                                       use cases for the warehouse domain.</li>
-                                    <li>Single-handedly developed vision based 3D Bin Picking (pick and place) ROS package for an E-commerece client that can be ported to any ROS
-                                       supported 6DOF robots.</li> 
-                                    
-                                    <li>Trained and validated various CNN architectures such as MaskRCNN, YOLO etc. for custom object detection in 2D and 3D.</li>
-                                    <li>Deployed Pick and place algorithms with ABB, KUKA, & Universal Robots manipulators.</li>
 
-                                    <li>Integrated various robot models(UR5, ABB IRB 1200) with Gazebo simulator, for testing
-                                       and validating the 3D Bin Picking algorithms in advance.</li>
+                                    <li>Demonstrated ability to lead multiple research projects and identify the
+                                       potential use cases for the warehouse
+                                       domain.</li>
 
-                                    <li>Implemented a perception based solution for pallet detection using 2D Laser
-                                       scanners.</li>
+                                    <li>Developed and deployed perception algorithms for Robotic 3D Bin picking for an
+                                       E-commerce client using Point
+                                       Cloud Library (PCL), OpenCV, ROS and TensorFlow with ABB, KUKA, Universal Robots
+                                       manipulators.</li>
+
+                                    <li>Implemented a perception based solution for pallet detection using 2D Lidars.
+                                    </li>
                                  </div>
                               </div>
                            </article>
@@ -432,18 +438,16 @@
                                     <h2><a href="https://www.ey.com/">Ernst and Young, India</a> <span> (January 2017 -
                                           December 2017)</span></h2>
                                     <p><strong>Consultant (Artificial Intelligence and Robotics)</strong></p>
-                                    <li> Possessed strong ability to interact with clients and manage multiple and
-                                       varied projects with
-                                       enthusiasm and prioritize workload with attention to detail.</li>
                                     <li> Developed and Demonstrated various Proof of Concepts (POCs) using Microsoft
-                                       stack of technologies
-                                       including Cognitive Services, Microsoft HoloLens (v1), Kinect Sensor and CNTK
-                                       framework. </li>
-                                    <li> Developed a computer vision algorithm for crack detection and rust
-                                       classification occurred in mobile
-                                       towers using CNN and ROS for a US-based Aerial company.</li>
-                                    <li> Worked on the integration of PTAM-SLAM with Parrot Ardrone 2.0 and Parrot
-                                       Bebop drones and developed warehouse inventory management POCs. </li>
+                                       stack of technologies including
+                                       Cognitive Services, Microsoft HoloLens (v1), RGBD Sensor and CNTK deep learning
+                                       framework.</li>
+                                    <li> Implemented a deep neural network-based crack detection and rust classification
+                                       that occurred in mobile towers and
+                                       implemented the inference code as ROS wrapper node. </li>
+                                    <li> Implemented AR Tag based indoor localization ROS node for the Parrot Bebop
+                                       drones for a warehouse inventory
+                                       management project.</li>
 
                                  </div>
                               </div>
@@ -458,11 +462,11 @@
                                     <h2><a href="https://ingeniarius.pt/">Ingeniarius Lda, Portugal</a> <span> (June
                                           2016 - December 2016)</span></h2>
                                     <p><strong> Intern (Mobile Robotics) </strong></p>
-                                    <li> Worked across the entire development of a differential drive ROS mobile
-                                       robot. </li>
-                                    <li> Implemented an Evolutionary swarm robotics algorithm using C++, ROS and
-                                       simulated the swarm
-                                       behaviour in Gazebo. </li>
+                                    <li> Worked across the entire development of a differential drive ROS mobile robot.
+                                    </li>
+                                    <li> Implemented an evolutionary swarm robotics algorithm using C++ and ROS. </li>
+                                    <li> Simulated the swarm robots behaviour in Gazebo for a search and rescue
+                                       scenario. </li>
                                  </div>
                               </div>
                            </article>
@@ -491,7 +495,7 @@
                      <div class="col-md-12">
                         <div class="timeline-centered">
                            <!-- changes-->
-                          
+
 
                            <!-- changes-->
                            <article class="timeline-entry animate-box" data-animate-effect="fadeInRight">
@@ -500,7 +504,8 @@
                                     <img class="img-responsive " src="images/e_0.jpeg" alt="">
                                  </div>
                                  <div class="timeline-label">
-                                    <h2><a href="https://www.amrita.edu/program/m-tech-robotics-and-automation" target="_blank">Master's
+                                    <h2><a href="https://www.amrita.edu/program/m-tech-robotics-and-automation"
+                                          target="_blank">Master's
                                           in Robotics and Automation</a> <span> June 2015 - July 2017</span></h2>
                                     <p><strong>Amrita Vishwa Vidyapeetham, India</strong><br>
                                        <u> Master's Thesis: </u> &nbsp;&nbsp; <strong> Automated Inspection of Mobile
@@ -518,7 +523,8 @@
                                     <img class="img-responsive " src="images/e_0.jpeg" alt="">
                                  </div>
                                  <div class="timeline-label">
-                                    <h2><a href='https://www.amrita.edu/program/btech-computer-science-and-engineering' target="_blank">Bachelor's
+                                    <h2><a href='https://www.amrita.edu/program/btech-computer-science-and-engineering'
+                                          target="_blank">Bachelor's
                                           in Computer Science and Engineering</a> <span> June2011 -
                                           June 2015</span></h2>
                                     <p><strong>Amrita Vishwa Vidyapeetham, India</strong><br>
@@ -562,23 +568,24 @@
                                     <img class="img-responsive " src="images/e_1.png" alt="">
                                  </div>
                                  <div class="timeline-label">
-                                    <h2><a href="https://confirm.udacity.com/AGGZZASQ" target="_blank">Self Driving Car Engineer Nanodegree</a> <span>Aug 2019- Aug 2020</span></h2>
+                                    <h2><a href="https://confirm.udacity.com/AGGZZASQ" target="_blank">Self Driving Car
+                                          Engineer Nanodegree</a> <span>Aug 2019- Aug 2020</span></h2>
                                     <p><strong>Udacity- The School of Autonomous Systems</strong><br>
                                        <u> Capstone Project: </u> &nbsp;&nbsp; <strong> Program an Autonomous Vehicle
-                                       </strong> 
+                                       </strong>
                                        <li> Worked on the perception, localization, control and system integration of
                                           the autonomous vehicles.</li>
                                  </div>
                               </div>
                            </article>
 
-                           
-                 
+
+
                         </div>
                      </div>
                   </div>
                </div>
-            </section> 
+            </section>
 
             <!------Skills---------------->
 
@@ -790,7 +797,7 @@
 
 
 
-              
+
 
             <!--- Publications 
             <section class="colorlib-about" data-section="publications">
@@ -855,7 +862,7 @@
                </div>
             </section>
 
-             End of Publications--> 
+             End of Publications-->
 
             <!--- Publications -->
 
@@ -878,27 +885,30 @@
                                              onmouseover="document.querySelector('#colorlib-main > section.colorlib-skills > div > div > div:nth-child(3) > article > ul > li:nth-child(1) > div > a > div:nth-child(1)').style.backgroundColor='#78C2AD'"
                                              onmouseout="document.querySelector('#colorlib-main > section.colorlib-skills > div > div > div:nth-child(3) > article > ul > li:nth-child(1) > div > a > div:nth-child(1)').style.backgroundColor=''">
                                              <a href="" style="text-decoration:none;">
-                                               
+
                                                 <div
                                                    class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
                                                    <div id="divMain">
 
                                                       <div class="box">
                                                          <iframe src="res/papers/kumar2017.pdf" frameborder="0"
-                                                            scrolling="yes" width="100%" height="300" align="left" name="iframe_a">
-                                                         </iframe>  
+                                                            scrolling="yes" width="100%" height="300" align="left"
+                                                            name="iframe_a">
+                                                         </iframe>
                                                          <p><a href="https://ieeexplore.ieee.org/document/8126112"
-                                                            style="text-decoration:none;" target="_blank">paper link</a></p> 
+                                                               style="text-decoration:none;" target="_blank">paper
+                                                               link</a></p>
                                                       </div>
 
                                                       <div class="box">
                                                          <iframe src="res/papers/shajahan2019.pdf" frameborder="0"
-                                                            scrolling="yes" width="100%" height="300"
-                                                            align="right" name="iframe_b"></iframe>
-                                                            <p><a href="https://ieeexplore.ieee.org/document/8782477"
-                                                               style="text-decoration:none;" target="_blank">paper link</a></p>
+                                                            scrolling="yes" width="100%" height="300" align="right"
+                                                            name="iframe_b"></iframe>
+                                                         <p><a href="https://ieeexplore.ieee.org/document/8782477"
+                                                               style="text-decoration:none;" target="_blank">paper
+                                                               link</a></p>
                                                       </div>
-                                                      
+
 
 
 
@@ -938,9 +948,12 @@
                               <div class="slideshow-container">
 
                                  <div class="mySlides">
-                                    <q>Arjun's unparalleled spirit to learn and adhere to the motto of 'leave no stone unturned' has always encouraged him to take up any 
-                                       challenging opportunity where he sprints before the team to get the required functionality out.</q>
-                                    <p class="author">- <strong> Abdul Jaleel, Principal Engineer @ Ignitarium, India. </strong></p>
+                                    <q>Arjun's unparalleled spirit to learn and adhere to the motto of 'leave no stone
+                                       unturned' has always encouraged him to take up any
+                                       challenging opportunity where he sprints before the team to get the required
+                                       functionality out.</q>
+                                    <p class="author">- <strong> Abdul Jaleel, Principal Engineer @ Ignitarium, India.
+                                       </strong></p>
                                  </div>
 
                                  <div class="mySlides">
@@ -1016,7 +1029,7 @@
             </section>
 
 
-            
+
             <!-- Start of new Projects-->
             <!--
             <section class="colorlib-about" data-section="projects">
@@ -1102,15 +1115,17 @@
                                                    class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
                                                    <div id="divMain">
                                                       <div id='left-div' class="resume-content">
-                                                         <div class="zoom_animate"> 
+                                                         <div class="zoom_animate">
                                                             <img style='float:left; margin:0 1px;' width='340px;'
-                                                               class='img-fluid' src='images/certificates/Arjun_visum.png'>
+                                                               class='img-fluid'
+                                                               src='images/certificates/Arjun_visum.png'>
                                                          </div>
                                                       </div>
                                                       <div id='right-div' class="resume-content">
                                                          <div class="zoom_animate">
                                                             <img style='float: right; margin:0 1px;' width='340px;'
-                                                               class='img-fluid' src='images/certificates/Arjun_ign.jpg'>
+                                                               class='img-fluid'
+                                                               src='images/certificates/Arjun_ign.jpg'>
                                                          </div>
                                                       </div>
 
@@ -1127,7 +1142,7 @@
                                     <ul class="fa-ul mb-0">
                                        <!-- <article class="timeline-entry animate-box" data-animate-effect="fadeInRight"> -->
                                        <li>
-                                          
+
                                           <div
                                              onmouseover="document.querySelector('#colorlib-main > section.colorlib-skills > div > div > div:nth-child(3) > article > ul > li:nth-child(1) > div > a > div:nth-child(1)').style.backgroundColor='#78C2AD'"
                                              onmouseout="document.querySelector('#colorlib-main > section.colorlib-skills > div > div > div:nth-child(3) > article > ul > li:nth-child(1) > div > a > div:nth-child(1)').style.backgroundColor=''">
@@ -1141,13 +1156,15 @@
                                                       <div id='left-div' class="resume-content">
                                                          <div class="zoom_animate">
                                                             <img style='float:left; margin:0 1px;' width='340px;'
-                                                               class='img-fluid' src='images/certificates/Arjun_team_spark.jpg'>
+                                                               class='img-fluid'
+                                                               src='images/certificates/Arjun_team_spark.jpg'>
                                                          </div>
                                                       </div>
                                                       <div id='right-div' class="resume-content">
                                                          <div class="zoom_animate">
                                                             <img style='float: right; margin:0 1px;' width='340px;'
-                                                               class='img-fluid' src='images/certificates/Arjun_udacity.jpg'>
+                                                               class='img-fluid'
+                                                               src='images/certificates/Arjun_udacity.jpg'>
                                                          </div>
                                                       </div>
 
@@ -1160,7 +1177,7 @@
                                  </article>
 
 
-                                
+
 
 
 
@@ -1172,7 +1189,7 @@
                </div>
             </section>
 
-               <!-- End of Achievements -->
+            <!-- End of Achievements -->
 
             <!-- Start of Projects-->
 
