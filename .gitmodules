@@ -1,3 +1,3 @@
 [submodule "study_notes"]
 	path = study_notes
-	url = https://github.com/arjunskumar/study_notes.git
+	url = git@github.com:arjunskumar/study_notes.git
