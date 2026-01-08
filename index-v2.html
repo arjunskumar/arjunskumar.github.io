@@ -187,14 +187,87 @@
         </div>
     </section>
 
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section">
+        <div class="container">
+            <h2 class="reveal">Recommendations</h2>
+            <p style="margin-top: var(--space-4); max-width: 600px;" class="reveal">
+                What colleagues and mentors have said about working with me.
+            </p>
+
+            <div class="testimonials" style="margin-top: var(--space-12);">
+                <div class="testimonial-slider">
+                    <div class="testimonial-slide active">
+                        <blockquote class="testimonial__quote">
+                            "Arjun's unparalleled spirit to learn and adhere to the motto of 'leave no stone unturned'
+                            has always encouraged him to take up any challenging opportunity where he sprints before the
+                            team to get the required functionality out."
+                        </blockquote>
+                        <div class="testimonial__author">
+                            <strong>Abdul Jaleel</strong>
+                            <span>Principal Engineer @ Ignitarium, India</span>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-slide">
+                        <blockquote class="testimonial__quote">
+                            "Arjun has an uncanny ability to solve a problem at hand. His commitment and dedication to
+                            work is unparalleled. Moreover, his work ethic is exemplary."
+                        </blockquote>
+                        <div class="testimonial__author">
+                            <strong>Sangeet Kumar</strong>
+                            <span>CEO @ Addverb Tech, India</span>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-slide">
+                        <blockquote class="testimonial__quote">
+                            "The results which we got after Arjun's internship were better than what we had planned. His
+                            learning curve was always high, he always had a curiosity to learn new things and execute
+                            which is commendable."
+                        </blockquote>
+                        <div class="testimonial__author">
+                            <strong>Dr. Micael S Couceiro</strong>
+                            <span>CEO @ Ingeniarius, Lda, Portugal</span>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-slide">
+                        <blockquote class="testimonial__quote">
+                            "Arjun's ideas and concepts were inspirational in the way he wanted to employ changes in the
+                            robotics product that we will be using in the near future and was able to adapt very fast to
+                            the nature of the work."
+                        </blockquote>
+                        <div class="testimonial__author">
+                            <strong>Andre Arujo</strong>
+                            <span>CTO @ Ingeniarius, Lda, Portugal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-controls">
+                    <button class="testimonial-btn prev" aria-label="Previous testimonial">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="testimonial-dots"></div>
+                    <button class="testimonial-btn next" aria-label="Next testimonial">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
-    <section id="contact" class="section">
+    <section id="contact" class="section" style="background-color: var(--color-bg-secondary);">
         <div class="container" style="text-align: center;">
-            <h2>Let's Connect</h2>
-            <p style="margin-top: var(--space-4); max-width: 500px; margin-left: auto; margin-right: auto;">
+            <h2 class="reveal">Let's Connect</h2>
+            <p style="margin-top: var(--space-4); max-width: 500px; margin-left: auto; margin-right: auto;"
+                class="reveal">
                 Interested in collaborating on robotics, SLAM, or autonomous systems? I'd love to hear from you.
             </p>
-            <a href="mailto:arjunskumar22@gmail.com" class="btn btn--primary" style="margin-top: var(--space-8);">
+            <a href="mailto:arjunskumar22@gmail.com" class="btn btn--primary reveal"
+                style="margin-top: var(--space-8);">
                 Reach Out
             </a>
         </div>
@@ -228,23 +301,98 @@
             });
         });
 
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
+        // Scroll-triggered reveal animations
+        const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in-up');
-                    observer.unobserve(entry.target);
+                    entry.target.classList.add('is-visible');
+                    revealObserver.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
 
-        document.querySelectorAll('h2, .card').forEach(el => {
-            observer.observe(el);
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Card animations
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+            revealObserver.observe(card);
+        });
+
+        // Testimonial Slider
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const dotsContainer = document.querySelector('.testimonial-dots');
+        const prevBtn = document.querySelector('.testimonial-btn.prev');
+        const nextBtn = document.querySelector('.testimonial-btn.next');
+        let currentSlide = 0;
+        let autoSlideInterval;
+
+        // Create dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.classList.add('testimonial-dot');
+            if (i === 0) dot.classList.add('active');
+            dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.testimonial-dot');
+
+        function goToSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            goToSlide(currentSlide - 1);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoSlide();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoSlide();
+        });
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        startAutoSlide();
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 </body>
