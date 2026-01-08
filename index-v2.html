@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Arjun S Kumar — Robotics & Deep Learning Engineer specializing in Lidar SLAM, Visual SLAM, and autonomous systems.">
+    <meta name="keywords" content="robotics, SLAM, deep learning, autonomous systems, Arjun S Kumar">
+    <meta name="author" content="Arjun S Kumar">
+
+    <title>Arjun S Kumar | Robotics & Deep Learning</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/theme-dark.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#about" class="nav__link">About</a>
+        <a href="/" class="nav__logo">Arjun S Kumar</a>
+        <div class="nav__cta">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin nav__icon"></i>
+            </a>
+            <a href="mailto:arjunskumar22@gmail.com" class="nav__link">Reach Out</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero section--hero">
+        <div class="hero__media">
+            <img src="images/arjun.jpeg" alt="Robotics Engineer at work" class="hero__image">
+        </div>
+        <div class="hero__panel">
+            <h1 class="hero__tagline animate-fade-in-up">
+                Building<br>
+                autonomous<br>
+                systems that<br>
+                navigate the<br>
+                real world.
+            </h1>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="animate-fade-in-up">About</h2>
+            <div
+                style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-12); margin-top: var(--space-8);">
+                <div>
+                    <img src="images/arjun.jpeg" alt="Arjun S Kumar" style="width: 100%; border-radius: 8px;">
+                </div>
+                <div>
+                    <p style="font-size: var(--text-lg); color: var(--color-text); margin-bottom: var(--space-6);">
+                        An engineer specialized in Robotics and Machine Learning, with experience spanning multinational
+                        companies, startups, and top research institutions like Nanyang Technological University,
+                        Singapore.
+                    </p>
+                    <p>
+                        Previously Lead Autonomy Engineer at Lionsbot International, where I
+                        spearheaded the development of 3D Lidar SLAM and localization systems for large-scale
+                        environments.
+                    </p>
+
+                    <!-- Accordion -->
+                    <div class="accordion" style="margin-top: var(--space-8);">
+                        <div class="accordion__item">
+                            <button class="accordion__header">
+                                <span>Experience</span>
+                                <span class="accordion__icon">+</span>
+                            </button>
+                            <div class="accordion__content">
+                                <div class="accordion__inner">
+                                    <strong>Lead Software Engineer (Autonomy)</strong> — Lionsbot International,
+                                    Singapore<br>
+                                    Feb 2022 – Present<br><br>
+                                    <strong>Senior Engineer (ML & Robotics)</strong> — Ignitarium Technologies,
+                                    India<br>
+                                    April 2019 – Jan 2022<br><br>
+                                    <strong>Research Associate</strong> — NTU, Singapore<br>
+                                    Aug 2018 – April 2019
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion__item">
+                            <button class="accordion__header">
+                                <span>Skills</span>
+                                <span class="accordion__icon">+</span>
+                            </button>
+                            <div class="accordion__content">
+                                <div class="accordion__inner">
+                                    C++ · Python · ROS 1/2 · Lidar SLAM · Visual SLAM · Deep Learning · OpenCV ·
+                                    TensorFlow · PyTorch · Docker · Git
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion__item">
+                            <button class="accordion__header">
+                                <span>Education</span>
+                                <span class="accordion__icon">+</span>
+                            </button>
+                            <div class="accordion__content">
+                                <div class="accordion__inner">
+                                    <strong>M.Tech in Robotics and Automation</strong><br>
+                                    Amrita Vishwa Vidyapeetham, India (2015–2017)<br><br>
+                                    <strong>B.Tech in Computer Science</strong><br>
+                                    Amrita Vishwa Vidyapeetham, India (2011–2015)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="res/ARJUN_S_KUMAR.pdf" target="_blank" class="btn btn--primary"
+                        style="margin-top: var(--space-8);">
+                        Download Resume
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section" style="background-color: var(--color-bg-secondary);">
+        <div class="container">
+            <h2 class="animate-fade-in-up">Selected Work</h2>
+            <p style="margin-top: var(--space-4); max-width: 600px;">
+                A selection of projects showcasing my expertise in robotics, SLAM, and autonomous systems.
+            </p>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: var(--space-8); margin-top: var(--space-12);">
+
+                <!-- Project Card 1 -->
+                <div class="card">
+                    <img src="images/projects/vio_1.gif" alt="3D Lidar SLAM" class="card__image">
+                    <div class="card__content">
+                        <h3 class="card__title">3D Lidar SLAM @ Lionsbot</h3>
+                        <p class="card__desc">
+                            Engineered a drift-free 3D Lidar SLAM system for large-scale indoor environments, enabling
+                            autonomous navigation for commercial cleaning robots.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="card">
+                    <img src="images/projects/ntu_drone.gif" alt="Visual Inertial Odometry" class="card__image">
+                    <div class="card__content">
+                        <h3 class="card__title">Visual Inertial Odometry @ NTU</h3>
+                        <p class="card__desc">
+                            Deployed VIO and SLAM algorithms on Micro Aerial Vehicles with Nvidia Jetson TX2, improving
+                            localization in GPS-denied environments.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="card">
+                    <img src="images/projects/carla_g29.gif" alt="Autonomous Driving Simulator" class="card__image">
+                    <div class="card__content">
+                        <h3 class="card__title">Autonomous Driving Simulator</h3>
+                        <p class="card__desc">
+                            Built a simulation environment for testing perception, localization, and control algorithms
+                            for self-driving vehicles.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container" style="text-align: center;">
+            <h2>Let's Connect</h2>
+            <p style="margin-top: var(--space-4); max-width: 500px; margin-left: auto; margin-right: auto;">
+                Interested in collaborating on robotics, SLAM, or autonomous systems? I'd love to hear from you.
+            </p>
+            <a href="mailto:arjunskumar22@gmail.com" class="btn btn--primary" style="margin-top: var(--space-8);">
+                Reach Out
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__social">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin footer__icon"></i>
+            </a>
+            <a href="https://github.com/arjunskumar" target="_blank" aria-label="GitHub">
+                <i class="fa-brands fa-github footer__icon"></i>
+            </a>
+            <a href="https://instagram.com/robotics.engineer" target="_blank" aria-label="Instagram">
+                <i class="fa-brands fa-instagram footer__icon"></i>
+            </a>
+        </div>
+        <p class="footer__copy">
+            © 2025 Arjun S Kumar. Open source — feel free to use this template.
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Accordion functionality
+        document.querySelectorAll('.accordion__header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                item.classList.toggle('is-open');
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('h2, .card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
