@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Visual Inertial Odometry for Micro Aerial Vehicles at NTU Singapore — Case Study by Arjun S Kumar">
+    <title>Visual Inertial Odometry @ NTU | Arjun S Kumar</title>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme-dark.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        .case-study-hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: flex-end;
+            background: linear-gradient(to bottom, transparent 0%, var(--color-bg) 100%),
+                url('../images/projects/ntu_drone.gif') center/cover no-repeat;
+            padding: var(--space-16) 0;
+        }
+
+        .case-study-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-8);
+            padding-top: var(--space-8);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .meta-item h4 {
+            font-family: var(--font-body);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+        }
+
+        .meta-item p {
+            font-size: var(--text-sm);
+            color: var(--color-text);
+            margin: 0;
+        }
+
+        .story-section {
+            padding: var(--space-16) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .story-section:last-child {
+            border-bottom: none;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--space-12);
+            align-items: start;
+        }
+
+        .story-grid h3 {
+            font-size: var(--text-3xl);
+            position: sticky;
+            top: calc(var(--nav-height) + var(--space-8));
+        }
+
+        .story-content p {
+            font-size: var(--text-lg);
+            line-height: 1.8;
+        }
+
+        .story-content p:first-child {
+            color: var(--color-text);
+            font-weight: 400;
+        }
+
+        .highlight-box {
+            background: var(--color-bg-card);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-6);
+            margin: var(--space-6) 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            font-style: italic;
+            color: var(--color-text);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3);
+            margin-top: var(--space-4);
+        }
+
+        .tech-tag {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            padding: var(--space-2) var(--space-4);
+            border-radius: 4px;
+            font-size: var(--text-sm);
+            font-family: var(--font-mono);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            margin-bottom: var(--space-8);
+            opacity: 0.7;
+            transition: opacity var(--transition-fast);
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .story-grid h3 {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="../index-v2.html#about" class="nav__link">About</a>
+        <a href="../index-v2.html" class="nav__logo">Arjun S Kumar</a>
+        <div class="nav__cta">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin nav__icon"></i>
+            </a>
+            <a href="mailto:arjunskumar22@gmail.com" class="nav__link">Reach Out</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="case-study-hero">
+        <div class="container">
+            <a href="../index-v2.html#projects" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Projects
+            </a>
+            <h1>Visual Inertial Odometry</h1>
+            <p style="font-size: var(--text-xl); max-width: 600px; margin-top: var(--space-4);">
+                Enabling precise localization for Micro Aerial Vehicles in GPS-denied environments.
+            </p>
+
+            <div class="case-study-meta">
+                <div class="meta-item">
+                    <h4>Institution</h4>
+                    <p>Nanyang Technological University</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Role</h4>
+                    <p>Research Associate</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Duration</h4>
+                    <p>Aug 2018 – April 2019</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Location</h4>
+                    <p>Singapore</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Sections -->
+    <main class="container">
+
+        <!-- Introduction -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>Introduction</h3>
+                <div class="story-content">
+                    <p>
+                        Micro Aerial Vehicles (MAVs) are increasingly used for indoor inspection, search and rescue, and
+                        autonomous delivery. However, GPS signals are unavailable indoors, making alternative
+                        localization methods essential.
+                    </p>
+                    <p>
+                        At NTU's Robotics Research Centre, I worked on deploying Visual Inertial Odometry (VIO) and SLAM
+                        algorithms on resource-constrained embedded systems, enabling MAVs to navigate autonomously in
+                        challenging indoor and outdoor environments.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Challenge -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>The Challenge</h3>
+                <div class="story-content">
+                    <p>
+                        Deploying perception algorithms on MAVs presents unique constraints:
+                    </p>
+                    <div class="highlight-box">
+                        <p>"Every gram matters on a drone. We had limited compute, limited power, and milliseconds to
+                            make decisions."</p>
+                    </div>
+                    <ul style="color: var(--color-text-muted); margin: var(--space-4) 0; padding-left: var(--space-6);">
+                        <li>Real-time performance on Nvidia Jetson TX2</li>
+                        <li>Rapid motion causing image blur</li>
+                        <li>Varying lighting conditions (indoor/outdoor transitions)</li>
+                        <li>Vibrations from propellers affecting IMU data</li>
+                        <li>Limited payload capacity for sensors</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>The Solution</h3>
+                <div class="story-content">
+                    <p>
+                        I implemented and optimized state-of-the-art VIO algorithms including VINS-Mono and VINS-Fusion
+                        for the Jetson TX2 platform. Key contributions included:
+                    </p>
+                    <ul style="color: var(--color-text-muted); margin: var(--space-4) 0; padding-left: var(--space-6);">
+                        <li><strong>Real-time feature tracking</strong> optimized for GPU acceleration</li>
+                        <li><strong>Tightly-coupled visual-inertial fusion</strong> for robust state estimation</li>
+                        <li><strong>Loop closure</strong> using DBoW2 vocabulary for global consistency</li>
+                        <li><strong>Multi-sensor integration</strong> with stereo cameras and Lidar</li>
+                    </ul>
+
+                    <h4 style="margin-top: var(--space-8); font-family: var(--font-body);">Tech Stack</h4>
+                    <div class="tech-stack">
+                        <span class="tech-tag">C++</span>
+                        <span class="tech-tag">ROS</span>
+                        <span class="tech-tag">CUDA</span>
+                        <span class="tech-tag">OpenCV</span>
+                        <span class="tech-tag">Ceres Solver</span>
+                        <span class="tech-tag">Jetson TX2</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>Impact</h3>
+                <div class="story-content">
+                    <p>
+                        The optimized VIO system enabled stable autonomous flight in GPS-denied environments,
+                        contributing to NTU's research in aerial robotics.
+                    </p>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin: var(--space-8) 0;">
+                        <div style="text-align: center;">
+                            <p style="font-size: var(--text-4xl); color: var(--color-accent); margin: 0;">30Hz</p>
+                            <p style="font-size: var(--text-sm); margin-top: var(--space-2);">Real-time pose estimation
+                            </p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: var(--text-4xl); color: var(--color-accent); margin: 0;">
+                                < 1%</p>
+                                    <p style="font-size: var(--text-sm); margin-top: var(--space-2);">Drift over
+                                        distance</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: var(--text-4xl); color: var(--color-accent); margin: 0;">10+</p>
+                            <p style="font-size: var(--text-sm); margin-top: var(--space-2);">Mins autonomous flight</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__social">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin footer__icon"></i>
+            </a>
+            <a href="https://github.com/arjunskumar" target="_blank" aria-label="GitHub">
+                <i class="fa-brands fa-github footer__icon"></i>
+            </a>
+        </div>
+        <p class="footer__copy">© 2025 Arjun S Kumar</p>
+    </footer>
+
+</body>
+
+</html>

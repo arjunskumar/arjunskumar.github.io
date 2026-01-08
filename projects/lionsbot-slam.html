@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="3D Lidar SLAM for autonomous cleaning robots at Lionsbot International — Case Study by Arjun S Kumar">
+    <title>3D Lidar SLAM @ Lionsbot | Arjun S Kumar</title>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme-dark.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        .case-study-hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: flex-end;
+            background: linear-gradient(to bottom, transparent 0%, var(--color-bg) 100%),
+                url('../images/projects/vio_1.gif') center/cover no-repeat;
+            padding: var(--space-16) 0;
+        }
+
+        .case-study-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-8);
+            padding-top: var(--space-8);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .meta-item h4 {
+            font-family: var(--font-body);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+        }
+
+        .meta-item p {
+            font-size: var(--text-sm);
+            color: var(--color-text);
+            margin: 0;
+        }
+
+        .story-section {
+            padding: var(--space-16) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .story-section:last-child {
+            border-bottom: none;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--space-12);
+            align-items: start;
+        }
+
+        .story-grid h3 {
+            font-size: var(--text-3xl);
+            position: sticky;
+            top: calc(var(--nav-height) + var(--space-8));
+        }
+
+        .story-content p {
+            font-size: var(--text-lg);
+            line-height: 1.8;
+        }
+
+        .story-content p:first-child {
+            color: var(--color-text);
+            font-weight: 400;
+        }
+
+        .highlight-box {
+            background: var(--color-bg-card);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-6);
+            margin: var(--space-6) 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            font-style: italic;
+            color: var(--color-text);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3);
+            margin-top: var(--space-4);
+        }
+
+        .tech-tag {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            padding: var(--space-2) var(--space-4);
+            border-radius: 4px;
+            font-size: var(--text-sm);
+            font-family: var(--font-mono);
+        }
+
+        .image-full {
+            width: 100%;
+            margin: var(--space-8) 0;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            margin-bottom: var(--space-8);
+            opacity: 0.7;
+            transition: opacity var(--transition-fast);
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .story-grid h3 {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="../index-v2.html#about" class="nav__link">About</a>
+        <a href="../index-v2.html" class="nav__logo">Arjun S Kumar</a>
+        <div class="nav__cta">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin nav__icon"></i>
+            </a>
+            <a href="mailto:arjunskumar22@gmail.com" class="nav__link">Reach Out</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="case-study-hero">
+        <div class="container">
+            <a href="../index-v2.html#projects" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Projects
+            </a>
+            <h1>3D Lidar SLAM</h1>
+            <p style="font-size: var(--text-xl); max-width: 600px; margin-top: var(--space-4);">
+                Enabling drift-free localization for autonomous cleaning robots in large-scale indoor environments.
+            </p>
+
+            <div class="case-study-meta">
+                <div class="meta-item">
+                    <h4>Company</h4>
+                    <p>Lionsbot International</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Role</h4>
+                    <p>Lead Autonomy Engineer</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Duration</h4>
+                    <p>Feb 2022 – Present</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Location</h4>
+                    <p>Singapore</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Sections -->
+    <main class="container">
+
+        <!-- Introduction -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>Introduction</h3>
+                <div class="story-content">
+                    <p>
+                        Autonomous cleaning robots need to navigate complex indoor environments like malls, airports,
+                        and warehouses — often spanning 50,000+ square meters with dynamic obstacles and changing
+                        layouts.
+                    </p>
+                    <p>
+                        Traditional 2D Lidar SLAM struggled in these environments due to drift accumulation over large
+                        distances and inability to handle multi-floor scenarios. My mission was to develop a robust 3D
+                        SLAM system that could maintain centimeter-level accuracy across entire facilities.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Challenge -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>The Challenge</h3>
+                <div class="story-content">
+                    <p>
+                        Large-scale environments present unique challenges for localization systems:
+                    </p>
+                    <div class="highlight-box">
+                        <p>"When your robot operates for 8+ hours across 50,000 sqm, even small drift errors compound
+                            into meters of localization error."</p>
+                    </div>
+                    <p>
+                        Key technical challenges included:
+                    </p>
+                    <ul style="color: var(--color-text-muted); margin: var(--space-4) 0; padding-left: var(--space-6);">
+                        <li>Drift accumulation in featureless corridors</li>
+                        <li>Dynamic obstacles (people, carts, temporary structures)</li>
+                        <li>Glass walls and reflective surfaces confusing lidar</li>
+                        <li>Real-time performance on embedded hardware</li>
+                        <li>Seamless map updates without downtime</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>The Solution</h3>
+                <div class="story-content">
+                    <p>
+                        I designed and implemented a multi-sensor fusion SLAM system combining 3D Lidar, wheel odometry,
+                        and IMU data through a factor graph optimization framework.
+                    </p>
+                    <p>
+                        Key innovations included:
+                    </p>
+                    <ul style="color: var(--color-text-muted); margin: var(--space-4) 0; padding-left: var(--space-6);">
+                        <li><strong>Loop closure detection</strong> using scan context descriptors</li>
+                        <li><strong>Robust outlier rejection</strong> for dynamic obstacle handling</li>
+                        <li><strong>Incremental map updates</strong> without full re-mapping</li>
+                        <li><strong>Multi-session SLAM</strong> for persistent localization across power cycles</li>
+                    </ul>
+
+                    <h4 style="margin-top: var(--space-8); font-family: var(--font-body);">Tech Stack</h4>
+                    <div class="tech-stack">
+                        <span class="tech-tag">C++17</span>
+                        <span class="tech-tag">ROS 2</span>
+                        <span class="tech-tag">GTSAM</span>
+                        <span class="tech-tag">PCL</span>
+                        <span class="tech-tag">Eigen</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>Impact</h3>
+                <div class="story-content">
+                    <p>
+                        The new SLAM system is now deployed across Lionsbot's fleet of autonomous cleaning robots
+                        operating in commercial facilities across Asia and Europe.
+                    </p>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin: var(--space-8) 0;">
+                        <div style="text-align: center;">
+                            <p style="font-size: var(--text-4xl); color: var(--color-accent); margin: 0;">
+                                < 5cm</p>
+                                    <p style="font-size: var(--text-sm); margin-top: var(--space-2);">Localization
+                                        accuracy</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: var(--text-4xl); color: var(--color-accent); margin: 0;">50k+</p>
+                            <p style="font-size: var(--text-sm); margin-top: var(--space-2);">Sq meters mapped</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: var(--text-4xl); color: var(--color-accent); margin: 0;">100+</p>
+                            <p style="font-size: var(--text-sm); margin-top: var(--space-2);">Robots deployed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__social">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin footer__icon"></i>
+            </a>
+            <a href="https://github.com/arjunskumar" target="_blank" aria-label="GitHub">
+                <i class="fa-brands fa-github footer__icon"></i>
+            </a>
+        </div>
+        <p class="footer__copy">© 2025 Arjun S Kumar</p>
+    </footer>
+
+</body>
+
+</html>
