@@ -22,9 +22,28 @@
             min-height: 70vh;
             display: flex;
             align-items: flex-end;
-            background: linear-gradient(to bottom, transparent 0%, var(--color-bg) 100%),
-                url('../images/projects/ntu_drone.gif') center/cover no-repeat;
+            position: relative;
             padding: var(--space-16) 0;
+        }
+
+        .case-study-hero__bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .case-study-hero__bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .case-study-hero__bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, var(--color-bg) 100%);
         }
 
         .case-study-meta {
@@ -154,6 +173,9 @@
 
     <!-- Hero -->
     <section class="case-study-hero">
+        <div class="case-study-hero__bg">
+            <img src="../images/projects/ntu_drone.gif" alt="VIO on MAV visualization">
+        </div>
         <div class="container">
             <a href="../index-v2.html#projects" class="back-link">
                 <i class="fa-solid fa-arrow-left"></i> Back to Projects
