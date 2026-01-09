@@ -26,6 +26,16 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Three.js -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
 </head>
 
 <body>
@@ -69,14 +79,20 @@
                 </div>
                 <div>
                     <p style="font-size: var(--text-lg); color: var(--color-text); margin-bottom: var(--space-6);">
-                        An engineer specialized in Robotics and Machine Learning, with experience spanning multinational
-                        companies, startups, and top research institutions like Nanyang Technological University,
-                        Singapore.
+                        Previously, I worked as a <strong>Lead Autonomy Engineer</strong> at Lionsbot International,
+                        Singapore. My journey towards professional and research excellence began with a
+                        <strong>Master's degree in Robotics</strong>.
+                    </p>
+                    <p style="margin-bottom: var(--space-4);">
+                        I'm deeply interested in <strong>Lidar SLAM / Visual SLAM</strong>, <strong>Deep
+                            Learning</strong>,
+                        <strong>Path Planning</strong>, <strong>Robot Autonomy</strong>, and <strong>Product
+                            Development</strong>.
                     </p>
                     <p>
-                        Previously Lead Autonomy Engineer at Lionsbot International, where I
-                        spearheaded the development of 3D Lidar SLAM and localization systems for large-scale
-                        environments.
+                        With experience spanning multinational companies, startups, and top research institutions
+                        like Nanyang Technological University, Singapore — I bring a unique blend of research depth
+                        and industry expertise.
                     </p>
 
                     <!-- Accordion -->
@@ -135,6 +151,140 @@
             </div>
         </div>
     </section>
+
+    <!-- Career Journey Section -->
+    <section id="journey" class="section" style="background: var(--color-bg-secondary);">
+        <div class="container">
+            <h2 class="reveal">Career Graph</h2>
+            <p style="margin-top: var(--space-4); max-width: 600px;" class="reveal">
+                7+ years of continuous growth in robotics, AI, and autonomous systems.
+            </p>
+
+            <div class="career-graph reveal" style="margin-top: var(--space-12);">
+                <!-- SVG Graph Background -->
+                <svg class="career-graph__svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+                    <!-- Grid lines -->
+                    <defs>
+                        <pattern id="grid" width="100" height="50" patternUnits="userSpaceOnUse">
+                            <path d="M 100 0 L 0 0 0 50" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
+
+                    <!-- Career progression line -->
+                    <path class="career-line" d="M 50,250 L 200,220 L 350,180 L 500,150 L 650,100 L 800,60 L 950,30"
+                        fill="none" stroke="url(#lineGradient)" stroke-width="3" stroke-linecap="round" />
+
+                    <!-- Glow effect -->
+                    <path d="M 50,250 L 200,220 L 350,180 L 500,150 L 650,100 L 800,60 L 950,30" fill="none"
+                        stroke="var(--color-accent)" stroke-width="8" stroke-linecap="round" opacity="0.2"
+                        filter="blur(4px)" />
+
+                    <defs>
+                        <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgba(224,122,95,0.3)" />
+                            <stop offset="100%" style="stop-color:rgba(224,122,95,1)" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+
+                <!-- Career Nodes -->
+                <div class="career-nodes">
+                    <div class="career-node" style="left: 5%; bottom: 15%;" data-job="ingeniarius">
+                        <div class="career-node__dot"></div>
+                        <div class="career-node__tooltip">
+                            <span class="career-node__year">2016</span>
+                            <h4>Robotics Intern</h4>
+                            <p>Ingeniarius, Portugal</p>
+                            <small>Click for details</small>
+                        </div>
+                    </div>
+
+                    <div class="career-node" style="left: 20%; bottom: 25%;" data-job="ey">
+                        <div class="career-node__dot"></div>
+                        <div class="career-node__tooltip">
+                            <span class="career-node__year">2017</span>
+                            <h4>AI Consultant</h4>
+                            <p>Ernst & Young</p>
+                            <small>Click for details</small>
+                        </div>
+                    </div>
+
+                    <div class="career-node" style="left: 35%; bottom: 38%;" data-job="addverb">
+                        <div class="career-node__dot"></div>
+                        <div class="career-node__tooltip">
+                            <span class="career-node__year">2018</span>
+                            <h4>Robotics Engineer</h4>
+                            <p>Addverb Technologies</p>
+                            <small>Click for details</small>
+                        </div>
+                    </div>
+
+                    <div class="career-node" style="left: 50%; bottom: 48%;" data-job="ntu">
+                        <div class="career-node__dot"></div>
+                        <div class="career-node__tooltip">
+                            <span class="career-node__year">2018–19</span>
+                            <h4>Research Associate</h4>
+                            <p>NTU Singapore</p>
+                            <small>Click for details</small>
+                        </div>
+                    </div>
+
+                    <div class="career-node" style="left: 65%; bottom: 63%;" data-job="ignitarium">
+                        <div class="career-node__dot"></div>
+                        <div class="career-node__tooltip">
+                            <span class="career-node__year">2019–22</span>
+                            <h4>Senior ML Engineer</h4>
+                            <p>Ignitarium</p>
+                            <small>Click for details</small>
+                        </div>
+                    </div>
+
+                    <div class="career-node career-node--current" style="left: 80%; bottom: 78%;" data-job="lionsbot">
+                        <div class="career-node__dot"></div>
+                        <div class="career-node__tooltip career-node__tooltip--active">
+                            <span class="career-node__year">2022–Now</span>
+                            <h4>Lead Autonomy Engineer</h4>
+                            <p>Lionsbot, Singapore</p>
+                            <small>Click for details</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- X-Axis Labels -->
+                <div class="career-graph__axis">
+                    <span>2016</span>
+                    <span>2017</span>
+                    <span>2018</span>
+                    <span>2019</span>
+                    <span>2022</span>
+                    <span class="career-graph__now">Now 🚀</span>
+                </div>
+            </div>
+
+            <p
+                style="text-align: center; margin-top: var(--space-4); color: var(--color-text-muted); font-size: var(--text-sm);">
+                <i class="fa-solid fa-hand-pointer"></i> Click on any point to see details
+            </p>
+        </div>
+    </section>
+
+    <!-- Work Experience Modal -->
+    <div id="job-modal" class="modal">
+        <div class="modal__backdrop"></div>
+        <div class="modal__content">
+            <button class="modal__close" aria-label="Close">&times;</button>
+            <div class="modal__header">
+                <span class="modal__year" id="job-year"></span>
+                <h3 class="modal__title" id="job-title"></h3>
+                <p class="modal__company" id="job-company"></p>
+            </div>
+            <div class="modal__body">
+                <ul id="job-responsibilities"></ul>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Projects Section -->
     <section id="projects" class="section" style="background-color: var(--color-bg-secondary);">
@@ -263,6 +413,55 @@
         </div>
     </div>
 
+    <!-- GitHub Section -->
+    <section id="github" class="section">
+        <div class="container">
+            <h2 class="reveal">Open Source</h2>
+            <p style="margin-top: var(--space-4); max-width: 600px;" class="reveal">
+                Contributing to the robotics community through code.
+            </p>
+
+            <div class="github-wrapper reveal" style="margin-top: var(--space-12);">
+
+                <!-- Stats Row -->
+                <div class="github-stats-row">
+                    <div class="github-stat">
+                        <i class="fa-solid fa-fire"></i>
+                        <span class="github-stat__value">🔥</span>
+                        <span class="github-stat__label">Streak</span>
+                    </div>
+                    <div class="github-stat">
+                        <i class="fa-solid fa-code-commit"></i>
+                        <span class="github-stat__value">500+</span>
+                        <span class="github-stat__label">Commits</span>
+                    </div>
+                    <div class="github-stat">
+                        <i class="fa-solid fa-folder-tree"></i>
+                        <span class="github-stat__value">20+</span>
+                        <span class="github-stat__label">Repos</span>
+                    </div>
+                    <div class="github-stat">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="github-stat__value">50+</span>
+                        <span class="github-stat__label">Stars</span>
+                    </div>
+                </div>
+
+                <!-- Streak Image -->
+                <div class="github-streak-wrapper" style="margin-top: var(--space-6);">
+                    <img src="https://streak-stats.demolab.com?user=arjunskumar&theme=transparent&hide_border=true&ring=E07A5F&fire=E07A5F&currStreakLabel=E07A5F&sideLabels=ffffff&currStreakNum=ffffff&sideNums=ffffff&dates=888888"
+                        alt="GitHub Streak" class="github-streak-img">
+                </div>
+
+
+                <div style="text-align: center; margin-top: var(--space-8);">
+                    <a href="https://github.com/arjunskumar" target="_blank" class="btn">
+                        <i class="fa-brands fa-github"></i> View Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Testimonials Section -->
     <section id="testimonials" class="section" style="background-color: var(--color-bg-secondary);">
@@ -366,6 +565,10 @@
         <p class="footer__copy">
             © <span id="current-year"></span> Arjun S Kumar. Open source — feel free to use this template.
         </p>
+        <div class="footer__visitors">
+            <img src="https://komarev.com/ghpvc/?username=arjunskumar&style=flat-square&color=E07A5F&label=visitors"
+                alt="Profile Views">
+        </div>
     </footer>
 
     <!-- Scripts -->
@@ -517,7 +720,104 @@
             if (e.key === 'Escape' && pdfModal.classList.contains('is-open')) {
                 closePdfModal();
             }
+            if (e.key === 'Escape' && jobModal.classList.contains('is-open')) {
+                closeJobModal();
+            }
         });
+
+        // Job Experience Modal
+        const jobData = {
+            lionsbot: {
+                year: '2022 – July 2025',
+                title: 'Lead Software Engineer (Autonomy)',
+                company: 'Lionsbot International, Singapore',
+                responsibilities: [
+                    'Spearheaded the development of 3D Lidar SLAM and 3D localization as a Product Owner/Developer.',
+                    'Engineered an in-house, drift-free 3D Lidar SLAM system tailored for large-scale environments.',
+                    'Currently engaged in groundbreaking research on Visual SLAM and hardware acceleration technologies.'
+                ]
+            },
+            ignitarium: {
+                year: '2019 – 2022',
+                title: 'Senior Engineer (Machine Learning & Robotics)',
+                company: 'Ignitarium Technologies, India',
+                responsibilities: [
+                    'Improved autonomous navigation of Turtlebot2 with fused laser scans from RGBD camera and 2D Lidar on TI Jacinto™ J7 automotive platform.',
+                    'Implemented ROS wrapper for OpenVX based computer vision algorithms.',
+                    'Developed object classification, detection, semantic segmentation networks using Transfer Learning for ARM & x86 devices.',
+                    'Mentored interns on tele-operation of Kobuki robot using Micro-ROS and F1-10 car using Nvidia Jetson Nano.'
+                ]
+            },
+            ntu: {
+                year: '2018 – 2019',
+                title: 'Research Associate (Flight Mechanics and Control)',
+                company: 'Nanyang Technological University, Singapore',
+                responsibilities: [
+                    'Deployed Visual Inertial Odometry (VIO) and SLAM algorithms like DSO, ORB-SLAM, ROVIO, VINS-Mono on Nvidia Jetson TX2.',
+                    'Built custom Micro Aerial Vehicle with Stereo Camera, Jetson TX2 and Pixhawk under ROS platform.',
+                    'Improved localization in GPS denied environments by refining visual SLAM and fusing PixHawk IMU.',
+                    'Implemented VIO algorithms with fuzzy logic controllers and simulated in Gazebo.'
+                ]
+            },
+            addverb: {
+                year: '2018',
+                title: 'Engineer (Robotics)',
+                company: 'Addverb Technologies, India',
+                responsibilities: [
+                    'Led multiple research projects and identified potential use cases for warehouse domain.',
+                    'Developed perception algorithms for Robotic 3D Bin picking using PCL, OpenCV, ROS and TensorFlow with ABB, KUKA, Universal Robots.',
+                    'Implemented perception based pallet detection solution using 2D Lidars.'
+                ]
+            },
+            ey: {
+                year: '2017',
+                title: 'Consultant (Artificial Intelligence and Robotics)',
+                company: 'Ernst and Young, India',
+                responsibilities: [
+                    'Developed POCs using Microsoft Cognitive Services, HoloLens (v1), RGBD Sensor and CNTK deep learning framework.',
+                    'Implemented deep neural network-based crack detection and rust classification for mobile towers.',
+                    'Implemented AR Tag based indoor localization ROS node for Parrot Bebop drones for warehouse inventory.'
+                ]
+            },
+            ingeniarius: {
+                year: '2016',
+                title: 'Intern (Mobile Robotics)',
+                company: 'Ingeniarius Lda, Portugal',
+                responsibilities: [
+                    'Worked across the entire development of a differential drive ROS mobile robot.',
+                    'Implemented an evolutionary swarm robotics algorithm using C++ and ROS.',
+                    'Simulated swarm robots behaviour in Gazebo for a search and rescue scenario.'
+                ]
+            }
+        };
+
+        const jobModal = document.getElementById('job-modal');
+        const jobModalBackdrop = jobModal.querySelector('.modal__backdrop');
+        const jobModalClose = jobModal.querySelector('.modal__close');
+
+        document.querySelectorAll('.career-node').forEach(node => {
+            node.addEventListener('click', () => {
+                const jobId = node.dataset.job;
+                const job = jobData[jobId];
+                if (job) {
+                    document.getElementById('job-year').textContent = job.year;
+                    document.getElementById('job-title').textContent = job.title;
+                    document.getElementById('job-company').textContent = job.company;
+                    const list = document.getElementById('job-responsibilities');
+                    list.innerHTML = job.responsibilities.map(r => `<li>${r}</li>`).join('');
+                    jobModal.classList.add('is-open');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        function closeJobModal() {
+            jobModal.classList.remove('is-open');
+            document.body.style.overflow = '';
+        }
+
+        jobModalClose.addEventListener('click', closeJobModal);
+        jobModalBackdrop.addEventListener('click', closeJobModal);
     </script>
 </body>
 

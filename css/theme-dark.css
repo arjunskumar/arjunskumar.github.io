@@ -368,6 +368,534 @@ strong {
 }
 
 /* --------------------------------------------------------------------------
+   Career Graph
+   -------------------------------------------------------------------------- */
+.career-graph {
+  position: relative;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--space-6);
+  height: 350px;
+}
+
+.career-graph__svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 40px);
+  pointer-events: none;
+}
+
+.career-line {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: drawLine 2s ease-out forwards;
+}
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.career-nodes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 40px);
+}
+
+.career-node {
+  position: absolute;
+  cursor: pointer;
+}
+
+.career-node__dot {
+  width: 16px;
+  height: 16px;
+  background: var(--color-bg);
+  border: 3px solid var(--color-accent);
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 0 4px rgba(224, 122, 95, 0.1);
+}
+
+.career-node:hover .career-node__dot {
+  transform: scale(1.4);
+  box-shadow: 0 0 20px rgba(224, 122, 95, 0.5);
+}
+
+.career-node--current .career-node__dot {
+  background: var(--color-accent);
+  animation: nodePulse 2s infinite;
+}
+
+@keyframes nodePulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(224, 122, 95, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 0 12px rgba(224, 122, 95, 0);
+  }
+}
+
+.career-node__tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-3);
+  min-width: 150px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.career-node__tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-border);
+}
+
+.career-node:hover .career-node__tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.career-node__tooltip--active {
+  border-color: var(--color-accent);
+}
+
+.career-node__year {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-accent);
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.career-node__tooltip h4 {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.career-node__tooltip p {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: var(--space-1) 0 0;
+}
+
+.career-node__tooltip small {
+  font-size: 9px;
+  color: var(--color-accent);
+  display: block;
+  margin-top: var(--space-2);
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   Modal Component
+   -------------------------------------------------------------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.modal__content {
+  position: relative;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal.is-open .modal__content {
+  transform: translateY(0);
+}
+
+.modal__close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  font-size: var(--text-xl);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal__close:hover {
+  background: var(--color-accent);
+}
+
+.modal__header {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal__year {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modal__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  color: var(--color-text);
+  margin: var(--space-2) 0 var(--space-1);
+}
+
+.modal__company {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.modal__body {
+  padding: var(--space-6);
+}
+
+.modal__body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modal__body li {
+  position: relative;
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-4);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+.modal__body li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+
+
+.career-graph__axis {
+  position: absolute;
+  bottom: 0;
+  left: var(--space-6);
+  right: var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.career-graph__axis span {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.career-graph__now {
+  color: var(--color-accent) !important;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .career-graph {
+    height: 280px;
+    padding: var(--space-4);
+  }
+
+  .career-node__dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .career-node__tooltip {
+    min-width: 120px;
+    padding: var(--space-2);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   GitHub Section
+   -------------------------------------------------------------------------- */
+.github-wrapper {
+  max-width: 900px;
+}
+
+.github-chart-wrapper {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-4);
+  overflow: hidden;
+}
+
+.github-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.github-streak-wrapper {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.github-streak-img {
+  max-width: 100%;
+  height: auto;
+}
+
+-------------------------------------------------------------------------- */ .github-wrapper {
+  max-width: 900px;
+}
+
+.github-chart-wrapper {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-4);
+  overflow: hidden;
+}
+
+.github-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.github-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.github-stat {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-4);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.github-stat:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.github-stat i {
+  font-size: var(--text-xl);
+  color: var(--color-accent);
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+.github-stat__value {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  color: var(--color-text);
+  display: block;
+}
+
+.github-stat__label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .github-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tech Tags
+   -------------------------------------------------------------------------- */
+.tech-tag {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  padding: var(--space-1) var(--space-2);
+  background: rgba(224, 122, 95, 0.1);
+  color: var(--color-accent);
+  border-radius: 4px;
+  border: 1px solid rgba(224, 122, 95, 0.2);
+}
+
+.tech-tag--sm {
+  font-size: 9px;
+  padding: 2px 6px;
+}
+
+/*
+.robot-viewer-section {
+  background: var(--color-bg-secondary);
+}
+
+.robot-viewer-content {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+.robot-viewer-text h2 {
+  font-size: var(--text-4xl);
+}
+
+.robot-viewer-canvas {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+}
+
+.sketchfab-embed-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 75%;
+}
+
+.sketchfab-embed-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .robot-viewer-content {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .robot-viewer-text {
+    text-align: center;
+  }
+
+  .robot-viewer-text h2 {
+    font-size: var(--text-3xl);
+  }
+
+  .robot-viewer-tech {
+    justify-content: center;
+  }
+}
+
+.robot-viewer-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* --------------------------------------------------------------------------
+   GitHub Stats
+   -------------------------------------------------------------------------- */
+.github-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+  max-width: 900px;
+}
+
+.github-card {
+  display: block;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-4);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.github-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.github-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.github-card--wide {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .github-stats__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .github-card--wide {
+    grid-column: span 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Testimonials
    -------------------------------------------------------------------------- */
 .testimonials {
@@ -800,6 +1328,14 @@ strong {
 .footer__copy {
   font-size: var(--text-sm);
   color: var(--color-text-muted);
+}
+
+.footer__visitors {
+  margin-top: var(--space-4);
+}
+
+.footer__visitors img {
+  height: 20px;
 }
 
 /* --------------------------------------------------------------------------
