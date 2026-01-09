@@ -187,8 +187,85 @@
         </div>
     </section>
 
+    <!-- Publications Section -->
+    <section id="publications" class="section">
+        <div class="container">
+            <h2 class="reveal">Publications</h2>
+            <p style="margin-top: var(--space-4); max-width: 600px;" class="reveal">
+                Peer-reviewed research in robotics, swarm intelligence, and autonomous systems.
+            </p>
+
+            <div class="publications-grid"
+                style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); margin-top: var(--space-12);">
+
+                <!-- Publication 1 -->
+                <div class="publication-card reveal" data-pdf="res/papers/shajahan2019.pdf"
+                    data-ieee="https://ieeexplore.ieee.org/document/8782477">
+                    <div class="publication-card__content">
+                        <span class="publication-card__venue">IEEE ICoIAS 2019 · Singapore</span>
+                        <h3 class="publication-card__title">Automated Inspection of Monopole Tower using Drones and
+                            Computer Vision</h3>
+                        <p class="publication-card__authors">Shajahan S, Arjun S Kumar, et al.</p>
+                    </div>
+                    <div class="publication-card__actions">
+                        <button class="publication-card__btn view-pdf" title="View PDF">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </button>
+                        <a href="https://ieeexplore.ieee.org/document/8782477" target="_blank"
+                            class="publication-card__btn" title="View on IEEE">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Publication 2 -->
+                <div class="publication-card reveal" data-pdf="res/papers/kumar2017.pdf"
+                    data-ieee="https://ieeexplore.ieee.org/document/8126112">
+                    <div class="publication-card__content">
+                        <span class="publication-card__venue">IEEE ICACCI 2017 · India</span>
+                        <h3 class="publication-card__title">Search and Rescue Operations Using Robotic Darwinian
+                            Particle Swarm Optimization</h3>
+                        <p class="publication-card__authors">Arjun S Kumar, et al.</p>
+                    </div>
+                    <div class="publication-card__actions">
+                        <button class="publication-card__btn view-pdf" title="View PDF">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </button>
+                        <a href="https://ieeexplore.ieee.org/document/8126112" target="_blank"
+                            class="publication-card__btn" title="View on IEEE">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PDF Modal -->
+    <div id="pdf-modal" class="pdf-modal">
+        <div class="pdf-modal__overlay"></div>
+        <div class="pdf-modal__container">
+            <div class="pdf-modal__header">
+                <h3 class="pdf-modal__title"></h3>
+                <div class="pdf-modal__actions">
+                    <a id="pdf-modal-ieee" href="#" target="_blank" class="btn" style="font-size: var(--text-xs);">
+                        View on IEEE <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                    <button class="pdf-modal__close" aria-label="Close modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="pdf-modal__body">
+                <iframe id="pdf-viewer" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Testimonials Section -->
-    <section id="testimonials" class="section">
+    <section id="testimonials" class="section" style="background-color: var(--color-bg-secondary);">
         <div class="container">
             <h2 class="reveal">Recommendations</h2>
             <p style="margin-top: var(--space-4); max-width: 600px;" class="reveal">
@@ -287,12 +364,15 @@
             </a>
         </div>
         <p class="footer__copy">
-            © 2025 Arjun S Kumar. Open source — feel free to use this template.
+            © <span id="current-year"></span> Arjun S Kumar. Open source — feel free to use this template.
         </p>
     </footer>
 
     <!-- Scripts -->
     <script>
+        // Set current year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
         // Accordion functionality
         document.querySelectorAll('.accordion__header').forEach(header => {
             header.addEventListener('click', () => {
@@ -393,6 +473,50 @@
                     });
                 }
             });
+        });
+
+        // PDF Modal functionality
+        const pdfModal = document.getElementById('pdf-modal');
+        const pdfViewer = document.getElementById('pdf-viewer');
+        const pdfModalTitle = document.querySelector('.pdf-modal__title');
+        const pdfModalIeee = document.getElementById('pdf-modal-ieee');
+        const pdfModalClose = document.querySelector('.pdf-modal__close');
+        const pdfModalOverlay = document.querySelector('.pdf-modal__overlay');
+
+        // Open modal when clicking View PDF button
+        document.querySelectorAll('.view-pdf').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = btn.closest('.publication-card');
+                const pdfPath = card.dataset.pdf;
+                const ieeeLink = card.dataset.ieee;
+                const title = card.querySelector('.publication-card__title').textContent;
+
+                pdfViewer.src = pdfPath;
+                pdfModalTitle.textContent = title;
+                pdfModalIeee.href = ieeeLink;
+                pdfModal.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close modal
+        function closePdfModal() {
+            pdfModal.classList.remove('is-open');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                pdfViewer.src = '';
+            }, 300);
+        }
+
+        pdfModalClose.addEventListener('click', closePdfModal);
+        pdfModalOverlay.addEventListener('click', closePdfModal);
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && pdfModal.classList.contains('is-open')) {
+                closePdfModal();
+            }
         });
     </script>
 </body>
