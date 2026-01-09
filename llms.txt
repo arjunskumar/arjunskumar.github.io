@@ -1,0 +1,28 @@
+# Arjun S Kumar
+
+Lead Autonomy Engineer & SLAM Expert
+
+## Summary
+Robotics and Deep Learning Engineer with 7+ years of experience specializing in 3D Lidar SLAM, Visual SLAM, ROS2, and autonomous systems. Lead Autonomy Engineer at Lionsbot International.
+
+## Core Expertise
+- **SLAM**: 3D Lidar SLAM, Visual SLAM (LIO-SAM, FAST-LIO, SLAM Toolbox)
+- **Robotics**: ROS1/ROS2, Autonomous Navigation, Path Planning
+- **AI/ML**: Deep Learning, Computer Vision, PyTorch, TensorFlow
+- **Software**: C++, Python, OpenCV, PCL, Gazebo
+
+## Experience
+- **Lionsbot International**: Lead Autonomy Engineer (Current). Scaling AMR software to 1000+ robots.
+- **V-SLAM Intern**: Visual SLAM for surgical robots.
+- **Nanyang Technological University (NTU)**: Master's in Smart Product Design.
+- **Early Career**: Robotics Researcher & Intern at Ingeniarius, Portugal.
+
+## Notable Projects
+- **Cavira Robot Studio**: No-code platform for industrial robotics.
+- **SLAM Quest**: Gamified SLAM learning platform.
+- **Robot Arm Simulation**: Advanced 6-axis kinematics and control.
+
+## Links
+- **LinkedIn**: [linkedin.com/in/arjunskumar](https://linkedin.com/in/arjunskumar)
+- **GitHub**: [github.com/arjunskumar](https://github.com/arjunskumar)
+- **Portfolio**: [arjunskumar.github.io](https://arjunskumar.github.io)

@@ -4,15 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Arjun S Kumar — Robotics & Deep Learning Engineer specializing in Lidar SLAM, Visual SLAM, and autonomous systems.">
-    <meta name="keywords" content="robotics, SLAM, deep learning, autonomous systems, Arjun S Kumar">
-    <meta name="author" content="Arjun S Kumar">
 
-    <title>Arjun S Kumar | Robotics & Deep Learning</title>
+    <!-- Primary Meta Tags -->
+    <title>Arjun S Kumar | Robotics & Deep Learning Engineer | SLAM Expert</title>
+    <meta name="title" content="Arjun S Kumar | Robotics & Deep Learning Engineer | SLAM Expert">
+    <meta name="description"
+        content="Lead Autonomy Engineer specializing in 3D Lidar SLAM, Visual SLAM, ROS2, and autonomous robotic systems. 7+ years building intelligent robots at Lionsbot, NTU Singapore, and more.">
+    <meta name="keywords"
+        content="Arjun S Kumar, robotics engineer, SLAM, Lidar SLAM, Visual SLAM, ROS, ROS2, autonomous systems, deep learning, computer vision, robotics, Singapore, Lionsbot, path planning, localization, mapping">
+    <meta name="author" content="Arjun S Kumar">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://arjunskumar.github.io/">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0d0d0d">
+    <meta name="msapplication-TileColor" content="#0d0d0d">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arjunskumar.github.io/">
+    <meta property="og:title" content="Arjun S Kumar | Robotics & Deep Learning Engineer">
+    <meta property="og:description"
+        content="Lead Autonomy Engineer specializing in 3D Lidar SLAM, Visual SLAM, and autonomous robotic systems. 7+ years of experience.">
+    <meta property="og:image" content="https://arjunskumar.github.io/images/arjun.jpeg">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Arjun S Kumar Portfolio">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://arjunskumar.github.io/">
+    <meta name="twitter:title" content="Arjun S Kumar | Robotics & Deep Learning Engineer">
+    <meta name="twitter:description"
+        content="Lead Autonomy Engineer specializing in 3D Lidar SLAM, Visual SLAM, and autonomous robotic systems.">
+    <meta name="twitter:image" content="https://arjunskumar.github.io/images/arjun.jpeg">
+
+    <!-- JSON-LD Structured Data for LLMs and Search Engines -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Arjun S Kumar",
+        "url": "https://arjunskumar.github.io",
+        "image": "https://arjunskumar.github.io/images/arjun.jpeg",
+        "jobTitle": "Lead Autonomy Engineer",
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Lionsbot International"
+        },
+        "description": "Robotics and Deep Learning Engineer specializing in 3D Lidar SLAM, Visual SLAM, ROS2, and autonomous systems with 7+ years of experience.",
+        "email": "arjunskumar22@gmail.com",
+        "sameAs": [
+            "https://linkedin.com/in/arjunskumar",
+            "https://github.com/arjunskumar"
+        ],
+        "knowsAbout": [
+            "Lidar SLAM",
+            "Visual SLAM",
+            "ROS",
+            "ROS2",
+            "Deep Learning",
+            "Computer Vision",
+            "Path Planning",
+            "Robot Localization",
+            "Autonomous Navigation",
+            "C++",
+            "Python",
+            "TensorFlow",
+            "PyTorch"
+        ],
+        "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "Nanyang Technological University"
+        },
+        "nationality": "Indian"
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="css/theme-dark.css" as="style">
+    <link rel="preload" href="images/arjun.jpeg" as="image">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,6 +112,7 @@
     </script>
 </head>
 
+
 <body>
 
     <!-- Navigation -->
@@ -55,7 +130,8 @@
     <!-- Hero Section -->
     <section class="hero section--hero">
         <div class="hero__media">
-            <img src="images/arjun.jpeg" alt="Robotics Engineer at work" class="hero__image">
+            <img src="images/arjun.jpeg" alt="Arjun S Kumar - Robotics & Deep Learning Engineer" class="hero__image"
+                loading="eager" width="800" height="1000">
         </div>
         <div class="hero__panel">
             <h1 class="hero__tagline animate-fade-in-up">
@@ -273,7 +349,7 @@
     <div id="job-modal" class="modal">
         <div class="modal__backdrop"></div>
         <div class="modal__content">
-            <button class="modal__close" aria-label="Close">&times;</button>
+            <button class="modal__close" aria-label="Close job details modal">&times;</button>
             <div class="modal__header">
                 <span class="modal__year" id="job-year"></span>
                 <h3 class="modal__title" id="job-title"></h3>
@@ -298,8 +374,9 @@
                 style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: var(--space-8); margin-top: var(--space-12);">
 
                 <!-- Project Card 1 -->
-                <a href="projects/lionsbot-slam.html" class="card" style="text-decoration: none;">
-                    <img src="images/projects/vio_1.gif" alt="3D Lidar SLAM" class="card__image">
+                <a href="projects/lionsbot-slam.html" class="card" style="text-decoration: none;"
+                    aria-label="View project details for 3D Lidar SLAM at Lionsbot">
+                    <img src="images/projects/vio_1.gif" alt="3D Lidar SLAM" class="card__image" loading="lazy">
                     <div class="card__content">
                         <h3 class="card__title">3D Lidar SLAM @ Lionsbot</h3>
                         <p class="card__desc">
@@ -310,8 +387,10 @@
                 </a>
 
                 <!-- Project Card 2 -->
-                <a href="projects/vio-ntu.html" class="card" style="text-decoration: none;">
-                    <img src="images/projects/ntu_drone.gif" alt="Visual Inertial Odometry" class="card__image">
+                <a href="projects/vio-ntu.html" class="card" style="text-decoration: none;"
+                    aria-label="View project details for Visual Inertial Odometry at NTU">
+                    <img src="images/projects/ntu_drone.gif" alt="Visual Inertial Odometry" class="card__image"
+                        loading="lazy">
                     <div class="card__content">
                         <h3 class="card__title">Visual Inertial Odometry @ NTU</h3>
                         <p class="card__desc">
@@ -322,8 +401,10 @@
                 </a>
 
                 <!-- Project Card 3 -->
-                <a href="projects/autonomous-driving.html" class="card" style="text-decoration: none;">
-                    <img src="images/projects/carla_g29.gif" alt="Autonomous Driving Simulator" class="card__image">
+                <a href="projects/autonomous-driving.html" class="card" style="text-decoration: none;"
+                    aria-label="View project details for Autonomous Driving Simulator">
+                    <img src="images/projects/carla_g29.gif" alt="Autonomous Driving Simulator" class="card__image"
+                        loading="lazy">
                     <div class="card__content">
                         <h3 class="card__title">Autonomous Driving Simulator</h3>
                         <p class="card__desc">
@@ -358,11 +439,13 @@
                         <p class="publication-card__authors">Shajahan S, Arjun S Kumar, et al.</p>
                     </div>
                     <div class="publication-card__actions">
-                        <button class="publication-card__btn view-pdf" title="View PDF">
+                        <button class="publication-card__btn view-pdf" title="View PDF"
+                            aria-label="View PDF of publication">
                             <i class="fa-solid fa-file-pdf"></i>
                         </button>
                         <a href="https://ieeexplore.ieee.org/document/8782477" target="_blank"
-                            class="publication-card__btn" title="View on IEEE">
+                            class="publication-card__btn" title="View on IEEE"
+                            aria-label="View publication on IEEE Xplore">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
                     </div>
@@ -378,11 +461,13 @@
                         <p class="publication-card__authors">Arjun S Kumar, et al.</p>
                     </div>
                     <div class="publication-card__actions">
-                        <button class="publication-card__btn view-pdf" title="View PDF">
+                        <button class="publication-card__btn view-pdf" title="View PDF"
+                            aria-label="View PDF of publication">
                             <i class="fa-solid fa-file-pdf"></i>
                         </button>
                         <a href="https://ieeexplore.ieee.org/document/8126112" target="_blank"
-                            class="publication-card__btn" title="View on IEEE">
+                            class="publication-card__btn" title="View on IEEE"
+                            aria-label="View publication on IEEE Xplore">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
                     </div>
@@ -399,10 +484,11 @@
             <div class="pdf-modal__header">
                 <h3 class="pdf-modal__title"></h3>
                 <div class="pdf-modal__actions">
-                    <a id="pdf-modal-ieee" href="#" target="_blank" class="btn" style="font-size: var(--text-xs);">
+                    <a id="pdf-modal-ieee" href="#" target="_blank" class="btn" style="font-size: var(--text-xs);"
+                        aria-label="View publication on IEEE Xplore">
                         View on IEEE <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </a>
-                    <button class="pdf-modal__close" aria-label="Close modal">
+                    <button class="pdf-modal__close" aria-label="Close PDF modal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -444,7 +530,7 @@
                         <div class="github-graph-card">
                             <div class="github-graph-label">Contribution Calendar</div>
                             <img src="https://ghchart.rshah.org/E07A5F/arjunskumar" alt="GitHub Contributions"
-                                style="width: 100%;" onerror="this.parentElement.style.display='none'">
+                                style="width: 100%;" onerror="this.parentElement.style.display='none'" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -452,7 +538,8 @@
 
             <!-- Centered Button -->
             <div style="text-align: center; margin-top: var(--space-8);">
-                <a href="https://github.com/arjunskumar" target="_blank" class="btn">
+                <a href="https://github.com/arjunskumar" target="_blank" class="btn"
+                    aria-label="Visit my GitHub profile">
                     <i class="fa-brands fa-github"></i> View GitHub Profile
                 </a>
             </div>
