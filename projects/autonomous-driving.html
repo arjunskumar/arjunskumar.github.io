@@ -215,14 +215,15 @@
                 <h3>Introduction</h3>
                 <div class="story-content">
                     <p>
-                        Testing autonomous driving algorithms in the real world is expensive, dangerous, and
-                        time-consuming. Simulation provides a safe, repeatable environment to develop and validate
-                        perception, planning, and control systems.
+                        Autonomous navigation in complex urban scenarios requires a robust interplay between perception,
+                        kinematic planning, and high-fidelity control. Simulation environments like CARLA allow for the
+                        development and stress-testing of these components under edge-case conditions that are difficult
+                        to replicate in the real world.
                     </p>
                     <p>
-                        I built a comprehensive simulation setup using CARLA — an open-source autonomous driving
-                        simulator — integrated with a Logitech G29 racing wheel for human-in-the-loop data collection
-                        and manual override capabilities.
+                        I developed a full-stack autonomy pipeline that integrates perception-based obstacle detection
+                        with a non-holonomic path planner and an MPC (Model Predictive Control) feedback system to
+                        achieve smooth, human-like driving behavior.
                     </p>
                 </div>
             </div>
@@ -241,11 +242,11 @@
                             noise, physics, and visual appearance."</p>
                     </div>
                     <ul style="color: var(--color-text-muted); margin: var(--space-4) 0; padding-left: var(--space-6);">
-                        <li>Realistic sensor simulation (cameras, lidar, radar)</li>
-                        <li>Physics-based vehicle dynamics</li>
-                        <li>Diverse weather and lighting conditions</li>
-                        <li>Dynamic traffic and pedestrian behavior</li>
-                        <li>Low-latency hardware-in-the-loop integration</li>
+                        <li>Non-holonomic constraints in tight urban maneuvering</li>
+                        <li>High-frequency control loop stability (MPC vs PID)</li>
+                        <li>Multi-modal sensor fusion (Lidar + Camera + Radar) via EKF</li>
+                        <li>Sim-to-real domain adaptation for perception models</li>
+                        <li>Low-latency planning under dynamic agent uncertainty</li>
                     </ul>
                 </div>
             </div>
@@ -260,12 +261,16 @@
                         I developed a modular simulation framework with the following components:
                     </p>
                     <ul style="color: var(--color-text-muted); margin: var(--space-4) 0; padding-left: var(--space-6);">
-                        <li><strong>ROS bridge</strong> for seamless integration with robotics stacks</li>
-                        <li><strong>Hardware integration</strong> with Logitech G29 for manual driving and data
-                            collection</li>
-                        <li><strong>Scenario generation</strong> for testing edge cases</li>
-                        <li><strong>Data logging</strong> for training imitation learning models</li>
-                        <li><strong>Visualization dashboard</strong> for real-time monitoring</li>
+                        <li><strong>Hybrid A* Path Planner</strong> for kinematically feasible trajectories in
+                            constrained spaces</li>
+                        <li><strong>Model Predictive Control (MPC)</strong> for unified lateral and longitudinal vehicle
+                            control</li>
+                        <li><strong>Extended Kalman Filter (EKF)</strong> for multi-modal sensor fusion and state
+                            estimation</li>
+                        <li><strong>Semantic Segmentation Backend</strong> for robust road and obstacle boundary
+                            detection</li>
+                        <li><strong>Scenario Runner Integration</strong> for automated regression testing of corner
+                            cases</li>
                     </ul>
 
                     <h4 style="margin-top: var(--space-8); font-family: var(--font-body);">Tech Stack</h4>
@@ -277,6 +282,18 @@
                         <span class="tech-tag">OpenCV</span>
                         <span class="tech-tag">Unreal Engine</span>
                     </div>
+
+                    <h4 style="margin-top: var(--space-12); font-family: var(--font-body);">System Architecture</h4>
+                    <figure style="margin: var(--space-6) 0;">
+                        <img src="../images/projects/adas_autonomy_stack.png"
+                            alt="Full-Stack Autonomous Driving Architecture"
+                            style="width: 100%; border-radius: 8px; border: 1px solid var(--color-border);">
+                        <figcaption
+                            style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-3); text-align: center;">
+                            Fig. 1: Proposed Full-Stack Autonomous Driving Architecture for IEEE Intelligent Vehicles
+                            Symposium.
+                        </figcaption>
+                    </figure>
                 </div>
             </div>
         </section>

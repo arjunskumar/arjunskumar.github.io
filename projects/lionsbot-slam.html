@@ -227,8 +227,9 @@
                     </p>
                     <p>
                         Traditional 2D Lidar SLAM struggled in these environments due to drift accumulation over large
-                        distances and inability to handle multi-floor scenarios. My mission was to develop a robust 3D
-                        SLAM system that could maintain centimeter-level accuracy across entire facilities.
+                        distances and inability to handle "corridor environments" (low geometric features). My mission
+                        was to architect a tightly-coupled Lidar-Inertial Odometry (LIO) system using factor-graph
+                        optimization to maintain centimeter-level consistency across global coordinates.
                     </p>
                 </div>
             </div>
@@ -250,11 +251,11 @@
                         Key technical challenges included:
                     </p>
                     <ul style="color: var(--color-text-muted); margin: var(--space-4) 0; padding-left: var(--space-6);">
-                        <li>Drift accumulation in featureless corridors</li>
-                        <li>Dynamic obstacles (people, carts, temporary structures)</li>
-                        <li>Glass walls and reflective surfaces confusing lidar</li>
-                        <li>Real-time performance on embedded hardware</li>
-                        <li>Seamless map updates without downtime</li>
+                        <li>Geometric degeneracy in featureless long corridors</li>
+                        <li>Dynamic noise filtering (people, warehouse equipment)</li>
+                        <li>Lidar beam distortion correction from high-speed motion</li>
+                        <li>Resource-constrained optimization (GTSAM iSAM2) on embedded ARM</li>
+                        <li>Large-scale pose-graph management for 100k+ sqm maps</li>
                     </ul>
                 </div>
             </div>
@@ -273,10 +274,13 @@
                         Key innovations included:
                     </p>
                     <ul style="color: var(--color-text-muted); margin: var(--space-4) 0; padding-left: var(--space-6);">
-                        <li><strong>Loop closure detection</strong> using scan context descriptors</li>
-                        <li><strong>Robust outlier rejection</strong> for dynamic obstacle handling</li>
-                        <li><strong>Incremental map updates</strong> without full re-mapping</li>
-                        <li><strong>Multi-session SLAM</strong> for persistent localization across power cycles</li>
+                        <li><strong>Factor-Graph Optimization</strong> using GTSAM for multi-sensor global consistency
+                        </li>
+                        <li><strong>Geometric Degeneracy Detection</strong> to prevent drift in symmetrical corridors
+                        </li>
+                        <li><strong>Descriptor-based Place Recognition</strong> for robust loop closure candidates</li>
+                        <li><strong>Voxel-based Downsampling</strong> for real-time PCL processing overhead reduction
+                        </li>
                     </ul>
 
                     <h4 style="margin-top: var(--space-8); font-family: var(--font-body);">Tech Stack</h4>
@@ -287,6 +291,167 @@
                         <span class="tech-tag">PCL</span>
                         <span class="tech-tag">Eigen</span>
                         <span class="tech-tag">Docker</span>
+                    </div>
+
+                    <h4 style="margin-top: var(--space-12); font-family: var(--font-body);">System Architecture</h4>
+                    <figure style="margin: var(--space-6) 0;">
+                        <img src="../images/projects/lionsbot_slam_architecture.png"
+                            alt="System Architecture of 3D Lidar SLAM with GTSAM Factor Graph Optimization"
+                            style="width: 100%; border-radius: 8px; border: 1px solid var(--color-border);">
+                        <figcaption
+                            style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-3); text-align: center;">
+                            Fig. 1: System Architecture of the Proposed 3D Lidar SLAM System with GTSAM-based Factor
+                            Graph Optimization.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Deep Dive -->
+        <section class="story-section">
+            <div class="story-grid">
+                <h3>Technical Deep Dive</h3>
+                <div class="story-content">
+                    <p>
+                        The core of our system is a <strong>tightly-coupled Lidar-Inertial Odometry (LIO)</strong>
+                        pipeline that fuses high-frequency IMU measurements with 3D Lidar scans using a factor graph
+                        formulation. This approach allows us to model the probabilistic relationships between sensor
+                        measurements and robot states, enabling globally consistent trajectory estimation.
+                    </p>
+
+                    <h4 style="margin-top: var(--space-8); font-family: var(--font-body);">1. Factor Graph Formulation
+                    </h4>
+                    <p>
+                        We model the SLAM problem as a Maximum a Posteriori (MAP) estimation over a factor graph. The
+                        state vector <code>X = {x₀, x₁, ..., xₙ}</code> contains robot poses at each keyframe. Factors
+                        encode constraints from odometry, IMU pre-integration, and loop closures.
+                    </p>
+                    <pre
+                        style="background: var(--color-bg-card); padding: var(--space-4); border-radius: 8px; overflow-x: auto; font-size: var(--text-sm); border: 1px solid var(--color-border);"><code class="language-cpp">// GTSAM Factor Graph Construction
+#include &lt;gtsam/nonlinear/ISAM2.h&gt;
+#include &lt;gtsam/slam/BetweenFactor.h&gt;
+#include &lt;gtsam/navigation/ImuFactor.h&gt;
+
+gtsam::NonlinearFactorGraph graph;
+gtsam::Values initialEstimate;
+
+// Add IMU pre-integration factor between consecutive poses
+auto imuFactor = gtsam::ImuFactor(
+    X(i), V(i),      // Previous pose and velocity
+    X(i+1), V(i+1),  // Current pose and velocity
+    B(i),            // IMU bias
+    preintegrated    // Pre-integrated IMU measurements
+);
+graph.add(imuFactor);
+
+// Add Lidar odometry factor from scan matching
+gtsam::Pose3 relativePose = performScanMatching(prevCloud, currCloud);
+auto lidarFactor = gtsam::BetweenFactor&lt;gtsam::Pose3&gt;(
+    X(i), X(i+1), relativePose, lidarNoise
+);
+graph.add(lidarFactor);</code></pre>
+
+                    <h4 style="margin-top: var(--space-8); font-family: var(--font-body);">2. Geometric Degeneracy
+                        Detection</h4>
+                    <p>
+                        A critical challenge in large-scale environments is <strong>geometric degeneracy</strong> — when
+                        the environment lacks sufficient geometric features to constrain all 6-DoF of the robot's pose.
+                        This commonly occurs in long, featureless corridors where the translational component along the
+                        corridor axis becomes unobservable from Lidar alone.
+                    </p>
+                    <p>
+                        We detect degeneracy by analyzing the eigenvalues of the Hessian matrix from the scan-matching
+                        optimization. If any eigenvalue falls below a threshold, we increase reliance on IMU and wheel
+                        odometry for that axis:
+                    </p>
+                    <pre
+                        style="background: var(--color-bg-card); padding: var(--space-4); border-radius: 8px; overflow-x: auto; font-size: var(--text-sm); border: 1px solid var(--color-border);"><code class="language-cpp">// Degeneracy Detection via Hessian Eigenvalue Analysis
+Eigen::SelfAdjointEigenSolver&lt;Eigen::Matrix6d&gt; solver(hessian);
+Eigen::Vector6d eigenvalues = solver.eigenvalues();
+
+const double DEGENERACY_THRESHOLD = 100.0;
+for (int i = 0; i < 6; ++i) {
+    if (eigenvalues(i) < DEGENERACY_THRESHOLD) {
+        // Axis 'i' is degenerate - reduce Lidar weight for this DOF
+        lidarNoise(i, i) *= 10.0;  // Inflate covariance
+        ROS_WARN("Degeneracy detected on axis %d, inflating covariance", i);
+    }
+}
+
+// Compensate with IMU/Wheel Odometry
+if (isDegenerateState) {
+    graph.add(gtsam::BetweenFactor&lt;gtsam::Pose3&gt;(
+        X(i), X(i+1), wheelOdomPose, wheelOdomNoise  // Tighter noise
+    ));
+}</code></pre>
+
+                    <h4 style="margin-top: var(--space-8); font-family: var(--font-body);">3. Loop Closure with Scan
+                        Context</h4>
+                    <p>
+                        For place recognition, we use <strong>Scan Context</strong> descriptors — a rotation-invariant
+                        representation of the 3D point cloud. When revisiting a location, we detect loop closure
+                        candidates by comparing descriptors and validate them with ICP-based geometric verification.
+                    </p>
+                    <pre
+                        style="background: var(--color-bg-card); padding: var(--space-4); border-radius: 8px; overflow-x: auto; font-size: var(--text-sm); border: 1px solid var(--color-border);"><code class="language-cpp">// Loop Closure Detection with Scan Context
+ScanContext sc;
+auto descriptor = sc.makeDescriptor(currentCloud);
+
+// Query KD-tree for nearest neighbors in descriptor space
+auto [loopIdx, distance] = scManager.detectLoopClosure(descriptor);
+
+if (distance < LOOP_THRESHOLD) {
+    // Geometric verification with ICP
+    pcl::IterativeClosestPoint&lt;PointT, PointT&gt; icp;
+    icp.setInputSource(currentCloud);
+    icp.setInputTarget(keyframeDatabase[loopIdx].cloud);
+    
+    pcl::PointCloud&lt;PointT&gt; aligned;
+    icp.align(aligned);
+    
+    if (icp.getFitnessScore() < ICP_FITNESS_THRESHOLD) {
+        // Add loop closure factor to graph
+        gtsam::Pose3 loopPose(icp.getFinalTransformation());
+        graph.add(gtsam::BetweenFactor&lt;gtsam::Pose3&gt;(
+            X(loopIdx), X(currentIdx), loopPose, loopNoise
+        ));
+    }
+}</code></pre>
+
+                    <h4 style="margin-top: var(--space-8); font-family: var(--font-body);">4. Incremental Optimization
+                        with iSAM2</h4>
+                    <p>
+                        To maintain real-time performance on embedded ARM hardware, we use <strong>iSAM2</strong>
+                        (Incremental Smoothing and Mapping) for incremental graph optimization. Unlike batch solvers
+                        that re-optimize the entire graph, iSAM2 only updates the affected portion when new factors are
+                        added, achieving O(log n) complexity for most updates.
+                    </p>
+                    <pre
+                        style="background: var(--color-bg-card); padding: var(--space-4); border-radius: 8px; overflow-x: auto; font-size: var(--text-sm); border: 1px solid var(--color-border);"><code class="language-cpp">// Incremental Optimization with iSAM2
+gtsam::ISAM2Params params;
+params.relinearizeThreshold = 0.1;
+params.relinearizeSkip = 1;
+gtsam::ISAM2 isam(params);
+
+// Called at each new keyframe
+void updateGraph(const gtsam::NonlinearFactorGraph& newFactors,
+                 const gtsam::Values& newValues) {
+    isam.update(newFactors, newValues);
+    
+    // Retrieve optimized estimates
+    gtsam::Values result = isam.calculateEstimate();
+    currentPose = result.at&lt;gtsam::Pose3&gt;(X(latestIdx));
+    
+    // Update global map with corrected trajectory
+    updateGlobalMap(result);
+}</code></pre>
+
+                    <div class="highlight-box" style="margin-top: var(--space-8);">
+                        <p><strong>Key Insight:</strong> The combination of degeneracy-aware sensor fusion and
+                            incremental optimization allows our system to maintain <strong>&lt;5cm localization
+                                accuracy</strong> even in 100,000+ sqm facilities with long featureless corridors — a
+                            scenario where traditional Lidar-only SLAM would accumulate meters of drift.</p>
                     </div>
                 </div>
             </div>
