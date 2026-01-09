@@ -98,6 +98,9 @@
     <!-- Styles -->
     <link rel="stylesheet" href="css/theme-dark.css">
 
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -198,8 +201,15 @@
                             </button>
                             <div class="accordion__content">
                                 <div class="accordion__inner">
-                                    C++ · Python · ROS 1/2 · Lidar SLAM · Visual SLAM · Deep Learning · OpenCV ·
-                                    TensorFlow · PyTorch · Docker · Git
+                                    <div style="margin-bottom: var(--space-4);">
+                                        C++ · Python · ROS 1/2 · Lidar SLAM · Visual SLAM · Deep Learning · OpenCV ·
+                                        TensorFlow · PyTorch · Docker · Git
+                                    </div>
+                                    <!-- Skills Radar Chart -->
+                                    <div class="skills-radar"
+                                        style="max-width: 400px; margin: 0 auto; padding-top: var(--space-4);">
+                                        <canvas id="skillsChart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -223,6 +233,67 @@
                         style="margin-top: var(--space-8);">
                         Download Resume
                     </a>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const ctx = document.getElementById('skillsChart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'radar',
+                                data: {
+                                    labels: ['SLAM', 'DL', 'ROS2', 'C++', 'Planning', 'CV'],
+                                    datasets: [{
+                                        label: 'Proficiency',
+                                        data: [95, 88, 92, 90, 85, 87],
+                                        fill: true,
+                                        backgroundColor: 'rgba(224, 122, 95, 0.2)',
+                                        borderColor: '#E07A5F',
+                                        pointBackgroundColor: '#E07A5F',
+                                        pointBorderColor: '#fff',
+                                        pointHoverBackgroundColor: '#fff',
+                                        pointHoverBorderColor: '#E07A5F'
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    elements: {
+                                        line: {
+                                            borderWidth: 3
+                                        }
+                                    },
+                                    scales: {
+                                        r: {
+                                            angleLines: {
+                                                color: 'rgba(255, 255, 255, 0.1)'
+                                            },
+                                            grid: {
+                                                color: 'rgba(255, 255, 255, 0.1)'
+                                            },
+                                            pointLabels: {
+                                                color: '#e0e0e0',
+                                                font: {
+                                                    size: 12,
+                                                    family: "'Inter', sans-serif"
+                                                }
+                                            },
+                                            ticks: {
+                                                display: false,
+                                                max: 100,
+                                                stepSize: 20
+                                            },
+                                            suggestedMin: 0,
+                                            suggestedMax: 100
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>
@@ -378,6 +449,10 @@
                     aria-label="View project details for 3D Lidar SLAM at Lionsbot">
                     <img src="images/projects/vio_1.gif" alt="3D Lidar SLAM" class="card__image" loading="lazy">
                     <div class="card__content">
+                        <div class="badge-group">
+                            <span class="badge">1000+ Robots Deployed</span>
+                            <span class="badge">ROS2 / C++</span>
+                        </div>
                         <h3 class="card__title">3D Lidar SLAM @ Lionsbot</h3>
                         <p class="card__desc">
                             Engineered a drift-free 3D Lidar SLAM system for large-scale indoor environments, enabling
@@ -392,6 +467,10 @@
                     <img src="images/projects/ntu_drone.gif" alt="Visual Inertial Odometry" class="card__image"
                         loading="lazy">
                     <div class="card__content">
+                        <div class="badge-group">
+                            <span class="badge">40% Drift Reduction</span>
+                            <span class="badge">UAV Autonomy</span>
+                        </div>
                         <h3 class="card__title">Visual Inertial Odometry @ NTU</h3>
                         <p class="card__desc">
                             Deployed VIO and SLAM algorithms on Micro Aerial Vehicles with Nvidia Jetson TX2, improving
@@ -406,6 +485,10 @@
                     <img src="images/projects/carla_g29.gif" alt="Autonomous Driving Simulator" class="card__image"
                         loading="lazy">
                     <div class="card__content">
+                        <div class="badge-group">
+                            <span class="badge">CARLA / ROS2</span>
+                            <span class="badge">End-to-End Nav</span>
+                        </div>
                         <h3 class="card__title">Autonomous Driving Simulator</h3>
                         <p class="card__desc">
                             Built a simulation environment for testing perception, localization, and control algorithms
