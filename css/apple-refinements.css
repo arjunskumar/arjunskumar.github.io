@@ -1,0 +1,457 @@
+/* ==========================================================================
+   APPLE DESIGN REFINEMENTS
+   Typography rhythm, spacing, and motion refined for premium feel
+   Include this AFTER theme-dark.css
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Enhanced CSS Custom Properties — Apple Design Language
+   -------------------------------------------------------------------------- */
+:root {
+    /* Colors — Deep, confident, premium */
+    --color-bg-elevated: #161616;
+    --color-text: #f5f5f7;
+    --color-text-muted: #86868b;
+    --color-text-tertiary: #6e6e73;
+    --color-accent-hover: #ef8b72;
+    --color-border-subtle: rgba(255, 255, 255, 0.08);
+
+    /* Typography — SF Pro-inspired scale with perfect rhythm */
+    --text-base: 1.0625rem;
+    /* 17px - Apple's base */
+    --text-lg: 1.25rem;
+    /* 20px */
+    --text-xl: 1.5rem;
+    /* 24px */
+    --text-2xl: 1.75rem;
+    /* 28px */
+    --text-3xl: 2.25rem;
+    /* 36px */
+    --text-4xl: 2.875rem;
+    /* 46px */
+    --text-hero: clamp(3rem, 8vw, 5.5rem);
+
+    /* Line Heights — Precise vertical rhythm */
+    --leading-none: 1;
+    --leading-tight: 1.1;
+    --leading-snug: 1.25;
+    --leading-normal: 1.47059;
+    --leading-relaxed: 1.6;
+
+    /* Letter Spacing — Apple's tracking */
+    --tracking-tighter: -0.022em;
+    --tracking-tight: -0.015em;
+    --tracking-wide: 0.012em;
+
+    /* Additional Spacing */
+    --space-32: 8rem;
+    --space-40: 10rem;
+
+    /* Layout refinements */
+    --max-width: 980px;
+    --max-width-wide: 1200px;
+    --nav-height: 52px;
+
+    /* Transitions — Apple's signature easing */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    --transition-micro: 0.15s var(--ease-out-expo);
+    --transition-fast: 0.25s var(--ease-out-expo);
+    --transition-base: 0.4s var(--ease-out-expo);
+    --transition-slow: 0.6s var(--ease-out-expo);
+    --transition-slower: 0.8s var(--ease-out-expo);
+    --transition-slowest: 1s var(--ease-out-expo);
+
+    /* Shadows — Soft, layered, premium */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.45);
+    --shadow-glow: 0 0 40px rgba(224, 122, 95, 0.15);
+
+    /* Border Radius — Apple's rounded aesthetic */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+}
+
+/* --------------------------------------------------------------------------
+   Enhanced Base Styles
+   -------------------------------------------------------------------------- */
+html {
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    font-weight: 400;
+    line-height: var(--leading-normal);
+    letter-spacing: 0;
+}
+
+::selection {
+    background-color: rgba(224, 122, 95, 0.25);
+    color: var(--color-text);
+}
+
+/* --------------------------------------------------------------------------
+   Typography Refinements
+   -------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+}
+
+h1 {
+    font-size: var(--text-hero);
+    line-height: var(--leading-none);
+    letter-spacing: var(--tracking-tighter);
+}
+
+h2 {
+    font-size: var(--text-4xl);
+}
+
+h3 {
+    font-size: var(--text-2xl);
+    line-height: var(--leading-snug);
+}
+
+p {
+    line-height: var(--leading-relaxed);
+}
+
+a {
+    transition: color var(--transition-micro);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation — Apple-style frosted glass
+   -------------------------------------------------------------------------- */
+.nav {
+    height: var(--nav-height);
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--color-border-subtle);
+    transition: background-color var(--transition-base);
+}
+
+.nav__link {
+    font-weight: 400;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-muted);
+    transition: color 0.3s var(--ease-out-expo);
+}
+
+.nav__link:hover {
+    color: var(--color-text);
+}
+
+.nav__link::after {
+    transition: transform 0.4s var(--ease-out-expo);
+}
+
+/* --------------------------------------------------------------------------
+   Section Spacing — Generous, intentional
+   -------------------------------------------------------------------------- */
+.section {
+    padding: var(--space-32) 0;
+}
+
+/* --------------------------------------------------------------------------
+   Hero — Luxurious reveal
+   -------------------------------------------------------------------------- */
+.hero__tagline {
+    line-height: var(--leading-snug);
+    animation: fadeInUp 1.2s var(--ease-out-expo) 0.4s forwards;
+}
+
+.hero__image {
+    transition: transform 0.8s var(--ease-out-expo);
+}
+
+/* --------------------------------------------------------------------------
+   Cards — Premium, restrained motion
+   -------------------------------------------------------------------------- */
+.card {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-subtle);
+    transition:
+        transform 0.5s var(--ease-out-expo),
+        box-shadow 0.5s var(--ease-out-expo),
+        border-color 0.5s var(--ease-out-expo);
+}
+
+.card::before {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
+    transition: opacity 0.5s var(--ease-out-expo);
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl), var(--shadow-glow);
+    border-color: var(--color-border);
+}
+
+.card__image {
+    transition: transform 0.8s var(--ease-out-expo);
+}
+
+.card:hover .card__image {
+    transform: scale(1.03);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons — Apple pill style
+   -------------------------------------------------------------------------- */
+.btn {
+    justify-content: center;
+    padding: var(--space-3) var(--space-8);
+    letter-spacing: var(--tracking-wide);
+    border-radius: var(--radius-full);
+    transition: all 0.4s var(--ease-out-expo);
+}
+
+.btn::before {
+    transition: transform 0.5s var(--ease-out-expo);
+}
+
+.btn--primary {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-bg);
+}
+
+.btn--primary::before {
+    background: var(--color-accent-hover);
+}
+
+.btn--primary:hover {
+    border-color: var(--color-accent-hover);
+}
+
+/* --------------------------------------------------------------------------
+   Modal — Apple-style transitions
+   -------------------------------------------------------------------------- */
+.modal {
+    z-index: 2000;
+    transition:
+        opacity 0.4s var(--ease-out-expo),
+        visibility 0.4s var(--ease-out-expo);
+}
+
+.modal__backdrop {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+.modal__content {
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    transform: translateY(30px) scale(0.97);
+    transition: transform 0.5s var(--ease-out-expo);
+}
+
+.modal.is-open .modal__content {
+    transform: translateY(0) scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   Reveal Animations — Slow, smooth, purposeful
+   -------------------------------------------------------------------------- */
+.reveal {
+    transform: translateY(50px);
+    transition:
+        opacity 1s var(--ease-out-expo),
+        transform 1s var(--ease-out-expo);
+}
+
+.reveal-left {
+    transform: translateX(-40px);
+    transition:
+        opacity 1s var(--ease-out-expo),
+        transform 1s var(--ease-out-expo);
+}
+
+.reveal-right {
+    transform: translateX(40px);
+    transition:
+        opacity 1s var(--ease-out-expo),
+        transform 1s var(--ease-out-expo);
+}
+
+.reveal-stagger>* {
+    transform: translateY(30px);
+    transition:
+        opacity 0.8s var(--ease-out-expo),
+        transform 0.8s var(--ease-out-expo);
+}
+
+/* --------------------------------------------------------------------------
+   Career Graph — Enhanced timing
+   -------------------------------------------------------------------------- */
+.career-node__dot {
+    transition: all 0.4s var(--ease-out-expo);
+}
+
+.career-node:hover .career-node__dot {
+    transform: scale(1.3);
+    box-shadow: 0 0 24px rgba(224, 122, 95, 0.5);
+}
+
+.career-node__tooltip {
+    transition: all 0.4s var(--ease-out-expo);
+}
+
+/* --------------------------------------------------------------------------
+   Testimonials — Refined motion
+   -------------------------------------------------------------------------- */
+.testimonial-slide {
+    transition:
+        opacity 0.8s var(--ease-out-expo),
+        transform 0.8s var(--ease-out-expo);
+}
+
+.testimonial-btn {
+    transition: all 0.4s var(--ease-out-expo);
+}
+
+.testimonial-dot {
+    transition: all 0.4s var(--ease-out-expo);
+}
+
+/* --------------------------------------------------------------------------
+   Accordion — Smooth interactions
+   -------------------------------------------------------------------------- */
+.accordion__header {
+    transition:
+        color 0.3s var(--ease-out-expo),
+        padding-left 0.3s var(--ease-out-expo);
+}
+
+.accordion__icon {
+    transition: transform 0.4s var(--ease-out-expo);
+}
+
+.accordion__content {
+    transition: max-height 0.5s var(--ease-out-expo);
+}
+
+/* --------------------------------------------------------------------------
+   Publication Cards — Premium hover
+   -------------------------------------------------------------------------- */
+.publication-card {
+    border-radius: var(--radius-md);
+    transition: all 0.4s var(--ease-out-expo);
+}
+
+.publication-card:hover {
+    transform: translateX(6px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* --------------------------------------------------------------------------
+   PDF Modal — Enhanced animation
+   -------------------------------------------------------------------------- */
+.pdf-modal {
+    transition:
+        opacity 0.4s var(--ease-out-expo),
+        visibility 0.4s var(--ease-out-expo);
+}
+
+.pdf-modal__container {
+    border-radius: var(--radius-lg);
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.5s var(--ease-out-expo);
+}
+
+.pdf-modal.is-open .pdf-modal__container {
+    transform: translateY(0) scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   GitHub Showcase — Refined cards
+   -------------------------------------------------------------------------- */
+.github-graph-card {
+    border-radius: var(--radius-md);
+    transition: all 0.4s var(--ease-out-expo);
+}
+
+.github-graph-card:hover {
+    border-color: var(--color-accent);
+}
+
+/* --------------------------------------------------------------------------
+   Footer — Subtle interactions
+   -------------------------------------------------------------------------- */
+.footer__icon {
+    transition: opacity 0.3s var(--ease-out-expo);
+}
+
+/* --------------------------------------------------------------------------
+   Animation Keyframes — Refined timing
+   -------------------------------------------------------------------------- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation utility classes with refined timing */
+.animate-fade-in-up {
+    animation: fadeInUp 1s var(--ease-out-expo) forwards;
+}
+
+.animate-fade-in-left {
+    animation: fadeInLeft 1s var(--ease-out-expo) forwards;
+}
+
+.animate-fade-in-right {
+    animation: fadeInRight 1s var(--ease-out-expo) forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.8s var(--ease-out-expo) forwards;
+}
+
+/* Extended stagger delays for slower reveal */
+.animate-delay-1 {
+    animation-delay: 0.15s;
+}
+
+.animate-delay-2 {
+    animation-delay: 0.25s;
+}
+
+.animate-delay-3 {
+    animation-delay: 0.35s;
+}
+
+.animate-delay-4 {
+    animation-delay: 0.45s;
+}
+
+.animate-delay-5 {
+    animation-delay: 0.55s;
+}
+
+.animate-delay-6 {
+    animation-delay: 0.65s;
+}
