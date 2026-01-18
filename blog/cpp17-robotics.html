@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Modern C++17 patterns for safer, more expressive robotics code including std::optional, structured bindings, and constexpr.">
+    <title>Modern C++17 Patterns for Robotics | Arjun S Kumar</title>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme-dark.css">
+    <link rel="stylesheet" href="../css/apple-refinements.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <style>
+        .article-hero {
+            padding: calc(var(--nav-height) + var(--space-16)) 0 var(--space-16);
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+            flex-wrap: wrap;
+        }
+
+        .article-meta span {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .article-tag {
+            background: rgba(99, 179, 237, 0.15);
+            color: #63b3ed;
+            padding: var(--space-1) var(--space-3);
+            border-radius: 4px;
+            font-size: var(--text-xs);
+            font-weight: 500;
+        }
+
+        .article-content {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-6);
+        }
+
+        .article-content h2 {
+            font-size: var(--text-2xl);
+            margin-top: var(--space-12);
+            margin-bottom: var(--space-6);
+        }
+
+        .article-content h3 {
+            font-size: var(--text-xl);
+            margin-top: var(--space-10);
+            margin-bottom: var(--space-4);
+        }
+
+        .article-content p {
+            font-size: var(--text-base);
+            line-height: 1.8;
+            margin-bottom: var(--space-6);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: var(--space-6) 0;
+            padding-left: var(--space-8);
+        }
+
+        .article-content li {
+            margin-bottom: var(--space-3);
+            line-height: 1.7;
+            color: var(--color-text-muted);
+        }
+
+        .article-content code {
+            background: var(--color-bg-card);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+        }
+
+        .article-content pre {
+            background: var(--color-bg-card);
+            padding: var(--space-6);
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: var(--space-8) 0;
+            border: 1px solid var(--color-border);
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .article-content blockquote {
+            border-left: 3px solid var(--color-accent);
+            padding-left: var(--space-6);
+            margin: var(--space-8) 0;
+            font-style: italic;
+            color: var(--color-text);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            opacity: 0.7;
+            transition: opacity var(--transition-fast);
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .article-footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: var(--space-12) var(--space-6);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .author-card {
+            display: flex;
+            gap: var(--space-6);
+            align-items: center;
+        }
+
+        .author-card img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-card h4 {
+            font-size: var(--text-base);
+            margin-bottom: var(--space-1);
+        }
+
+        .author-card p {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav">
+        <a href="../index-v2.html#about" class="nav__link">About</a>
+        <a href="../index-v2.html" class="nav__logo">Arjun S Kumar</a>
+        <div class="nav__cta">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin nav__icon"></i>
+            </a>
+            <a href="mailto:arjunskumar22@gmail.com" class="nav__link">Reach Out</a>
+        </div>
+    </nav>
+
+    <header class="article-hero">
+        <div class="container" style="max-width: 720px;">
+            <a href="../index-v2.html#blog" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Notes
+            </a>
+            <h1 style="margin-top: var(--space-8); font-size: var(--text-4xl);">Modern C++17 Patterns for Robotics</h1>
+            <div class="article-meta">
+                <span class="article-tag">C++</span>
+                <span>12 min read</span>
+                <span>•</span>
+                <span>January 2026</span>
+            </div>
+        </div>
+    </header>
+
+    <article class="article-content">
+        <p class="lead" style="font-size: var(--text-lg); color: var(--color-text);">
+            C++17 introduced features that dramatically improve code safety and expressiveness. Here's how I use them in
+            production robotics systems.
+        </p>
+
+        <h2>1. std::optional for Sensor Data</h2>
+        <p>
+            Sensor readings can fail. Before C++17, we'd use sentinel values (<code>-1</code>, <code>nullptr</code>) or
+            output parameters. <code>std::optional</code> makes failure explicit:
+        </p>
+        <pre><code class="language-cpp">// Before: Unclear what -1 means
+double getLidarRange(int beam_id); 
+
+// After: Explicit optionality
+std::optional&lt;double&gt; getLidarRange(int beam_id) {
+    if (!isBeamValid(beam_id)) {
+        return std::nullopt;
+    }
+    return ranges_[beam_id];
+}
+
+// Usage
+if (auto range = getLidarRange(42); range) {
+    processPoint(*range);
+} else {
+    handleMissingScan();
+}</code></pre>
+
+        <h2>2. Structured Bindings for Transforms</h2>
+        <p>
+            Robotics is full of pairs and tuples — transforms, covariances, timestamped data. Structured bindings make
+            decomposition clean:
+        </p>
+        <pre><code class="language-cpp">// Decomposing a transform
+auto [translation, rotation] = getOdometry();
+
+// With maps
+std::map&lt;std::string, Sensor&gt; sensors;
+for (const auto& [name, sensor] : sensors) {
+    LOG_INFO("Sensor {} online: {}", name, sensor.isHealthy());
+}
+
+// Multiple return values
+auto [success, pose, covariance] = localize(scan);
+if (success) {
+    publishPose(pose, covariance);
+}</code></pre>
+
+        <h2>3. if constexpr for Compile-Time Branching</h2>
+        <p>
+            When writing templated code for different sensor types, <code>if constexpr</code> eliminates dead branches
+            at compile time:
+        </p>
+        <pre><code class="language-cpp">template&lt;typename SensorT&gt;
+void processMeasurement(const SensorT& sensor) {
+    if constexpr (std::is_same_v&lt;SensorT, LidarSensor&gt;) {
+        // This code only compiles for Lidar
+        auto pointcloud = sensor.getPointCloud();
+        slamBackend_.addScan(pointcloud);
+    } else if constexpr (std::is_same_v&lt;SensorT, CameraSensor&gt;) {
+        // This code only compiles for Camera
+        auto image = sensor.getImage();
+        visualOdometry_.processFrame(image);
+    }
+}</code></pre>
+
+        <h2>4. std::string_view for Zero-Copy Logging</h2>
+        <p>
+            In real-time systems, unnecessary allocations hurt. <code>std::string_view</code> provides a non-owning
+            view:
+        </p>
+        <pre><code class="language-cpp">// No allocation - just a pointer and length
+void logMessage(std::string_view msg, std::string_view level = "INFO") {
+    std::cout << "[" << level << "] " << msg << "\n";
+}
+
+// Works with string literals, std::string, char arrays
+logMessage("Robot initialized");                    // No copy
+logMessage(sensor.getName());                       // No copy
+logMessage(std::string("Dynamic: ") + value);       // Temporary ok</code></pre>
+
+        <h2>5. [[nodiscard]] for Critical Returns</h2>
+        <p>
+            Prevent silent failures by forcing callers to handle return values:
+        </p>
+        <pre><code class="language-cpp">[[nodiscard]] bool armMotors() {
+    if (!safetySystemOk()) return false;
+    motors_.enable();
+    return true;
+}
+
+// Compiler warning if ignored!
+armMotors();  // Warning: ignoring return value
+
+// Correct usage
+if (!armMotors()) {
+    emergencyStop();
+}</code></pre>
+
+        <blockquote>
+            Modern C++ isn't about using every new feature — it's about choosing the ones that make your intent clearer
+            and your bugs louder.
+        </blockquote>
+
+        <h3>Compiler Flags I Use</h3>
+        <pre><code class="language-bash"># Enable C++17 with strict warnings
+-std=c++17 -Wall -Wextra -Wpedantic -Werror
+# Catch more issues
+-Wshadow -Wnon-virtual-dtor -Wold-style-cast
+# Sanitizers for development
+-fsanitize=address,undefined</code></pre>
+
+        <h3>Further Reading</h3>
+        <ul>
+            <li>C++ Core Guidelines at isocpp.github.io</li>
+            <li>"Effective Modern C++" by Scott Meyers</li>
+            <li>The robotics-specific patterns in ROS2's rclcpp library</li>
+        </ul>
+    </article>
+
+    <footer class="article-footer">
+        <div class="author-card">
+            <img src="../images/arjun.jpeg" alt="Arjun S Kumar">
+            <div>
+                <h4>Arjun S Kumar</h4>
+                <p>Lead Autonomy Engineer specializing in SLAM and autonomous systems</p>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="footer">
+        <div class="footer__social">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin footer__icon"></i>
+            </a>
+            <a href="https://github.com/arjunskumar" target="_blank" aria-label="GitHub">
+                <i class="fa-brands fa-github footer__icon"></i>
+            </a>
+        </div>
+        <p class="footer__copy">© 2026 Arjun S Kumar</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+
+</body>
+
+</html>

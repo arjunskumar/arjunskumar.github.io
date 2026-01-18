@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="How to use ROS2 managed lifecycle nodes for deterministic startup, graceful shutdown, and error recovery.">
+    <title>ROS2 Lifecycle Nodes: Managing Robot State | Arjun S Kumar</title>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme-dark.css">
+    <link rel="stylesheet" href="../css/apple-refinements.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <style>
+        .article-hero {
+            padding: calc(var(--nav-height) + var(--space-16)) 0 var(--space-16);
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+            flex-wrap: wrap;
+        }
+
+        .article-meta span {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .article-tag {
+            background: rgba(72, 187, 120, 0.15);
+            color: #48bb78;
+            padding: var(--space-1) var(--space-3);
+            border-radius: 4px;
+            font-size: var(--text-xs);
+            font-weight: 500;
+        }
+
+        .article-content {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-6);
+        }
+
+        .article-content h2 {
+            font-size: var(--text-2xl);
+            margin-top: var(--space-12);
+            margin-bottom: var(--space-6);
+        }
+
+        .article-content h3 {
+            font-size: var(--text-xl);
+            margin-top: var(--space-10);
+            margin-bottom: var(--space-4);
+        }
+
+        .article-content p {
+            font-size: var(--text-base);
+            line-height: 1.8;
+            margin-bottom: var(--space-6);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: var(--space-6) 0;
+            padding-left: var(--space-8);
+        }
+
+        .article-content li {
+            margin-bottom: var(--space-3);
+            line-height: 1.7;
+            color: var(--color-text-muted);
+        }
+
+        .article-content code {
+            background: var(--color-bg-card);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+        }
+
+        .article-content pre {
+            background: var(--color-bg-card);
+            padding: var(--space-6);
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: var(--space-8) 0;
+            border: 1px solid var(--color-border);
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .article-content blockquote {
+            border-left: 3px solid var(--color-accent);
+            padding-left: var(--space-6);
+            margin: var(--space-8) 0;
+            font-style: italic;
+            color: var(--color-text);
+        }
+
+        .state-diagram {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: var(--space-8);
+            text-align: center;
+            margin: var(--space-8) 0;
+        }
+
+        .state-diagram code {
+            font-size: var(--text-sm);
+            line-height: 2;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            opacity: 0.7;
+            transition: opacity var(--transition-fast);
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .article-footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: var(--space-12) var(--space-6);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .author-card {
+            display: flex;
+            gap: var(--space-6);
+            align-items: center;
+        }
+
+        .author-card img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-card h4 {
+            font-size: var(--text-base);
+            margin-bottom: var(--space-1);
+        }
+
+        .author-card p {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav">
+        <a href="../index-v2.html#about" class="nav__link">About</a>
+        <a href="../index-v2.html" class="nav__logo">Arjun S Kumar</a>
+        <div class="nav__cta">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin nav__icon"></i>
+            </a>
+            <a href="mailto:arjunskumar22@gmail.com" class="nav__link">Reach Out</a>
+        </div>
+    </nav>
+
+    <header class="article-hero">
+        <div class="container" style="max-width: 720px;">
+            <a href="../index-v2.html#blog" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Notes
+            </a>
+            <h1 style="margin-top: var(--space-8); font-size: var(--text-4xl);">ROS2 Lifecycle Nodes: Managing Robot
+                State</h1>
+            <div class="article-meta">
+                <span class="article-tag">ROS2</span>
+                <span>10 min read</span>
+                <span>•</span>
+                <span>January 2026</span>
+            </div>
+        </div>
+    </header>
+
+    <article class="article-content">
+        <p class="lead" style="font-size: var(--text-lg); color: var(--color-text);">
+            Production robots need predictable startup sequences, graceful degradation, and clean shutdown. ROS2
+            lifecycle nodes provide exactly this — and most teams aren't using them.
+        </p>
+
+        <h2>The Problem with Regular Nodes</h2>
+        <p>
+            Standard ROS2 nodes start processing immediately upon launch. This causes issues:
+        </p>
+        <ul>
+            <li><strong>Race conditions:</strong> Node A publishes before Node B is ready to subscribe</li>
+            <li><strong>No error recovery:</strong> If initialization fails, the node is in an undefined state</li>
+            <li><strong>Unclean shutdown:</strong> Resources may not be properly released</li>
+        </ul>
+        <p>
+            In one of our cleaning robots, an unmanaged SLAM node would occasionally start publishing poses before the
+            sensor drivers were ready, causing localization to diverge.
+        </p>
+
+        <h2>Lifecycle Node States</h2>
+        <p>
+            Lifecycle nodes have four primary states with explicit transitions:
+        </p>
+        <div class="state-diagram">
+            <code>
+                Unconfigured → [configure] → Inactive → [activate] → Active<br>
+                         ↑                          ↓<br>
+                   [cleanup]              [deactivate]<br>
+                         ↑←←←←←←←←←←←←←←←←←←←←←←←←←↓
+            </code>
+        </div>
+        <ul>
+            <li><strong>Unconfigured:</strong> Node exists but hasn't loaded parameters or created publishers</li>
+            <li><strong>Inactive:</strong> Configured and ready, but not processing data</li>
+            <li><strong>Active:</strong> Fully operational, callbacks are being executed</li>
+            <li><strong>Finalized:</strong> About to be destroyed</li>
+        </ul>
+
+        <h2>Implementation Example</h2>
+        <p>
+            Here's a lifecycle-managed SLAM node:
+        </p>
+        <pre><code class="language-cpp">#include &lt;rclcpp_lifecycle/lifecycle_node.hpp&gt;
+
+class SlamNode : public rclcpp_lifecycle::LifecycleNode {
+public:
+    SlamNode() : LifecycleNode("slam_node") {}
+
+    // Called when transitioning to Inactive
+    CallbackReturn on_configure(const rclcpp_lifecycle::State&) override {
+        RCLCPP_INFO(get_logger(), "Configuring SLAM...");
+        
+        // Load parameters
+        map_resolution_ = declare_parameter("resolution", 0.05);
+        
+        // Create publishers (but don't activate yet)
+        pose_pub_ = create_publisher&lt;PoseStamped&gt;("pose", 10);
+        
+        // Initialize SLAM backend
+        if (!slam_.initialize(map_resolution_)) {
+            RCLCPP_ERROR(get_logger(), "SLAM init failed!");
+            return CallbackReturn::FAILURE;
+        }
+        
+        return CallbackReturn::SUCCESS;
+    }
+
+    // Called when transitioning to Active
+    CallbackReturn on_activate(const rclcpp_lifecycle::State&) override {
+        RCLCPP_INFO(get_logger(), "Activating SLAM...");
+        
+        // Activate the publisher
+        pose_pub_->on_activate();
+        
+        // Subscribe to sensor data only when active
+        scan_sub_ = create_subscription&lt;LaserScan&gt;(
+            "scan", 10, 
+            std::bind(&SlamNode::scanCallback, this, _1));
+        
+        return CallbackReturn::SUCCESS;
+    }
+
+    // Called when transitioning back to Inactive
+    CallbackReturn on_deactivate(const rclcpp_lifecycle::State&) override {
+        RCLCPP_INFO(get_logger(), "Deactivating SLAM...");
+        
+        pose_pub_->on_deactivate();
+        scan_sub_.reset();  // Stop receiving scans
+        
+        return CallbackReturn::SUCCESS;
+    }
+
+    // Called when transitioning to Unconfigured
+    CallbackReturn on_cleanup(const rclcpp_lifecycle::State&) override {
+        RCLCPP_INFO(get_logger(), "Cleaning up SLAM...");
+        
+        slam_.reset();
+        pose_pub_.reset();
+        
+        return CallbackReturn::SUCCESS;
+    }
+
+private:
+    rclcpp_lifecycle::LifecyclePublisher&lt;PoseStamped&gt;::SharedPtr pose_pub_;
+    rclcpp::Subscription&lt;LaserScan&gt;::SharedPtr scan_sub_;
+    SlamBackend slam_;
+    double map_resolution_;
+};</code></pre>
+
+        <h2>Orchestrating with launch_ros</h2>
+        <p>
+            Use the lifecycle manager to coordinate startup:
+        </p>
+        <pre><code class="language-python"># launch/robot_bringup.launch.py
+from launch_ros.actions import LifecycleNode
+from nav2_common.launch import RewrittenYaml
+
+def generate_launch_description():
+    slam_node = LifecycleNode(
+        package='my_slam',
+        executable='slam_node',
+        name='slam',
+        output='screen',
+        parameters=[params_file]
+    )
+    
+    lifecycle_manager = Node(
+        package='nav2_lifecycle_manager',
+        executable='lifecycle_manager',
+        parameters=[{
+            'autostart': True,
+            'node_names': ['slam', 'localization', 'navigation']
+        }]
+    )
+    
+    return LaunchDescription([slam_node, lifecycle_manager])</code></pre>
+
+        <blockquote>
+            Lifecycle nodes aren't just a nice-to-have — they're essential for building robots that behave predictably
+            in production.
+        </blockquote>
+
+        <h3>When to Use Lifecycle Nodes</h3>
+        <ul>
+            <li>Any node that manages hardware (drivers, actuators)</li>
+            <li>Nodes with expensive initialization (map loading, ML models)</li>
+            <li>Nodes that depend on other nodes being ready first</li>
+            <li>Any production robot system</li>
+        </ul>
+
+        <h3>Further Reading</h3>
+        <ul>
+            <li>ROS2 Design: Managed Nodes (design.ros2.org)</li>
+            <li>Nav2 documentation on lifecycle management</li>
+            <li>rclcpp_lifecycle API documentation</li>
+        </ul>
+    </article>
+
+    <footer class="article-footer">
+        <div class="author-card">
+            <img src="../images/arjun.jpeg" alt="Arjun S Kumar">
+            <div>
+                <h4>Arjun S Kumar</h4>
+                <p>Lead Autonomy Engineer specializing in SLAM and autonomous systems</p>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="footer">
+        <div class="footer__social">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin footer__icon"></i>
+            </a>
+            <a href="https://github.com/arjunskumar" target="_blank" aria-label="GitHub">
+                <i class="fa-brands fa-github footer__icon"></i>
+            </a>
+        </div>
+        <p class="footer__copy">© 2026 Arjun S Kumar</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+</body>
+
+</html>

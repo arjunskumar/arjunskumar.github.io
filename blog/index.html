@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Technical notes on robotics, SLAM, C++, and autonomous systems by Arjun S Kumar.">
+    <title>Technical Notes | Arjun S Kumar</title>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme-dark.css">
+    <link rel="stylesheet" href="../css/apple-refinements.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        .blog-hero {
+            padding: calc(var(--nav-height) + var(--space-16)) 0 var(--space-12);
+        }
+
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+
+        .blog-card {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: var(--space-6);
+            padding: var(--space-8);
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.4s var(--ease-out-expo);
+            align-items: center;
+        }
+
+        .blog-card:hover {
+            border-color: var(--color-accent);
+            transform: translateX(8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .blog-card__date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+            color: var(--color-text-muted);
+        }
+
+        .blog-card__day {
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            color: var(--color-accent);
+            line-height: 1;
+        }
+
+        .blog-card__month {
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .blog-card__content h2 {
+            font-size: var(--text-xl);
+            margin-bottom: var(--space-2);
+            color: var(--color-text);
+        }
+
+        .blog-card__content p {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .blog-card__meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-top: var(--space-3);
+        }
+
+        .blog-card__tag {
+            padding: var(--space-1) var(--space-3);
+            border-radius: 4px;
+            font-size: var(--text-xs);
+            font-weight: 500;
+        }
+
+        .tag-slam {
+            background: rgba(224, 122, 95, 0.15);
+            color: var(--color-accent);
+        }
+
+        .tag-cpp {
+            background: rgba(99, 179, 237, 0.15);
+            color: #63b3ed;
+        }
+
+        .tag-ros2 {
+            background: rgba(72, 187, 120, 0.15);
+            color: #48bb78;
+        }
+
+        .blog-card__read-time {
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+
+        .blog-card__arrow {
+            font-size: var(--text-lg);
+            color: var(--color-accent);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .blog-card:hover .blog-card__arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            opacity: 0.7;
+            transition: opacity var(--transition-fast);
+            margin-bottom: var(--space-8);
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .blog-card {
+                grid-template-columns: 1fr;
+                gap: var(--space-4);
+            }
+
+            .blog-card__date {
+                flex-direction: row;
+                gap: var(--space-2);
+            }
+
+            .blog-card__arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="../index-v2.html#about" class="nav__link">About</a>
+        <a href="../index-v2.html" class="nav__logo">Arjun S Kumar</a>
+        <div class="nav__cta">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin nav__icon"></i>
+            </a>
+            <a href="mailto:arjunskumar22@gmail.com" class="nav__link">Reach Out</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="blog-hero">
+        <div class="container">
+            <a href="../index-v2.html" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+            <h1>Technical Notes</h1>
+            <p style="margin-top: var(--space-4); max-width: 600px; color: var(--color-text-muted);">
+                Deep dives into robotics, SLAM algorithms, and lessons learned from building autonomous systems at
+                scale.
+            </p>
+        </div>
+    </header>
+
+    <!-- Blog List -->
+    <main class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="blog-list">
+
+                <!-- Article 1 -->
+                <a href="factor-graphs-slam.html" class="blog-card">
+                    <div class="blog-card__date">
+                        <span class="blog-card__day">15</span>
+                        <span class="blog-card__month">Jan 26</span>
+                    </div>
+                    <div class="blog-card__content">
+                        <h2>Factor Graphs for SLAM: A Practical Introduction</h2>
+                        <p>Understanding how factor graphs enable efficient optimization in modern SLAM systems like
+                            GTSAM and iSAM2.</p>
+                        <div class="blog-card__meta">
+                            <span class="blog-card__tag tag-slam">SLAM</span>
+                            <span class="blog-card__read-time">8 min read</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right blog-card__arrow"></i>
+                </a>
+
+                <!-- Article 2 -->
+                <a href="cpp17-robotics.html" class="blog-card">
+                    <div class="blog-card__date">
+                        <span class="blog-card__day">10</span>
+                        <span class="blog-card__month">Jan 26</span>
+                    </div>
+                    <div class="blog-card__content">
+                        <h2>Modern C++17 Patterns for Robotics</h2>
+                        <p>Leveraging std::optional, structured bindings, and constexpr for safer, more expressive
+                            robotics code.</p>
+                        <div class="blog-card__meta">
+                            <span class="blog-card__tag tag-cpp">C++</span>
+                            <span class="blog-card__read-time">12 min read</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right blog-card__arrow"></i>
+                </a>
+
+                <!-- Article 3 -->
+                <a href="ros2-lifecycle-nodes.html" class="blog-card">
+                    <div class="blog-card__date">
+                        <span class="blog-card__day">05</span>
+                        <span class="blog-card__month">Jan 26</span>
+                    </div>
+                    <div class="blog-card__content">
+                        <h2>ROS2 Lifecycle Nodes: Managing Robot State</h2>
+                        <p>How to use managed nodes for deterministic startup, graceful shutdown, and error recovery in
+                            production robots.</p>
+                        <div class="blog-card__meta">
+                            <span class="blog-card__tag tag-ros2">ROS2</span>
+                            <span class="blog-card__read-time">10 min read</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right blog-card__arrow"></i>
+                </a>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__social">
+            <a href="https://linkedin.com/in/arjunskumar" target="_blank" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin footer__icon"></i>
+            </a>
+            <a href="https://github.com/arjunskumar" target="_blank" aria-label="GitHub">
+                <i class="fa-brands fa-github footer__icon"></i>
+            </a>
+        </div>
+        <p class="footer__copy">© 2026 Arjun S Kumar</p>
+    </footer>
+
+</body>
+
+</html>
