@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 36" fill="currentColor">
+  <!-- Addverb Stylized Geometric Chevron / A Mark -->
+  <g fill="currentColor">
+    <polygon points="4,28 14,5 24,28 19,28 14,14 9,28" fill="currentColor"/>
+    <polygon points="12,18 16,18 14,11" fill="#BE2D2D"/>
+    <rect x="25" y="11" width="3" height="17" fill="currentColor"/>
+  </g>
+  <!-- Addverb Wordmark -->
+  <text x="36" y="24" font-family="'Space Grotesk', -apple-system, sans-serif" font-size="16" font-weight="700" letter-spacing="1">ADDVERB</text>
+</svg>

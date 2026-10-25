@@ -1,0 +1,36 @@
+# Arjun S. Kumar
+
+> Technical Lead, Robotics at Botsync (Bangalore, India), since October 2026. 8+ years building 3D LiDAR SLAM, factor-graph state estimation and perception systems. His autonomy stacks run on 1,800+ commercial robots worldwide.
+
+Canonical page: https://arjunskumar.github.io/portfolio/
+Contact: arjunskumar22@gmail.com
+LinkedIn: https://linkedin.com/in/arjunskumar
+GitHub: https://github.com/arjunskumar
+Résumé (PDF): https://arjunskumar.github.io/portfolio/assets/pdf/Arjun_S_Kumar_Resume.pdf
+
+## Headline results
+- 1,800+ robots running his autonomy stack (production 3D LiDAR SLAM on GTSAM iSAM2, commercial cleaning-robot fleet at LionsBot).
+- New-site deployment time cut from weeks to a few minutes by replacing offline rosbag mapping with a real-time online 3D SLAM pipeline (Botsync).
+- 8+ years building production autonomy: warehouse forklifts, cleaning robots, micro aerial vehicles, edge perception.
+- Author of the open-source "Robotics_CPP_Notes" (modern C++ for robotics engineers) with 300+ GitHub stars.
+
+## Experience
+- Technical Lead, Robotics, Botsync, Bangalore (Oct 2026 - present). Leads the AMR engineering team and the mapping and localization stack.
+- Staff Robotics Engineer, Botsync (Jan 2026 - Sep 2026). Led the AMR India team; built real-time online 3D SLAM and a 2D/3D Map Editor.
+- Volunteer Instructor, Robotics, Entri.App (Aug 2025 - present). ROS 2, modern C++, SLAM, state estimation, control theory.
+- Senior Engineer, Autonomy, LionsBot International, Singapore (Feb 2022 - Jul 2025). Production 3D LiDAR SLAM with GTSAM iSAM2 and zero Z-drift for 1,800+ cleaning robots.
+- Senior Engineer, Machine Learning & Robotics, Ignitarium Technologies, Kerala (Apr 2019 - Jan 2022). Navigation stack and CNN perception on TI Jacinto J7.
+- Research Associate, Robotics, Nanyang Technological University, Singapore (Aug 2018 - Apr 2019). MAV with stereo cameras; VINS-Mono and ROVIO benchmarking on Jetson TX2.
+- Robotics Engineer, Addverb Technologies, Noida (Jan 2018 - Jul 2018). RGB-D bin picking, 80% pick success.
+- Robotics Consultant and Master's Thesis Student, Ernst & Young, Kerala (2017). Surface-crack detection thesis reaching 89% accuracy.
+- Mobile Robotics Intern, Ingeniarius Lda, Coimbra, Portugal (Jun - Oct 2016). Swarm exploration, 3x faster area coverage than baseline PSO.
+- Education: M.Tech Robotics & Automation (2015-2017) and B.Tech Computer Science & Engineering (2011-2015), Amrita School of Engineering.
+
+## Selected work
+- Real-time online 3D SLAM pipeline (Botsync, 2026): online 3D maps replace offline rosbag mapping.
+- Interactive multi-layer 2D/3D map editor (Botsync, 2026): map merging, alignment and manual cleaning.
+- Fleet autonomy stack with zero Z-drift (LionsBot, 2022-2025): GTSAM iSAM2 3D LiDAR SLAM on 1,800+ robots.
+- Edge perception and navigation on TI Jacinto J7 (Ignitarium, 2019-2022).
+
+## Skills
+C++, Python, PyTorch, CUDA, TensorRT, ROS / ROS 2, OpenCV, PCL, GTSAM, g2o, Gazebo, Docker, CI/CD, Linux, 2D/3D LiDAR, RGB-D cameras, IMUs, Nvidia Jetson, TI Jacinto, factor graphs, iSAM2, scan matching (ICP / NDT), loop closure, IMU pre-integration, VIO, Kalman filtering.

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 36" fill="currentColor">
+  <!-- EY Angular Logomark -->
+  <g fill="currentColor">
+    <!-- E with yellow/accent beam -->
+    <path d="M 6 6 L 24 6 L 24 11 L 12 11 L 12 16 L 22 16 L 22 21 L 12 21 L 12 26 L 25 26 L 25 31 L 6 31 Z"/>
+    <!-- Yellow / Accent Beam over EY -->
+    <polygon points="18,3 32,3 27,6 13,6" fill="#FEE700"/>
+    <!-- Y -->
+    <path d="M 28 6 L 35 6 L 41 18 L 47 6 L 54 6 L 44 23 L 44 31 L 38 31 L 38 23 Z"/>
+  </g>
+</svg>

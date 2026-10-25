@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 36" fill="currentColor">
+  <!-- LionsBot Geometric Lion Head Icon -->
+  <g fill="currentColor">
+    <path d="M 6 6 L 16 2 L 26 6 L 24 16 L 16 26 L 8 16 Z" fill="none" stroke="currentColor" stroke-width="1.75"/>
+    <polygon points="16,8 21,15 11,15" fill="currentColor"/>
+    <circle cx="16" cy="20" r="2.5" fill="#BE2D2D"/>
+  </g>
+  <!-- LionsBot Wordmark -->
+  <text x="36" y="24" font-family="'Space Grotesk', -apple-system, sans-serif" font-size="16" font-weight="700" letter-spacing="1">LIONSBOT</text>
+</svg>

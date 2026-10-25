@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#121212"/>
+  <text x="8" y="44" font-family="'Space Grotesk', -apple-system, sans-serif" font-size="28" font-weight="700" fill="#ECECEC" letter-spacing="-1">ASK</text>
+  <circle cx="56" cy="42" r="4.5" fill="#BE2D2D"/>
+</svg>

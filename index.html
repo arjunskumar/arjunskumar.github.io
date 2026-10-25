@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#07090d">
+  <title>Arjun S. Kumar | Technical Lead, Robotics (SLAM &amp; State Estimation)</title>
+
+  <meta name="author" content="Arjun S Kumar">
+  <meta name="description" content="Arjun S Kumar is a Technical Lead in Robotics at Botsync. 8+ years building 3D LiDAR SLAM, factor-graph state estimation and perception systems running on 1,800+ commercial robots worldwide.">
+  <meta name="keywords" content="Arjun S Kumar, Technical Lead Robotics, SLAM, 3D LiDAR SLAM, state estimation, factor graphs, GTSAM, iSAM2, ROS 2, Botsync, LionsBot, autonomous mobile robots, AMR">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://arjunskumar.github.io/portfolio/">
+  <link rel="alternate" type="text/markdown" href="https://arjunskumar.github.io/portfolio/llms.txt" title="Plain-text summary for language models">
+
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Arjun S. Kumar">
+  <meta property="og:title" content="Arjun S. Kumar | Technical Lead, Robotics">
+  <meta property="og:description" content="3D LiDAR SLAM, state estimation and fleet-scale autonomy on 1,800+ commercial robots.">
+  <meta property="og:url" content="https://arjunskumar.github.io/portfolio/">
+  <meta property="og:image" content="https://arjunskumar.github.io/portfolio/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Top-down LiDAR map of a warehouse with the name Arjun S. Kumar, Technical Lead, Robotics">
+  <meta property="og:locale" content="en_US">
+  <meta property="profile:first_name" content="Arjun">
+  <meta property="profile:last_name" content="Kumar">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Arjun S. Kumar | Technical Lead, Robotics">
+  <meta name="twitter:description" content="3D LiDAR SLAM, state estimation and fleet-scale autonomy on 1,800+ commercial robots.">
+  <meta name="twitter:image" content="https://arjunskumar.github.io/portfolio/assets/img/og.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://arjunskumar.github.io/portfolio/#arjun",
+        "name": "Arjun S Kumar",
+        "givenName": "Arjun",
+        "jobTitle": "Technical Lead, Robotics",
+        "description": "Robotics technical lead specialising in 3D LiDAR SLAM, factor-graph state estimation and fleet-scale autonomy.",
+        "url": "https://arjunskumar.github.io/portfolio/",
+        "image": "https://arjunskumar.github.io/portfolio/assets/img/og.png",
+        "email": "mailto:arjunskumar22@gmail.com",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Botsync",
+          "address": { "@type": "PostalAddress", "addressLocality": "Bangalore", "addressCountry": "IN" }
+        },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Amrita School of Engineering" },
+        "knowsAbout": ["SLAM", "3D LiDAR SLAM", "State estimation", "Factor graphs", "GTSAM", "iSAM2", "Sensor fusion", "Autonomous mobile robots", "ROS 2", "Modern C++", "Perception systems", "Visual-inertial odometry"],
+        "sameAs": ["https://github.com/arjunskumar", "https://linkedin.com/in/arjunskumar"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://arjunskumar.github.io/portfolio/#website",
+        "url": "https://arjunskumar.github.io/portfolio/",
+        "name": "Arjun S. Kumar",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://arjunskumar.github.io/portfolio/#arjun" }
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://arjunskumar.github.io/portfolio/#profile",
+        "url": "https://arjunskumar.github.io/portfolio/",
+        "name": "Arjun S. Kumar | Technical Lead, Robotics",
+        "isPartOf": { "@id": "https://arjunskumar.github.io/portfolio/#website" },
+        "mainEntity": { "@id": "https://arjunskumar.github.io/portfolio/#arjun" },
+        "dateModified": "2026-10-25"
+      }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="preload" href="assets/data/warehouse_hero.bin" as="fetch" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <noscript><style>
+    .reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
+    .scrub .w { color: #fff !important; } .pin-foot { opacity: 1 !important; transform: none !important; }
+    .hero, .chapter-pin { height: auto !important; } .hero-sticky, .chapter-pin .pin { position: relative !important; height: auto !important; padding: 28vh 0 6vh; }
+    .hero-cap, .hero-cue, .hero-skip { display: none; }
+  </style></noscript>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Persistent 3D backdrop: one canvas for the whole page -->
+  <canvas id="world-canvas" aria-hidden="true"></canvas>
+  <div class="world-veil" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="#top" class="mark" aria-label="Arjun, back to top">Arjun</a>
+    <nav class="nav-links" id="nav-links" aria-label="Sections">
+      <a href="#results">Results</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Work</a>
+      <!-- <a href="#figures">Drive</a> -->
+      <a href="#notes">Open source</a>
+      <a href="assets/pdf/Arjun_S_Kumar_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </nav>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span><span></span></button>
+    <div class="nav-progress" id="nav-progress" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+
+  <!-- ============ Hero: scroll-linked camera flight ============ -->
+  <section id="top" class="hero" data-cam="hero" aria-label="Introduction">
+    <div class="hero-sticky">
+      <div class="hero-shade" aria-hidden="true"></div>
+
+      <div class="hero-copy" id="hero-copy">
+        <p class="eyebrow">Robotics · SLAM · Autonomy</p>
+        <h1>Arjun S. Kumar</h1>
+        <p class="hero-role">Technical Lead, Robotics</p>
+        <p class="hero-org">Botsync · Bangalore, India</p>
+        <div class="hero-cta">
+          <a class="cta cta-primary" href="#projects">See my work</a>
+          <a class="cta" href="assets/pdf/Arjun_S_Kumar_Resume.pdf" target="_blank" rel="noopener">Download résumé</a>
+        </div>
+        <ul class="hero-links">
+          <li><a href="https://linkedin.com/in/arjunskumar" target="_blank" rel="external nofollow noopener">LinkedIn</a></li>
+          <li><a href="https://github.com/arjunskumar" target="_blank" rel="external nofollow noopener">GitHub</a></li>
+          <li>
+            <span class="email-chip">
+              <a href="mailto:arjunskumar22@gmail.com">arjunskumar22@gmail.com</a>
+              <button type="button" class="copy-btn" title="Copy email" aria-label="Copy email address" onclick="copyEmailToClipboard('arjunskumar22@gmail.com', this)">copy</button>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="hero-cap" data-range="0.2,0.44"><span>01</span><h2>Map</h2><p>One scan of a real warehouse: 789,841 LiDAR points.</p></div>
+      <div class="hero-cap" data-range="0.46,0.70"><span>02</span><h2>Estimate</h2><p>Factor-graph SLAM on GTSAM iSAM2 keeps the map and the robot consistent.</p></div>
+      <div class="hero-cap" data-range="0.72,0.92"><span>03</span><h2>Deploy</h2><p>The same stack runs on 1,800+ commercial robots.</p></div>
+
+      <div class="hero-cue" id="hero-cue" aria-hidden="true"><span>Scroll</span><i></i></div>
+      <a class="hero-skip" href="#abstract">Skip intro <span aria-hidden="true">↓</span></a>
+    </div>
+  </section>
+
+  <!-- ============ Abstract: words light up as you scroll ============ -->
+  <section id="abstract" class="chapter chapter-pin" data-cam="intro" aria-labelledby="abstract-h">
+    <div class="pin">
+      <h2 class="eyebrow" id="abstract-h">Abstract</h2>
+      <p class="scrub" data-scrub>I build and lead the estimation and autonomy stacks behind mobile robots: <strong>3D LiDAR SLAM</strong>, factor-graph optimization and localization, now running on <strong>1,800+ commercial robots worldwide</strong>. My work takes a problem from the whiteboard (a cost function, a noise model, a proof that it converges) through to fleet deployment, and I lead the engineering teams and cross-functional work needed to make it hold up in production. Over <strong>8+ years</strong> this has spanned warehouse forklifts, commercial cleaning robots, micro aerial vehicles and edge perception.</p>
+      <div class="pin-foot">
+        <p class="keywords"><strong>Keywords:</strong> factor graphs, SLAM, state estimation, sensor fusion, GTSAM / iSAM2, LiDAR odometry, ROS 2, modern C++</p>
+        <div class="math-display" aria-label="Factor-graph maximum a posteriori estimate">
+          <span class="math-caption">The problem I work on: factor-graph SLAM</span>
+          <math display="block" aria-label="X star equals argmin over X of the sum over i of the squared norm of h sub i of X sub i minus z sub i, weighted by sigma sub i"><mrow><msup><mi>X</mi><mo>⋆</mo></msup><mo>=</mo><munder><mi mathvariant="normal">arg&#8201;min</mi><mi>X</mi></munder><munder><mo>∑</mo><mi>i</mi></munder><msubsup><mrow><mo>‖</mo><msub><mi>h</mi><mi>i</mi></msub><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mo>)</mo><mo>−</mo><msub><mi>z</mi><mi>i</mi></msub><mo>‖</mo></mrow><msub><mi mathvariant="normal">Σ</mi><mi>i</mi></msub><mn>2</mn></msubsup></mrow></math>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Results ============ -->
+  <section id="results" class="chapter" data-cam="results">
+    <div class="wrap">
+      <p class="eyebrow reveal">01 — Results</p>
+      <h2 class="display reveal">Numbers that <em>shipped</em>.</h2>
+        <div class="stats" role="list">
+          <div class="stat" role="listitem">
+            <div class="stat-num" data-count="1800" data-suffix="+">1,800+</div>
+            <div class="stat-label">robots running my autonomy stack</div>
+            <p class="stat-note">Production 3D LiDAR SLAM on GTSAM iSAM2, deployed across a commercial cleaning-robot fleet.</p>
+          </div>
+          <div class="stat" role="listitem">
+            <div class="stat-num stat-text">weeks <span class="arrow">→</span> few minutes</div>
+            <div class="stat-label">to deploy a new site</div>
+            <p class="stat-note">Online 3D SLAM replaced offline rosbag recording and hand-corrected pose graphs.</p>
+          </div>
+          <div class="stat" role="listitem">
+            <div class="stat-num" data-count="8" data-suffix="+ yrs">8+ yrs</div>
+            <div class="stat-label">building production autonomy</div>
+            <p class="stat-note">Warehouse forklifts, cleaning robots, micro aerial vehicles and edge perception.</p>
+          </div>
+          <div class="stat" role="listitem">
+            <div class="stat-num"><span id="repo-stars-metric" data-count="355">355</span><span class="star">★</span></div>
+            <div class="stat-label">GitHub stars on an open-source curriculum</div>
+            <p class="stat-note"><em>Robotics C++ Notes</em>: modern C++ for robotics engineers.</p>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- ============ Experience ============ -->
+  <section id="experience" class="chapter" data-cam="experience">
+    <div class="wrap split">
+      <div class="split-head">
+        <p class="eyebrow reveal">02 — Experience</p>
+        <h2 class="display reveal">Eight years of shipping <em>autonomy</em>.</h2>
+      </div>
+      <div class="split-body">
+        <article class="entry">
+          <div class="entry-when">Jan 2026 – present</div>
+          <div class="entry-main">
+            <h3>Botsync</h3>
+            <p class="entry-org">Bangalore, India</p>
+
+            <div class="role">
+              <h4>Technical Lead, Robotics <span class="role-when">Oct 2026 – present</span></h4>
+              <ul>
+                <li>Promoted to <strong>Technical Lead, Robotics</strong>, leading the AMR engineering team and the mapping and localization stack.</li>
+              </ul>
+            </div>
+
+            <div class="role">
+              <h4>Staff Robotics Engineer <span class="role-when">Jan 2026 – Sep 2026</span></h4>
+              <ul>
+                <li>Led the <strong>AMR India engineering team</strong>, owning the mapping and localization stack end to end and serving as the cross-functional point of contact for DevOps, embedded systems, fleet management and customer support.</li>
+                <li>Replaced manual mapping workflows with a <strong>real-time online 3D SLAM pipeline</strong>, removing the need to record rosbags and hand-correct pose graphs offline, and <strong>cutting site deployment time from weeks to a few minutes</strong>.</li>
+                <li>Built a full-featured <strong>Map Editor</strong> for 2D/3D map layers with multi-map merging, coordinate transformation and manual obstacle-layer editing to speed up deployments.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">Aug 2025 – present</div>
+          <div class="entry-main">
+            <h3>Volunteer Instructor, Robotics</h3>
+            <p class="entry-org">Entri.App · Remote · part-time</p>
+            <ul>
+              <li>Teaching <strong>ROS 2, modern C++, SLAM, state estimation, control theory</strong> and robotics mathematics to engineers moving into autonomous robotics.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">Feb 2022 – Jul 2025</div>
+          <div class="entry-main">
+            <h3>Senior Engineer, Autonomy</h3>
+            <p class="entry-org">LionsBot International · Singapore</p>
+            <ul>
+              <li>Built a production <strong>3D LiDAR SLAM system with GTSAM iSAM2 optimization</strong>, eliminating vertical Z-drift in sparse environments for reliable navigation across <strong>1,800+ commercial cleaning robots worldwide</strong>.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">Apr 2019 – Jan 2022</div>
+          <div class="entry-main">
+            <h3>Senior Engineer, Machine Learning &amp; Robotics</h3>
+            <p class="entry-org">Ignitarium Technologies · Kerala, India</p>
+            <ul>
+              <li>Built a complete autonomous navigation stack on the <strong>TI Jacinto J7</strong> heterogeneous processor, integrating SLAM, path planning and real-time obstacle avoidance.</li>
+              <li>Optimized custom CNN architectures for real-time 2D/3D object detection on resource-constrained ARM and x86 edge targets.</li>
+            </ul>
+          </div>
+        </article>
+
+        <details class="more">
+          <summary>Earlier roles and education <span class="more-count">5</span></summary>
+        <article class="entry">
+          <div class="entry-when">Aug 2018 – Apr 2019</div>
+          <div class="entry-main">
+            <h3>Research Associate, Robotics</h3>
+            <p class="entry-org">Nanyang Technological University · Singapore · contract</p>
+            <ul>
+              <li>Designed and built a custom <strong>micro aerial vehicle</strong> with stereo cameras and a Pixhawk flight controller.</li>
+              <li>Benchmarked visual-inertial odometry pipelines including <strong>VINS-Mono and ROVIO</strong> on an onboard Nvidia Jetson TX2 for GPS-denied flight.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">Jan 2018 – Jul 2018</div>
+          <div class="entry-main">
+            <h3>Robotics Engineer</h3>
+            <p class="entry-org">Addverb Technologies · Noida, India</p>
+            <ul>
+              <li>Built an RGB-D bin-picking solution reaching an <strong>80% pick success rate</strong> using ROS and PCL, integrated with ABB and Universal Robots manipulators.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">Jan 2017 – Dec 2017</div>
+          <div class="entry-main">
+            <h3>Robotics Consultant &amp; Master’s Thesis Student</h3>
+            <p class="entry-org">Ernst &amp; Young (EY) · Kerala, India · contract</p>
+            <ul>
+              <li>Delivered industrial proof-of-concept perception solutions using Microsoft HoloLens, RGB-D sensors and CNTK.</li>
+              <li>Thesis research reached <strong>89% accuracy</strong> in neural-network surface-crack detection.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">Jun 2016 – Oct 2016</div>
+          <div class="entry-main">
+            <h3>Mobile Robotics Intern</h3>
+            <p class="entry-org">Ingeniarius Lda · Coimbra, Portugal</p>
+            <ul>
+              <li>Developed and validated swarm exploration algorithms in ROS and Gazebo, extending Darwinian Particle Swarm Optimization to reach <strong>3× faster search-and-rescue area coverage</strong> than baseline PSO.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">2011 – 2017</div>
+          <div class="entry-main">
+            <h3>Education</h3>
+            <p class="entry-org">Amrita School of Engineering · Kerala, India</p>
+            <ul>
+              <li><strong>M.Tech, Robotics &amp; Automation</strong> (Jul 2015 – Jul 2017)</li>
+              <li><strong>B.Tech, Computer Science &amp; Engineering</strong> (Aug 2011 – May 2015)</li>
+            </ul>
+          </div>
+        </article>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Factory floor: inbound truck -> palletizing arm -> forklift -> outbound ============ -->
+  <section id="factory" class="chapter" data-cam="factory" aria-labelledby="factory-h">
+    <div class="wrap">
+      <p class="eyebrow reveal">Live on the floor</p>
+      <h2 class="display reveal" id="factory-h">From truck to <em>pallet</em> to outbound.</h2>
+      <p class="lead reveal">A truck docks and unloads onto the conveyor. A UR-style arm stacks the cartons on a pallet. When it is full, the forklift reverses in, lifts it and carries it to the outbound zone, while the tugger keeps the aisles moving. Same map, same robots, running live behind this page.</p>
+    </div>
+  </section>
+
+  <!-- ============ Selected work (cards open pop-up windows) ============ -->
+  <section id="projects" class="chapter" data-cam="work">
+    <div class="wrap">
+      <p class="eyebrow reveal">03 — Selected work</p>
+      <h2 class="display reveal">Built to run in <em>production</em>.</h2>
+      <p class="lead reveal">Open any card for the full write-up.</p>
+        <div class="work-grid">
+          <article class="work-card">
+            <button type="button" class="work-open" data-modal="p-slam" aria-haspopup="dialog" aria-label="Open details: Real-time online 3D SLAM pipeline">
+              <img class="work-thumb" src="assets/img/work/slam-pipeline-poster.jpg" data-gif="assets/img/work/slam-pipeline.gif" alt="" width="640" height="360" loading="lazy">
+              <span class="work-meta">Botsync, 2026 · production</span>
+              <h3>Real-time online 3D SLAM pipeline</h3>
+              <span class="work-short">Replaced offline rosbag mapping. AMRs now build 3D maps online, cutting site deployment from weeks to a few minutes.</span>
+              <span class="work-more">Read more <span aria-hidden="true">↗</span></span>
+            </button>
+          </article>
+          <article class="work-card">
+            <button type="button" class="work-open" data-modal="p-editor" aria-haspopup="dialog" aria-label="Open details: Interactive multi-layer 2D/3D map editor">
+              <img class="work-thumb" src="assets/img/work/map-editor-poster.jpg" data-gif="assets/img/work/map-editor.gif" alt="" width="640" height="360" loading="lazy">
+              <span class="work-meta">Botsync, 2026 · internal tool</span>
+              <h3>Interactive multi-layer 2D/3D map editor</h3>
+              <span class="work-short">Editor for 2D and 3D map layers with merging, alignment and manual cleaning, built end to end to speed up deployments.</span>
+              <span class="work-more">Read more <span aria-hidden="true">↗</span></span>
+            </button>
+          </article>
+          <article class="work-card">
+            <button type="button" class="work-open" data-modal="p-fleet" aria-haspopup="dialog" aria-label="Open details: Fleet autonomy stack with zero Z-drift">
+              <img class="work-thumb" src="assets/img/work/fleet-autonomy-poster.jpg" data-gif="assets/img/work/fleet-autonomy.gif" alt="" width="640" height="360" loading="lazy">
+              <span class="work-meta">LionsBot, 2022 – 2025 · global scale</span>
+              <h3>Fleet autonomy stack with zero Z-drift</h3>
+              <span class="work-short">Production 3D LiDAR SLAM on GTSAM iSAM2, deployed across 1,800+ commercial cleaning robots worldwide.</span>
+              <span class="work-more">Read more <span aria-hidden="true">↗</span></span>
+            </button>
+          </article>
+          <article class="work-card">
+            <button type="button" class="work-open" data-modal="p-edge" aria-haspopup="dialog" aria-label="Open details: Edge perception and navigation on TI Jacinto J7">
+              <img class="work-thumb" src="assets/img/work/edge-perception-poster.jpg" data-gif="assets/img/work/edge-perception.gif" alt="" width="640" height="360" loading="lazy">
+              <span class="work-meta">Ignitarium, 2019 – 2022 · embedded</span>
+              <h3>Edge perception &amp; navigation on TI Jacinto J7</h3>
+              <span class="work-short">A full navigation stack on the Jacinto J7, with custom CNNs tuned for real-time 2D/3D detection on ARM.</span>
+              <span class="work-more">Read more <span aria-hidden="true">↗</span></span>
+            </button>
+          </article>
+        </div>
+
+    </div>
+    <dialog class="modal" id="p-slam" aria-labelledby="p-slam-t">
+      <div class="modal-bar"><span class="modal-meta">Botsync, 2026 · production</span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
+      <div class="modal-body">
+        <h3 id="p-slam-t">Real-time online 3D SLAM pipeline</h3>
+        <img class="modal-gif" src="assets/img/work/slam-pipeline.gif" alt="Animated preview (mock): Real-time online 3D SLAM pipeline" width="640" height="360" loading="lazy">
+        <p>Replaced manual mapping workflows that required recording rosbags and hand-correcting pose graphs offline. AMRs now generate 3D maps online in real time, <strong>cutting site deployment from weeks to a few minutes</strong>.</p>
+        <div class="tags"><span class="tag">3D LiDAR</span><span class="tag">GTSAM</span><span class="tag">iSAM2</span><span class="tag">C++20</span><span class="tag">ROS 2</span></div>
+        <figure class="modal-figure">
+          <div class="arch-body"><svg class="arch-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" role="img" aria-label="3D LiDAR SLAM pipeline and factor graph architecture block diagram">
+      <defs>
+        <!-- Arrowhead markers -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 8 5 L 0 9 z" fill="currentColor"/>
+        </marker>
+        <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--accent)"/>
+        </marker>
+        <!-- Background Grid -->
+        <pattern id="diag-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.08"/>
+        </pattern>
+      </defs>
+
+      <!-- Canvas Background -->
+      <rect width="1000" height="480" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+      <rect width="1000" height="480" fill="url(#diag-grid)"/>
+
+      <!-- Top System Title Header -->
+      <g font-family="'EB Garamond', Georgia, serif" font-weight="600">
+        <text x="30" y="36" font-size="16" fill="currentColor" letter-spacing="0">
+          SYSTEM ARCHITECTURE: FULL-STACK REAL-TIME 3D LiDAR SLAM PIPELINE
+        </text>
+        <text x="30" y="54" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" fill="var(--accent)">
+          INCREMENTAL SMOOTHING &amp; MAPPING VIA GTSAM iSAM2 FACTOR GRAPH OPTIMIZATION
+        </text>
+      </g>
+
+      <!-- =========================================================================
+           COLUMN 1: SENSOR INGESTION & FRONT-END PREPROCESSING
+           ========================================================================= -->
+      <g transform="translate(30, 80)">
+        <!-- Stage Box -->
+        <rect width="210" height="360" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>
+        <rect width="210" height="28" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+        <text x="12" y="19" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">
+          1. SENSOR INGESTION
+        </text>
+
+        <!-- Block 1: 3D LiDAR -->
+        <g transform="translate(15, 45)">
+          <rect width="180" height="60" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="12" y="24" font-family="'EB Garamond', Georgia, serif" font-size="12" font-weight="600" fill="currentColor">3D LiDAR Stream</text>
+          <text x="12" y="44" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">10-20 Hz Raw Packets</text>
+          <circle cx="165" cy="22" r="4" fill="var(--accent)"/>
+        </g>
+
+        <!-- Block 2: IMU Pre-integration -->
+        <g transform="translate(15, 125)">
+          <rect width="180" height="60" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="12" y="24" font-family="'EB Garamond', Georgia, serif" font-size="12" font-weight="600" fill="currentColor">6-DoF IMU Sensor</text>
+          <text x="12" y="44" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">200 Hz High-Rate Acc/Gyr</text>
+        </g>
+
+        <!-- Block 3: Wheel Odometry -->
+        <g transform="translate(15, 205)">
+          <rect width="180" height="60" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="12" y="24" font-family="'EB Garamond', Georgia, serif" font-size="12" font-weight="600" fill="currentColor">Wheel Odometry</text>
+          <text x="12" y="44" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Differential Planar Encoders</text>
+        </g>
+
+        <!-- Block 4: Motion Deskewing -->
+        <g transform="translate(15, 285)">
+          <rect width="180" height="55" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="12" y="22" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="var(--accent)">Deskewing Pipeline</text>
+          <text x="12" y="40" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Continuous IMU Interpolation</text>
+        </g>
+      </g>
+
+      <!-- Flow Arrow 1 -> 2 -->
+      <line x1="240" y1="230" x2="275" y2="230" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- =========================================================================
+           COLUMN 2: FRONT-END ODOMETRY & KEYFRAME GENERATION
+           ========================================================================= -->
+      <g transform="translate(280, 80)">
+        <rect width="215" height="360" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>
+        <rect width="215" height="28" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+        <text x="12" y="19" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">
+          2. FRONT-END ODOMETRY
+        </text>
+
+        <!-- Voxel Downsampling -->
+        <g transform="translate(15, 45)">
+          <rect width="185" height="55" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="12" y="22" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Voxel Filter &amp; Normals</text>
+          <text x="12" y="40" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Adaptive Octree Leaf (PCL)</text>
+        </g>
+
+        <!-- Scan-to-Map Matching -->
+        <g transform="translate(15, 120)">
+          <rect width="185" height="70" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="12" y="24" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Scan-to-Map Matching</text>
+          <text x="12" y="42" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Point-to-Plane ICP / NDT</text>
+          <text x="12" y="58" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--accent)">Covariance Estimation Σ</text>
+        </g>
+
+        <!-- Keyframe Decision Logic -->
+        <g transform="translate(15, 210)">
+          <rect width="185" height="65" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="12" y="22" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Keyframe Decider</text>
+          <text x="12" y="40" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Δd &gt; 0.4m  ||  Δθ &gt; 15°</text>
+          <text x="12" y="54" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Generates Pose Node xᵢ</text>
+        </g>
+
+        <!-- Submap Manager -->
+        <g transform="translate(15, 295)">
+          <rect width="185" height="50" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="12" y="20" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Local Submap Sliding Window</text>
+          <text x="12" y="38" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">K-Nearest Keyframe Buffer</text>
+        </g>
+      </g>
+
+      <!-- Flow Arrow 2 -> 3 -->
+      <line x1="495" y1="230" x2="530" y2="230" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- =========================================================================
+           COLUMN 3: BACK-END GTSAM iSAM2 FACTOR GRAPH OPTIMIZATION
+           ========================================================================= -->
+      <g transform="translate(535, 80)">
+        <rect width="225" height="360" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <rect width="225" height="28" fill="var(--accent)" stroke="var(--accent)" stroke-width="1"/>
+        <text x="12" y="19" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="var(--accent-ink)">
+          3. GTSAM iSAM2 FACTOR GRAPH
+        </text>
+
+        <!-- Factor Graph Nodes Visual -->
+        <g transform="translate(15, 45)">
+          <rect width="195" height="90" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Factor Graph Construction</text>
+
+          <!-- Pose Nodes (x0, x1, x2) -->
+          <circle cx="35" cy="55" r="12" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
+          <text x="30" y="59" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="currentColor">x₀</text>
+
+          <line x1="47" y1="55" x2="85" y2="55" stroke="currentColor" stroke-width="1.5"/>
+          <!-- Odometry Factor Symbol -->
+          <rect x="62" y="51" width="8" height="8" fill="var(--accent)"/>
+
+          <circle cx="97" cy="55" r="12" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
+          <text x="92" y="59" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="currentColor">x₁</text>
+
+          <line x1="109" y1="55" x2="147" y2="55" stroke="currentColor" stroke-width="1.5"/>
+          <!-- Odometry Factor Symbol -->
+          <rect x="124" y="51" width="8" height="8" fill="var(--accent)"/>
+
+          <circle cx="159" cy="55" r="12" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
+          <text x="154" y="59" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="currentColor">x₂</text>
+
+          <text x="10" y="80" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--muted)">BetweenFactorPose3(xᵢ₋₁, xᵢ)</text>
+        </g>
+
+        <!-- Bayes Tree Variable Update -->
+        <g transform="translate(15, 145)">
+          <rect width="195" height="90" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">iSAM2 Bayes Tree Smoothing</text>
+          <text x="10" y="38" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">• Incremental QR / Cholesky Factor</text>
+          <text x="10" y="54" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">• Relinearization of affected cliques</text>
+          <text x="10" y="70" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--accent)">• Zero Z-Drift Elevation Locking</text>
+          <text x="10" y="84" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--muted)">Execution: ~5–12ms per keyframe</text>
+        </g>
+
+        <!-- Loop Closure Input Port -->
+        <g transform="translate(15, 245)">
+          <rect width="195" height="95" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Loop Closure Integration</text>
+          <text x="10" y="38" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Non-linear pose constraint insertion:</text>
+          <text x="10" y="56" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--accent)">BetweenFactor(xₘ, xₙ, Tₘₙ)</text>
+          <text x="10" y="74" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Full trajectory back-propagation</text>
+        </g>
+      </g>
+
+      <!-- Flow Arrow 3 -> 4 -->
+      <line x1="760" y1="230" x2="795" y2="230" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- =========================================================================
+           COLUMN 4: LOOP CLOSURE & PRODUCTION DEPLOYMENT MAP
+           ========================================================================= -->
+      <g transform="translate(800, 80)">
+        <rect width="170" height="360" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>
+        <rect width="170" height="28" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+        <text x="10" y="19" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">
+          4. MAP &amp; FLEET
+        </text>
+
+        <!-- Loop Detector Block -->
+        <g transform="translate(12, 45)">
+          <rect width="146" height="85" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="10.5" font-weight="600" fill="currentColor">Loop Detection</text>
+          <text x="10" y="38" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Scan Context /</text>
+          <text x="10" y="52" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Ring Keys Search</text>
+          <text x="10" y="70" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--accent)">ICP Fitness Verify</text>
+        </g>
+
+        <!-- Output 1: Globally Consistent Map -->
+        <g transform="translate(12, 145)">
+          <rect width="146" height="95" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="10.5" font-weight="600" fill="currentColor">Globally Consistent 3D Point Cloud</text>
+          <text x="10" y="48" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Multi-Floor Align</text>
+          <text x="10" y="66" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--accent)">Zero Z-Drift Map</text>
+          <text x="10" y="84" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--muted)">2D Grid Projection</text>
+        </g>
+
+        <!-- Output 2: Fleet Autonomy -->
+        <g transform="translate(12, 255)">
+          <rect width="146" height="85" fill="var(--surface)" stroke="var(--text)" stroke-width="1.5"/>
+          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="10.5" font-weight="600" fill="currentColor">Fleet Deployment</text>
+          <text x="10" y="42" font-family="'EB Garamond', Georgia, serif" font-size="13" font-weight="600" fill="var(--accent)">1,800+ AMRs</text>
+          <text x="10" y="60" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Weeks → Few Minutes</text>
+          <text x="10" y="74" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--muted)">Online 3D SLAM</text>
+        </g>
+      </g>
+
+      <!-- Loop Closure Feedback Loop Arc (Red Dashed Line from Col 4 to Col 3) -->
+      <path d="M 870 90 C 870 30, 650 30, 650 75" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+      <text x="706" y="35" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="var(--accent)">LOOP CLOSURE FEEDBACK</text>
+    </svg></div>
+          <figcaption><strong>Figure 2.</strong> System architecture: online 3D LiDAR SLAM &amp; GTSAM factor graph. Four stages deployed on industrial AMRs. <strong>(1) Sensor ingestion:</strong> 3D point-cloud streaming and 6-DoF IMU pre-integration with high-rate deskewing. <strong>(2) Front-end odometry:</strong> voxel filtering, point-to-plane ICP/NDT scan-to-map matching, covariance estimation and keyframe selection. <strong>(3) Back-end iSAM2:</strong> BetweenFactorPose3 odometry constraints, zero-Z-drift elevation locks and Bayes-tree incremental updates. <strong>(4) Map &amp; fleet:</strong> Scan Context loop detection feeding non-linear loop closures into the graph, producing globally consistent 3D maps and 2D costmaps for 1,800+ AMRs.</figcaption>
+        </figure>
+      </div>
+    </dialog>
+    <dialog class="modal" id="p-editor" aria-labelledby="p-editor-t">
+      <div class="modal-bar"><span class="modal-meta">Botsync, 2026 · internal tool</span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
+      <div class="modal-body">
+        <h3 id="p-editor-t">Interactive multi-layer 2D/3D map editor</h3>
+        <img class="modal-gif" src="assets/img/work/map-editor.gif" alt="Animated preview (mock): Interactive multi-layer 2D/3D map editor" width="640" height="360" loading="lazy">
+        <p>Editor for 2D and 3D map layers supporting map merging, coordinate alignment and manual map cleaning, built end to end to unblock and speed up site deployments.</p>
+        <ul><li>Multi-map merging and coordinate transformation between maps.</li><li>Manual obstacle-layer editing on top of the 2D and 3D layers.</li></ul>
+        <div class="tags"><span class="tag">Map merging</span><span class="tag">Point clouds</span><span class="tag">PCL</span><span class="tag">Transform pipeline</span></div>
+        
+      </div>
+    </dialog>
+    <dialog class="modal" id="p-fleet" aria-labelledby="p-fleet-t">
+      <div class="modal-bar"><span class="modal-meta">LionsBot, 2022 – 2025 · global scale</span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
+      <div class="modal-body">
+        <h3 id="p-fleet-t">Fleet autonomy stack with zero Z-drift</h3>
+        <img class="modal-gif" src="assets/img/work/fleet-autonomy.gif" alt="Animated preview (mock): Fleet autonomy stack with zero Z-drift" width="640" height="360" loading="lazy">
+        <p>Production 3D LiDAR SLAM built on GTSAM iSAM2, eliminating vertical Z-drift in sparse environments. Deployed across <strong>1,800+ commercial cleaning robots worldwide</strong>.</p>
+        <div class="tags"><span class="tag">LiDAR SLAM</span><span class="tag">GTSAM</span><span class="tag">Sensor fusion</span><span class="tag">Commercial AMRs</span></div>
+        
+      </div>
+    </dialog>
+    <dialog class="modal" id="p-edge" aria-labelledby="p-edge-t">
+      <div class="modal-bar"><span class="modal-meta">Ignitarium, 2019 – 2022 · embedded</span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
+      <div class="modal-body">
+        <h3 id="p-edge-t">Edge perception &amp; navigation on TI Jacinto J7</h3>
+        <img class="modal-gif" src="assets/img/work/edge-perception.gif" alt="Animated preview (mock): Edge perception and navigation on TI Jacinto J7" width="640" height="360" loading="lazy">
+        <p>Complete autonomous navigation stack (SLAM, path planning, obstacle avoidance) on the TI Jacinto J7, with custom CNN architectures optimized for real-time 2D/3D detection on resource-constrained ARM and x86 edge targets.</p>
+        <div class="tags"><span class="tag">TI Jacinto J7</span><span class="tag">ARM / NEON</span><span class="tag">CNN optimization</span><span class="tag">CUDA / TensorRT</span></div>
+        
+      </div>
+    </dialog>
+      
+  </section>
+
+  <!-- ============ Drive it: forklift game chapter (DISABLED) ============
+     To re-enable: uncomment this section and the "Drive" link in the nav.
+     The backdrop keeps working without it (slam-viewer.js runs headless).
+
+  <section id="figures" class="chapter" data-cam="drive">
+    <div class="wrap wide">
+      <p class="eyebrow reveal">04 — Interactive</p>
+      <h2 class="display reveal">Take the controls.</h2>
+      <p class="lead reveal">The same warehouse scan, live. Orbit it, dispatch the AMR to any employer, or press Drive and deliver every pallet.</p>
+        <figure class="figure stage-figure" id="fig-sim">
+          <div class="sim-bar">
+            <span class="sim-bar-label">Dispatch the AMR to:</span>
+            <div class="mission-pills" id="viewer-mission-pills">
+              <button type="button" class="mission-pill active" data-station="all">All</button>
+              <button type="button" class="mission-pill" data-station="botsync"><span class="dot dot-botsync"></span>Botsync</button>
+              <button type="button" class="mission-pill" data-station="lionsbot"><span class="dot dot-lionsbot"></span>LionsBot</button>
+              <button type="button" class="mission-pill" data-station="ingeniarius"><span class="dot dot-ingeniarius"></span>Ingeniarius</button>
+              <button type="button" class="mission-pill" data-station="ntu"><span class="dot dot-ntu"></span>NTU</button>
+              <button type="button" class="mission-pill" data-station="ignitarium"><span class="dot dot-ignitarium"></span>Ignitarium</button>
+              <button type="button" class="mission-pill" data-station="addverb"><span class="dot dot-addverb"></span>Addverb</button>
+              <button type="button" class="mission-pill" data-station="ey"><span class="dot dot-ey"></span>EY</button>
+            </div>
+          </div>
+          <div class="sim-stage">
+            <div id="slam-canvas-container"></div>
+            <div class="mission-card" id="telem-mission-card">
+              <div class="mission-card-top">
+                <span class="mission-card-company" id="telem-mission-company">BOTSYNC</span>
+                <span class="mission-card-tenure" id="telem-mission-tenure">2022 – PRESENT</span>
+              </div>
+              <div class="mission-card-role" id="telem-mission-role">Technical Lead, Robotics</div>
+              <div class="mission-card-tech" id="telem-mission-tech">Heavy AMRs • CB Forklifts • 3D LiDAR SLAM (iSAM2) • syncOS</div>
+            </div>
+            <button type="button" class="play-overlay" id="stage-play-overlay">
+              <span class="play-glyph" aria-hidden="true">▶</span>
+              <span>Drive the forklift<small>Deliver a pallet for each stop on my career path</small></span>
+            </button>
+            <div class="game-hud" id="game-hud" style="display:none">
+              <div class="hud-top">
+                <div class="hud-objective">
+                  <div class="hud-arrow-wrap" aria-hidden="true"><svg id="game-arrow" class="hud-arrow" viewBox="0 0 24 24"><path d="M12 3 L19 20 L12 16 L5 20 Z"/></svg></div>
+                  <div>
+                    <div class="hud-objective-text" id="game-objective">Pick up the pallet</div>
+                    <div class="hud-dist" id="game-dist"></div>
+                  </div>
+                </div>
+                <div class="hud-progress">
+                  <span><strong id="game-delivered-count">0</strong> / <span id="game-total">7</span> delivered</span>
+                  <div class="hud-progress-track"><div class="hud-progress-bar" id="game-progress-bar"></div></div>
+                </div>
+                <div class="hud-actions">
+                  <button type="button" class="hud-btn" id="game-btn-restart" title="Restart (R)">Restart <kbd>R</kbd></button>
+                  <button type="button" class="hud-btn" id="game-btn-exit" title="Exit (Esc)">Exit <kbd>Esc</kbd></button>
+                </div>
+              </div>
+              <div class="hud-prompt" id="game-prompt-container" style="display:none">
+                <kbd>Space</kbd><span id="game-prompt-text"></span>
+              </div>
+              <div class="hud-help" id="game-help">
+                <h3>Warehouse run</h3>
+                <p>Carry each pallet to the loading dock. Every pallet is a stop on my career; picking one up opens the details.</p>
+                <ul class="keys">
+                  <li><kbd>W</kbd><kbd>S</kbd> drive / reverse</li>
+                  <li><kbd>A</kbd><kbd>D</kbd> steer left / right</li>
+                  <li><kbd>Space</kbd> pick up / drop pallet</li>
+                  <li><kbd>C</kbd> camera &nbsp; <kbd>R</kbd> restart &nbsp; <kbd>Esc</kbd> exit</li>
+                </ul>
+                <p class="hud-help-note">The rear wheel steers, like a real counterbalance forklift: the tail swings out in turns.</p>
+                <button type="button" class="btn btn-primary" id="game-help-dismiss">Start driving</button>
+              </div>
+              <div class="hud-bottom">
+                <div class="hud-gauges">
+                  <div class="gauge"><span class="gauge-label">Speed</span><span class="gauge-val"><span id="game-dash-speed">0.0</span> m/s</span><div class="gauge-track"><div class="gauge-bar" id="game-speed-bar"></div></div></div>
+                  <div class="gauge"><span class="gauge-label">Forks</span><span class="gauge-val" id="game-dash-forks">lowered</span></div>
+                </div>
+                <div class="touch-controls" id="game-touch-controls">
+                  <div class="touch-dpad">
+                    <button type="button" class="touch-btn" id="touch-up" aria-label="Forward">▲</button>
+                    <div class="touch-row">
+                      <button type="button" class="touch-btn" id="touch-left" aria-label="Steer left">◀</button>
+                      <button type="button" class="touch-btn" id="touch-down" aria-label="Reverse">▼</button>
+                      <button type="button" class="touch-btn" id="touch-right" aria-label="Steer right">▶</button>
+                    </div>
+                  </div>
+                  <button type="button" class="touch-btn touch-action" id="touch-action">Lift</button>
+                </div>
+              </div>
+              <aside class="hud-dossier" id="game-dossier" style="display:none" aria-live="polite">
+                <button type="button" class="hud-dossier-close" id="dossier-btn-close" aria-label="Dismiss">×</button>
+                <div class="hud-dossier-head">
+                  <h3 id="dossier-company">BOTSYNC</h3>
+                  <div id="dossier-role">Technical Lead, Robotics</div>
+                  <div class="hud-dossier-tenure" id="dossier-tenure">2022 – PRESENT</div>
+                </div>
+                <ul id="dossier-bullets"></ul>
+                <div class="tags" id="dossier-tech-wrap"></div>
+                <a href="#experience" class="hud-dossier-link" id="dossier-btn-profile">See it in the timeline →</a>
+              </aside>
+              <div class="hud-victory" id="game-victory-modal" style="display:none">
+                <div class="hud-victory-card">
+                  <h3>All seven pallets delivered</h3>
+                  <p>That is the whole route, from swarm-robotics intern to technical lead.</p>
+                  <div class="hud-victory-actions">
+                    <button type="button" class="btn btn-primary" id="victory-btn-keep-driving">Keep driving</button>
+                    <button type="button" class="btn" id="victory-btn-restart">Play again</button>
+                    <button type="button" class="btn" id="victory-btn-exit">Exit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fig-controls sim-toolbar">
+            <button type="button" class="btn" id="viewer-btn-game">Drive (game mode)</button>
+            <button type="button" class="btn" id="viewer-btn-play">Pause</button>
+            <button type="button" class="btn active" id="viewer-btn-lidar">LiDAR beams</button>
+            <span class="btn-group" role="group" aria-label="Camera">
+              <button type="button" class="btn active" id="cam-preset-iso">Iso</button>
+              <button type="button" class="btn" id="cam-preset-top">Top</button>
+              <button type="button" class="btn" id="cam-preset-follow">Follow</button>
+            </span>
+            <select class="select" id="viewer-color-select" aria-label="Point cloud shading">
+              <option value="elevation">Elevation</option>
+              <option value="intensity">Intensity</option>
+              <option value="swiss">Monochrome</option>
+            </select>
+            <label class="slider">Points <input type="range" min="1.0" max="4.0" step="0.5" value="1.5" id="viewer-size-slider"><output id="viewer-size-val">1.5px</output></label>
+          </div>
+          <figcaption>
+            <strong>Figure 1.</strong> A real 3D LiDAR SLAM map of a warehouse (PCL binary <code>warehouse_amazon.pcd</code>, 789,841 points). The AMR stacker follows a rear-steer tricycle model, <span class="math">tan δ = L κ</span> with <span class="math">L = 1.50 m</span> and <span class="math">δ ≤ 72°</span>, and visits every organization I have worked with. Drag to orbit, scroll to zoom, right-drag to pan, or press <em>Drive</em> to take the controls.
+          </figcaption>
+        </figure>
+    </div>
+  </section>
+  ============ end disabled chapter ============ -->
+
+  <!-- ============ Open source ============ -->
+  <section id="notes" class="chapter" data-cam="opensource">
+    <div class="wrap">
+      <p class="eyebrow reveal">05 — Open source</p>
+      <h2 class="display reveal">Giving <em>back</em>.</h2>
+        <blockquote class="remark">
+          <p>The open-source robotics community gave me the knowledge and support to build my career. Writing and sharing these notes is my way of giving back to the community that made it possible.</p>
+        </blockquote>
+        <article class="repo">
+          <div class="repo-head">
+            <h3><a href="https://github.com/arjunskumar/Robotics_CPP_Notes" target="_blank" rel="external nofollow noopener">Robotics_CPP_Notes</a>: modern C++ for robotics engineers</h3>
+            <p class="repo-stats"><span id="repo-stars">★ 343</span> · <span id="repo-forks">37 forks</span></p>
+          </div>
+          <p>A practical reference on C++17/20 for robotics software engineers: CMake build setups, memory management, zero-cost abstractions, concurrency and performance-focused data structures.</p>
+          <div class="tags"><span class="tag">C++17/20</span><span class="tag">CMake</span><span class="tag">Robotics architecture</span><span class="tag">Zero-copy abstractions</span><span class="tag">Memory management</span></div>
+        </article>
+        <h3 class="subhead">In preparation</h3>
+        <ul class="plain-list">
+          <li><strong>3D LiDAR SLAM from scratch.</strong> A hands-on guide to factor-graph optimization with GTSAM/iSAM2, loop-closure strategies and multi-floor vertical Z-drift.</li>
+          <li><strong>State estimation &amp; sensor fusion.</strong> Mathematical foundations and C++ implementations of error-state Kalman filters, IMU pre-integration and visual-inertial odometry.</li>
+        </ul>
+    </div>
+  </section>
+
+  <!-- ============ Methods & tools ============ -->
+  <section id="skills" class="chapter" data-cam="skills">
+    <div class="wrap">
+      <p class="eyebrow reveal">06 — Methods &amp; tools</p>
+      <h2 class="display reveal">The <em>toolbox</em>.</h2>
+        <dl class="skills">
+          <div><dt>Estimation &amp; mapping</dt><dd>Factor graphs, iSAM2, LiDAR odometry, scan matching (ICP / NDT), loop closure, IMU pre-integration, VIO, Kalman filtering</dd></div>
+          <div><dt>Programming &amp; ML</dt><dd>C++, Python, PyTorch, CUDA, TensorRT</dd></div>
+          <div><dt>Robotics software</dt><dd>ROS / ROS 2, OpenCV, PCL, GTSAM, g2o, Gazebo</dd></div>
+          <div><dt>Systems &amp; hardware</dt><dd>Git, Docker, CI/CD, Linux (Ubuntu), 2D/3D LiDARs, RGB-D cameras, IMUs, Nvidia Jetson (TX2 / Xavier), TI Jacinto</dd></div>
+        </dl>
+    </div>
+  </section>
+
+  <!-- ============ Contact ============ -->
+  <section id="contact" class="chapter chapter-end" data-cam="contact">
+    <div class="wrap center">
+      <p class="eyebrow reveal">07 — Contact</p>
+      <h2 class="display display-xl reveal">Let’s <em>talk</em>.</h2>
+      <p class="lead reveal">Always glad to talk about SLAM, estimation, fleet autonomy, robotics leadership or open-source work.</p>
+      <ul class="link-row reveal">
+        <li><a href="mailto:arjunskumar22@gmail.com">arjunskumar22@gmail.com</a></li>
+        <li><a href="tel:+6598605322">+65 9860 5322</a></li>
+        <li><a href="https://linkedin.com/in/arjunskumar" target="_blank" rel="external nofollow noopener">LinkedIn</a></li>
+        <li><a href="https://github.com/arjunskumar" target="_blank" rel="external nofollow noopener">GitHub</a></li>
+        <li><a href="assets/pdf/Arjun_S_Kumar_Resume.pdf" target="_blank" rel="noopener">Résumé</a></li>
+      </ul>
+      <footer class="colophon">© 2026 Arjun S. Kumar</footer>
+    </div>
+  </section>
+
+  </main>
+
+  <script defer src="assets/js/clipboard.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Needed only if the forklift game chapter above is re-enabled:
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script defer src="assets/js/pcd-loader.js"></script>
+  -->
+  <script defer src="assets/js/amr-model.js"></script>
+  <script defer src="assets/js/tugger-model.js"></script>
+  <script defer src="assets/js/factory-cell.js"></script>
+  <script defer src="assets/js/slam-viewer.js"></script>
+  <script defer src="assets/js/world3d.js"></script>
+  <script defer src="assets/js/main.js"></script>
+</body>
+</html>

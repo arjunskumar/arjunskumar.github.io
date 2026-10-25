@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 175 36" fill="currentColor">
+  <!-- NTU Shield / Cog Crest -->
+  <g fill="currentColor">
+    <path d="M 6 4 L 24 4 L 24 18 C 24 26 15 29 15 29 C 15 29 6 26 6 18 Z" fill="none" stroke="currentColor" stroke-width="1.75"/>
+    <circle cx="15" cy="14" r="4.5" fill="#BE2D2D"/>
+    <line x1="15" y1="6" x2="15" y2="10" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="15" y1="18" x2="15" y2="22" stroke="currentColor" stroke-width="1.5"/>
+  </g>
+  <!-- NTU Wordmark -->
+  <text x="34" y="24" font-family="'Space Grotesk', -apple-system, sans-serif" font-size="16" font-weight="700" letter-spacing="1">NTU SINGAPORE</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 36" fill="currentColor">
+  <!-- Ignitarium Flame / Spark Nodes -->
+  <g fill="currentColor">
+    <path d="M 14 3 C 14 3 24 12 24 20 C 24 26 19 30 14 30 C 9 30 4 26 4 20 C 4 15 10 9 14 3 Z" fill="none" stroke="currentColor" stroke-width="1.75"/>
+    <circle cx="14" cy="20" r="3.5" fill="#BE2D2D"/>
+  </g>
+  <!-- Ignitarium Wordmark -->
+  <text x="34" y="24" font-family="'Space Grotesk', -apple-system, sans-serif" font-size="15" font-weight="700" letter-spacing="1">IGNITARIUM</text>
+</svg>
