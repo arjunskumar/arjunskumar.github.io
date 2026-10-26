@@ -1,17 +1,23 @@
 /**
- * Factory cell for the 3D backdrop: inbound truck -> roller conveyor -> UR-style palletizing arm
- * -> full pallet waiting for the forklift -> outbound pallet zone.
+ * Factory cell for the 3D backdrop: inbound truck -> conveyor -> UR-style palletizing arm stacking onto a
+ * pallet in a MOBILE RACK (open U-frame on four legs) -> the MAG lifter drives under the rack and moves it to a
+ * hand-off spot -> the forklift swaps the pallet (loaded out to the outbound zone, empty in) -> the lifter
+ * brings the rack back to the arm.
  *
- * window.buildFactoryCell(THREE) returns an object with:
- *   group            add to the scene
- *   update(dt)       advance the simulation (truck, conveyor, arm)
- *   palletReady      true when a full pallet waits at pickup
- *   pickup           { x, z } pallet centre at pickup (pallet long axis along +X)
- *   zone             { slotsX[], z }: outbound pallet slot centres
- *   takePallet()     forklift took the pallet: returns its group (caller moves it) and frees the cell
- *   placePallet(g,i) pallet group g set down at outbound slot i
- *   pickupFree()     true once the pickup area is empty again (a new pallet is then spawned)
- * Units are scan metres; +Y is up.
+ * window.buildFactoryCell(THREE) returns:
+ *   group             add to the scene
+ *   update(dt)        advance truck, conveyor, arm; keeps the pallet seated on the rack
+ *   station           { x, z } rack position at the arm
+ *   handoff / emptyStation  { x, z } rack positions at the forklift and at the waiting spot for the spare rack
+ *   racks             two mobile racks { group, at: 'S'|'H'|'E'|'moving', slot }: slot = { x, z, y, pallet, lock } is where a pallet sits
+ *   rackAt(name)      the rack standing at 'S' (arm), 'H' (hand-off) or 'E' (spare), or null
+ *   setRackPose(rack,x,z,yaw,y)  move a rack (yaw = rotation.y; y = lift off the floor); keeps its slot in step
+ *   palletReady       true when the rack at the arm holds a full pallet and the arm is idle
+ *   out               { loaded[], empty[] }: floor slots { x, z, y, pallet, lock }
+ *   makePallet()      a new empty pallet group
+ *   place(slot, g)    set pallet group g down on a slot (updates its transform)
+ *   take(slot)        remove and return the slot's pallet
+ * Units are scan metres; +Y is up. A pallet's long axis (0.8 m) is its group's local X.
  */
 (function () {
   'use strict';
@@ -24,10 +30,14 @@
     /* ---------------- layout ---------------- */
     const BELT_Y = 0.8, BELT_Z = -2.0, BELT_X0 = 25.0, BELT_X1 = 36.2, PICK_X = 25.25;
     const BOX = { x: 0.4, y: 0.25, z: 0.3 };
-    const PAL = { x: 0.8, z: 0.6, h: 0.14 };
-    const BASE = new V3(24.45, 0, -3.0);                    // arm pedestal
-    const PICKUP = { x: 23.05, z: -3.0 };
-    const ZONE = { slotsX: [9.0, 12.0, 15.0, 18.0], z: -3.0 };
+    const PAL = { x: 0.8, z: 0.8, h: 0.14 };    // 0.8 m wide: outer stringers at +/-0.36, well outside the fork lanes (forks sit at +/-0.10..0.28)
+    const BASE = new V3(24.5, 0, -3.0);                     // arm pedestal
+    const STATION = { x: 22.95, z: -3.0 };                   // mobile rack stands here under the arm
+    const HANDOFF = { x: 14.0, z: -1.4 };                   // ... here for the forklift
+    const EMPTYST = { x: 14.0, z: -3.4 };                   // ... and the spare rack (with a pallet) waits here
+    const RAIL_Y = 0.80;                                    // pallet support rails (top)
+    const OUT_Z = -0.6;
+    const PED = 0.9;                                        // arm pedestal height (pallet rides on the lifter deck)
     const TRUCK_DOCK_X = 34.8;                              // trailer rear at the dock
     const TRUCK_Z = BELT_Z;
     const LAYERS = 3, PER_LAYER = 4, PALLET_BOXES = LAYERS * PER_LAYER;
@@ -84,11 +94,12 @@
       [[x0, x1, z0, z0 + w], [x0, x1, z1 - w, z1], [x0, x0 + w, z0, z1], [x1 - w, x1, z0, z1]].forEach(([a, b, c, d]) =>
         mesh(boxGeo(b - a, 0.01, d - c), m || mat.floorMark, (a + b) / 2, y, (c + d) / 2));
     }
-    const zx0 = ZONE.slotsX[0] - 1.1, zx1 = ZONE.slotsX[ZONE.slotsX.length - 1] + 1.1;
-    floorRect(zx0, zx1, ZONE.z - 0.9, ZONE.z + 0.9);
-    label('OUTBOUND', 2.6, 0.45, (zx0 + zx1) / 2, 0.035, ZONE.z + 1.25, 0);
-    floorRect(PICKUP.x - 0.75, PICKUP.x + 0.75, PICKUP.z - 0.65, PICKUP.z + 0.65);
-    label('PALLET', 1.3, 0.3, PICKUP.x, 0.035, PICKUP.z + 1.0, 0);
+    floorRect(STATION.x - 1.25, STATION.x + 1.25, STATION.z - 0.8, STATION.z + 0.8);
+    floorRect(HANDOFF.x - 1.25, HANDOFF.x + 1.25, HANDOFF.z - 0.8, HANDOFF.z + 0.8);
+    floorRect(EMPTYST.x - 1.25, EMPTYST.x + 1.25, EMPTYST.z - 0.8, EMPTYST.z + 0.8);
+    label('PALLETIZING', 2.0, 0.3, STATION.x - 0.2, 0.035, STATION.z - 1.15, 0);
+    label('HAND-OFF', 1.6, 0.3, HANDOFF.x, 0.035, HANDOFF.z + 0.95, 0, '#7fc8ff');
+    label('SPARE RACK', 1.9, 0.3, EMPTYST.x, 0.035, EMPTYST.z - 1.1, 0, '#7fc8ff');
     label('INBOUND', 2.2, 0.4, 29.8, 0.035, BELT_Z + 1.2, 0);
 
     /* ---------------- conveyor ---------------- */
@@ -181,34 +192,27 @@
       const g = new THREE.Group();
       const deck = new THREE.Group();
       mesh(boxGeo(PAL.x, 0.03, PAL.z), mat.pallet, 0, PAL.h - 0.015, 0, deck);
-      [[-0.285, 0.05], [0, 0.07], [0.285, 0.05]].forEach(([z, w]) => mesh(boxGeo(PAL.x, 0.09, w), mat.pallet, 0, 0.05, z, deck));   // stringers run along the fork direction
+      [[-0.36, 0.06], [0, 0.07], [0.36, 0.06]].forEach(([z, w]) => mesh(boxGeo(PAL.x, 0.09, w), mat.pallet, 0, 0.05, z, deck));   // stringers run along the fork direction
       g.add(deck);
       group.add(g);
       return g;
     }
-    let pallet = null;           // the pallet being built / waiting
+    let pallet = null;           // pallet currently docked under the arm (on the lifter deck)
     let palletBoxes = [];
     let palletFull = false;
-    let outbound = [];           // pallets standing in the outbound zone
-    function spawnPallet() {
-      pallet = makePallet();
-      pallet.position.set(PICKUP.x, 0, PICKUP.z);
-      palletBoxes = []; palletFull = false;
-    }
-    spawnPallet();
-
-    function slotPos(n) {         // n-th carton on the pallet -> centre in world coordinates
+    function slotPos(n) {         // n-th carton on the docked pallet -> centre in world coordinates
       const layer = Math.floor(n / PER_LAYER), i = n % PER_LAYER;
-      return new V3(PICKUP.x + (i % 2 ? 0.2 : -0.2), PAL.h + BOX.y / 2 + layer * BOX.y, PICKUP.z + (i < 2 ? -0.15 : 0.15));
+      pallet.updateMatrixWorld(true);
+      return pallet.localToWorld(new V3(i % 2 ? 0.2 : -0.2, PAL.h + BOX.y / 2 + layer * BOX.y, i < 2 ? -0.15 : 0.15));
     }
 
     /* ---------------- UR-style arm (2-link IK, tool pointing down) ---------------- */
-    const S = 2.3;                                   // visual scale of the arm
-    const L1 = 0.425 * S, L2 = 0.392 * S, TOOL = 0.34 * S, SH_Y = 0.52 + 0.09 * S;
+    const S = 2.8;                                   // visual scale of the arm (reach covers a pallet on the rack)
+    const L1 = 0.425 * S, L2 = 0.392 * S, TOOL = 0.34 * S, SH_Y = PED + 0.09 * S;
     const arm = new THREE.Group(); arm.position.copy(BASE); group.add(arm);
-    mesh(new THREE.CylinderGeometry(0.34, 0.4, 0.52, 28), mat.frame, 0, 0.26, 0, arm);          // pedestal
+    mesh(new THREE.CylinderGeometry(0.32, 0.38, PED, 28), mat.frame, 0, PED / 2, 0, arm);          // pedestal
     mesh(new THREE.CylinderGeometry(0.44, 0.44, 0.04, 28), mat.steel, 0, 0.02, 0, arm);          // floor plate
-    const yaw = new THREE.Group(); yaw.position.y = 0.52; arm.add(yaw);
+    const yaw = new THREE.Group(); yaw.position.y = PED; arm.add(yaw);
     mesh(new THREE.CylinderGeometry(0.1 * S, 0.1 * S, 0.09 * S, 24), mat.urLight, 0, 0.045 * S, 0, yaw);
     mesh(new THREE.CylinderGeometry(0.1 * S, 0.1 * S, 0.02, 24), mat.urBlue, 0, 0.09 * S, 0, yaw);
     const shoulder = new THREE.Group(); shoulder.position.set(0, 0.09 * S, 0); yaw.add(shoulder);
@@ -226,7 +230,7 @@
     mesh(new THREE.CylinderGeometry(0.04 * S, 0.04 * S, TOOL * 0.55, 20), mat.urDark, 0, -TOOL * 0.3, 0, wrist);
     mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.03, 24), mat.urDark, 0, -TOOL + 0.015, 0, wrist);   // vacuum plate
     mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.012, 24), mat.red, 0, -TOOL - 0.002, 0, wrist);     // suction face
-    const armTip = new V3(PICKUP.x, 1.6, PICKUP.z);       // current tool-tip target (world)
+    const armTip = new V3(STATION.x, 1.9, STATION.z);       // current tool-tip target (world)
 
     function solveArm(tip) {
       const wx = tip.x - BASE.x, wz = tip.z - BASE.z, wy = tip.y + TOOL - (BASE.y + SH_Y);
@@ -282,18 +286,19 @@
       solveArm(armTip);
       if (ARM.box && ARM.box.state === 'carried') {
         ARM.box.g.position.set(armTip.x, armTip.y - BOX.y / 2 - 0.004, armTip.z);
-        ARM.box.g.rotation.y = 0;
+        ARM.box.g.rotation.y = ARM.leg >= 5 ? pallet.rotation.y : (ARM.leg === 4 ? pallet.rotation.y * k : 0);   // turn the carton to the pallet's axis while carrying
       }
       if (ARM.t >= leg.dur) {
         if (leg.act === 'grip') { ARM.box.state = 'carried'; ARM.box.atStop = false; }
         if (leg.act === 'release') {
           const n = palletBoxes.length, p = slotPos(n);
-          ARM.box.g.position.copy(p);
           ARM.box.state = 'placed';
           palletBoxes.push(ARM.box);
+          const local = pallet.worldToLocal(p.clone());
           pallet.add(ARM.box.g);
-          ARM.box.g.position.set(p.x - PICKUP.x, p.y, p.z - PICKUP.z);     // now relative to the pallet
-          if (palletBoxes.length >= PALLET_BOXES) palletFull = true;
+          ARM.box.g.position.copy(local);
+          ARM.box.g.rotation.y = 0;                                        // aligned with the pallet
+          if (palletBoxes.length >= PALLET_BOXES) { palletFull = true; pallet.userData.full = true; pallet.userData.loaded = true; }
         }
         ARM.leg++; ARM.t = 0;
         if (ARM.leg >= ARM.legs.length) { ARM.state = 'idle'; ARM.box = null; return; }
@@ -366,31 +371,88 @@
       truck.position.x = T.x;
     }
 
+    /* ---------------- mobile racks: low four-leg tables with an open middle ---------------- */
+    // Local frame: +X = the lifter's travel direction (it drives in along X), rails run along Z under the pallet's
+    // outer stringers (x = +/-0.36). The lifter's column and deck stay above 0.645 m / inside |x| < 0.25 at rail height.
+    function makeRack(at, pos) {
+      const rack = { group: new THREE.Group(), at, slot: { x: pos.x, z: pos.z, y: RAIL_Y, pallet: null, lock: null }, x: pos.x, z: pos.z, yaw: 0, lift: 0 };
+      group.add(rack.group);
+      const upM = M(0x2b6fb8, 0.5, 0.3), beamM = M(0xd9792b, 0.5, 0.3), padM = M(0x39424d, 0.6, 0.3), g = rack.group;
+      // Low four-leg table: the legs and side beams stop at rail height (top 0.80), there is no upper frame, so nothing
+      // stands up beside the forklift's mast and housing. Rails (x = +/-0.36) carry the pallet's outer stringers;
+      // the lifter drives in along X through the open middle.
+      [[-1, -1], [-1, 1], [1, -1], [1, 1]].forEach(([sx, sz]) => mesh(boxGeo(0.07, RAIL_Y - 0.1, 0.07), upM, sx * 1.05, (RAIL_Y - 0.1) / 2, sz * 0.66, g));   // legs
+      [-1, 1].forEach((sx) => {
+        mesh(boxGeo(0.07, 0.1, 1.39), beamM, sx * 1.05, RAIL_Y - 0.05, 0, g);                  // side beams (leg to leg, top at 0.80)
+        mesh(boxGeo(0.06, 0.1, 1.0), beamM, sx * 0.36, RAIL_Y - 0.05, 0, g);                   // pallet rails
+        mesh(boxGeo(0.66, 0.1, 0.07), beamM, sx * 0.705, RAIL_Y - 0.05, 0, g);                 // rail brackets to the side beams
+      });
+      mesh(boxGeo(0.66, 0.1, 0.07), beamM, 0, RAIL_Y - 0.05, 0, g);                            // centre bar between the rails
+      mesh(boxGeo(0.7, 0.04, 0.5), padM, 0, 0.68, 0, g);                                       // lift pad the deck rises into (bottom 0.66)
+      rack.setPose = function (x, z, yaw, y) {
+        rack.x = x; rack.z = z; rack.yaw = yaw; rack.lift = y || 0;
+        g.position.set(x, rack.lift, z); g.rotation.y = yaw;
+        rack.slot.x = x; rack.slot.z = z; rack.slot.y = RAIL_Y + rack.lift;
+      };
+      rack.setPose(pos.x, pos.z, 0, 0);
+      return rack;
+    }
+    const rackA = makeRack('S', STATION), rackB = makeRack('E', EMPTYST);
+    const racks = [rackA, rackB];
+    const rackAt = (name) => racks.find((r) => r.at === name) || null;
+    function setRackPose(rack, x, z, yaw, y) { rack.setPose(x, z, yaw, y); }
+    function followPallets() {
+      racks.forEach((rack) => {
+        const p = rack.slot.pallet;
+        if (!p) return;
+        p.position.set(rack.x, rack.lift + RAIL_Y, rack.z);
+        p.rotation.y = rack.yaw + Math.PI / 2;         // pallet long axis along the rails
+      });
+    }
+    function syncPallet() {                            // the arm works on the pallet in the rack standing at the arm
+      const r = rackAt('S');
+      const p = (r && r.slot.pallet && !r.slot.pallet.userData.full) ? r.slot.pallet : null;
+      if (p === pallet) return;
+      pallet = p;
+      if (p) { palletBoxes = p.userData.boxes = p.userData.boxes || []; palletFull = palletBoxes.length >= PALLET_BOXES; }
+      else { palletBoxes = []; palletFull = false; }
+    }
+
+    /* ---------------- outbound + empty-pallet floor slots ---------------- */
+    const out = { loaded: [], empty: [] };
+    [4.6, 6.1].forEach((x) => out.loaded.push({ x, z: OUT_Z, y: 0, pallet: null, lock: null, ship: 0 }));
+    [7.6, 9.1].forEach((x) => out.empty.push({ x, z: OUT_Z, y: 0, pallet: null, lock: null, refill: 0 }));
+    out.loaded.concat(out.empty).forEach((sl) => floorRect(sl.x - 0.7, sl.x + 0.7, sl.z - 0.55, sl.z + 0.55));
+    label('OUTBOUND', 1.5, 0.3, 5.35, 0.035, OUT_Z - 0.95, 0);
+    label('EMPTIES', 1.4, 0.3, 8.35, 0.035, OUT_Z - 0.95, 0, '#7fc8ff');
+
+    function place(slot, g) {
+      g.position.set(slot.x, slot.y, slot.z); g.rotation.y = Math.PI / 2;
+      slot.pallet = g; slot.lock = null;
+    }
+    function take(slot) { const g = slot.pallet; slot.pallet = null; slot.lock = null; return g; }
+    // both racks start with an empty pallet on them: one at the arm, the spare waiting
+    racks.forEach((r) => { const g = makePallet(); g.userData.loaded = false; r.slot.pallet = g; });
+    followPallets();
+    out.empty.forEach((sl) => { const g = makePallet(); g.userData.loaded = false; place(sl, g); });
+
     function dropBoxes(p) { const gone = new Set(p.userData.boxes || []); boxes = boxes.filter((b) => !gone.has(b)); }
+    function housekeeping(dt) {
+      // loaded pallets in the outbound zone are "shipped" after a while; empties come back after a while
+      out.loaded.forEach((sl) => {
+        if (sl.pallet && !sl.lock) { sl.ship += dt; if (sl.ship > 35) { group.remove(sl.pallet); dropBoxes(sl.pallet); sl.pallet = null; sl.ship = 0; } } else sl.ship = 0;
+      });
+      out.empty.forEach((sl) => {
+        if (!sl.pallet && !sl.lock) { sl.refill += dt; if (sl.refill > 6) { const g = makePallet(); g.userData.loaded = false; place(sl, g); sl.refill = 0; } } else sl.refill = 0;
+      });
+    }
 
     /* ---------------- public API ---------------- */
     const api = {
-      group, pickup: PICKUP, zone: ZONE, pallet: PAL, boxSize: BOX, truckDockX: TRUCK_DOCK_X,
-      get palletReady() { return !!(pallet && palletFull && ARM.state === 'idle'); },
+      group, station: STATION, handoff: HANDOFF, emptyStation: EMPTYST, pallet: PAL, boxSize: BOX, truckDockX: TRUCK_DOCK_X, racks, rackAt, out, makePallet, place, take, setRackPose,
+      get palletReady() { const r = rackAt('S'), p = r && r.slot.pallet; return !!(p && p.userData.full && ARM.state === 'idle'); },
       get armBusy() { return ARM.state !== 'idle'; },
-      update(dt) { truckUpdate(dt); beltUpdate(dt); armUpdate(dt); },
-      takePallet() {
-        const g = pallet; g.userData.boxes = palletBoxes;
-        pallet = null; palletFull = false; palletBoxes = [];
-        return g;
-      },
-      pickupFree() { return !pallet; },
-      respawnPallet() { if (!pallet) spawnPallet(); },
-      placePallet(g, i) {
-        g.position.set(ZONE.slotsX[i], 0, ZONE.z); g.rotation.y = 0;
-        if (outbound[i]) { group.remove(outbound[i]); dropBoxes(outbound[i]); }
-        outbound[i] = g;
-      },
-      clearOutboundIfFull() {
-        if (outbound.filter(Boolean).length >= ZONE.slotsX.length) { outbound.forEach((p) => { if (p) { group.remove(p); dropBoxes(p); } }); outbound = []; return true; }
-        return false;
-      },
-      get outboundCount() { return outbound.filter(Boolean).length; }
+      update(dt) { truckUpdate(dt); syncPallet(); beltUpdate(dt); armUpdate(dt); housekeeping(dt); followPallets(); }
     };
     return api;
   };

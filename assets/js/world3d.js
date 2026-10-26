@@ -27,10 +27,8 @@
   const TUG_START = 0.32;         // initial lead, as a fraction of the loop
   const SAFE_GAP = 9;             // m: tugger yields when the forklift is closer than this ahead of it
   let cell = null;                // factory cell: truck, conveyor, palletizing arm (factory-cell.js)
-  let mission = null;             // forklift pallet mission (leaves the loop, moves one pallet, rejoins)
   let uDepart = 0;                // route parameter where the forklift leaves the loop for the cell
   let prevU = 0;
-  let liftY = 0;                  // current fork height (smoothed)
   let ready = false;
   let heroP = 0;                  // hero scroll progress 0..1
   let chapter = null;             // active chapter element
@@ -175,7 +173,14 @@
       cell = window.buildFactoryCell(THREE);
       scene.add(cell.group);
     }
-    uDepart = nearestU(13.0, 2.35);
+    if (window.buildBotsyncLifter && cell) {
+      lifterBot = window.buildBotsyncLifter(THREE);
+      scene.add(lifterBot.root);
+      L.x = LP[0]; L.z = LP[1]; L.phi = 0;                          // parked next to the arm, front east
+      lifterBot.root.position.set(L.x, 0, L.z);
+      lifterBot.root.rotation.y = -L.phi;
+    }
+    uDepart = nearestU(3.0, 2.35);
     prevU = u;
 
     // Second robot: MAG1500 tugger towing three trolleys around the same 3D map
@@ -250,101 +255,189 @@
     heading = phi;
   }
 
-  function placeAmr(dt) {
-    if (mission) runMission(dt);
-    else {
-      if (!reduceMotion) u = (u - dt * 0.011 + 1) % 1;
-      const p = spline.getPointAt(u);
-      const t = spline.getTangentAt(u);
-      setForklift(p.x, p.z, Math.atan2(t.z, t.x));                // forks point along the tangent; the forklift drives the other way
-      // Leave the loop for the factory cell when a pallet is waiting
-      if (cell && !reduceMotion && cell.palletReady) {
-        const before = (prevU - uDepart + 1) % 1, after = (u - uDepart + 1) % 1;
-        if (before < 0.02 && after > 0.9) startMission(p);
-      }
-    }
-    prevU = u;
-    if (lidar && !reduceMotion) lidar.rotation.y += dt * 4;
-    // Fork height: the lift cycles on the loop; missions set it explicitly
-    const want = mission ? mission.lift : (reduceMotion ? 0.3 : 0.43 * (1 - Math.cos(performance.now() / 1000 * 0.45)));
-    liftY += (want - liftY) * (1 - Math.exp(-4 * dt));
-    if (lifter) lifter.position.y = liftY;
-  }
-
-  /* ---------------- forklift pallet mission ---------------- */
-  const FWD = 1.5, REV = 0.9, CARRY = 1.0;
+  /* ---------------- shared step runner for the forklift (F) and the lifter (L) ---------------- */
+  const F = { busy: false, carried: null, steps: [], i: 0, lift: 0, liftY: 0, bx: 0, bz: 0 };
+  const L = { steps: [], i: 0, rack: null, lift: 0, liftY: 0, x: 0, z: 0, phi: 0, busy: false };
+  let lifterBot = null;          // MAG lifter (lifter-model.js)
+  const FWD = 1.5, REV = 0.9;
   function pathStep(pts, speed, reverse) {
     const c = new THREE.CatmullRomCurve3(pts.map(([x, z]) => new THREE.Vector3(x, 0, z)), false, 'centripetal', 0.5);
     return { type: 'path', curve: c, len: c.getLength(), s: 0, speed, reverse };
   }
-  function startMission(wheel) {
-    if (cell.outboundCount >= cell.zone.slotsX.length) cell.clearOutboundIfFull();
-    const slot = cell.outboundCount, xs = cell.zone.slotsX[slot], zz = cell.zone.z;
-    const pk = cell.pickup, px = wheel.x;
-    const Wpick = [pk.x - 0.3 - 0.55, pk.z], Wdrop = [xs - 0.85, zz];
-    const join = [xs + 2.2, 2.35];
-    mission = {
-      lift: 0, slot, join, carried: null, i: 0, timer: 0,
-      steps: [
-        pathStep([[px, 2.35], [px + 3, 2.35], [px + 5.6, 1.5], [px + 6.6, -0.2], [px + 5.9, -1.9], [px + 4.2, -2.9], [px + 2.5, -3.0], [px + 1.5, -3.0]], FWD, false),
-        pathStep([[px + 1.5, zz], Wpick], REV, true),
-        { type: 'lift', to: 0.3, dur: 1.4 },
-        pathStep([Wpick, Wdrop], CARRY, false),
-        { type: 'lower', to: 0, dur: 1.4 },
-        { type: 'clear', radius: 14 },
-        pathStep([Wdrop, [xs - 1.5, -2.2], [xs - 1.65, -0.6], [xs - 0.9, 1.2], [xs + 0.5, 2.15], join], FWD, false)
-      ]
-    };
+  /* Returns false when the step list is finished. `blocked()` pauses path steps (yielding). */
+  function runSteps(a, dt, pose, blocked) {
+    const s = a.steps[a.i];
+    if (!s) return false;
+    if (s.type === 'path') {
+      if (blocked && blocked()) return true;
+      const rem = s.len - s.s;
+      s.s = Math.min(s.len, s.s + s.speed * dt * clamp(Math.min(s.s, rem) / 1.0 + 0.25, 0.25, 1));
+      const k = clamp(s.s / s.len, 0, 1);
+      pose(s.curve.getPointAt(k), s.curve.getTangentAt(k), s.reverse);
+      if (s.len - s.s < 0.02) a.i++;
+    } else if (s.type === 'lift') {
+      const target = typeof s.to === 'function' ? s.to() : s.to;
+      a.lift = target;
+      if (s.when && !s.fired && s.when(a.liftY)) { s.fired = true; s.fn(); }
+      if (Math.abs(a.liftY - target) < 0.012) { if (s.when && !s.fired) { s.fired = true; s.fn(); } a.i++; }
+    } else if (s.type === 'wait') {
+      if (s.cond()) a.i++;
+    } else if (s.type === 'call') {
+      s.fn(); a.i++;
+    }
+    return true;
   }
-  const _o = new THREE.Vector3();
+
+  /* ---------------- forklift ---------------- */
+  function poseF(p, t, rev) {
+    const phi = rev ? Math.atan2(t.z, t.x) : Math.atan2(-t.z, -t.x);   // forks lead when reversing, trail when driving forward
+    setForklift(p.x, p.z, phi);
+  }
+  function carryF() {
+    const g = F.carried;
+    if (!g) return;
+    g.position.set(amr.position.x + 0.3 * Math.cos(heading), F.liftY, amr.position.z + 0.3 * Math.sin(heading));
+    g.rotation.y = -heading;
+  }
   function trainTooClose(x, z, r) {
     if (!tug) return false;
     const r2 = r * r;
     const near = (p) => (p.x - x) * (p.x - x) + (p.z - z) * (p.z - z) < r2;
     return near(tug.root.position) || tug.trolleys.some((t) => near(t.position));
   }
-  function carriedFollow(phi) {
-    const g = mission.carried;
-    if (!g) return;
-    g.position.set(amr.position.x + 0.3 * Math.cos(phi), liftY, amr.position.z + 0.3 * Math.sin(phi));
-    g.rotation.y = -phi;
+  const _tp = new THREE.Vector3();
+  function trainNear(x, z, r) {
+    if (!tug) return false;
+    const r2 = r * r, hit = (o, xs) => xs.some((lx) => { o.updateMatrixWorld(true); _tp.set(lx, 0, 0); o.localToWorld(_tp); return (_tp.x - x) * (_tp.x - x) + (_tp.z - z) * (_tp.z - z) < r2; });
+    return hit(tug.root, [-0.6, 0, 0.6]) || tug.trolleys.some((t) => hit(t, [0, -0.5, -1.0, -1.6]));
   }
-  function runMission(dt) {
-    const m = mission, s = m.steps[m.i];
-    if (!s) { endMission(); return; }
-    if (s.type === 'path') {
-      // yield to the tugger train if it comes close
-      if (trainTooClose(amr.position.x, amr.position.z, 3.2)) return;
-      const rem = s.len - s.s;
-      s.s = Math.min(s.len, s.s + s.speed * dt * clamp(Math.min(s.s, rem) / 1.0 + 0.25, 0.25, 1));
-      const k = clamp(s.s / s.len, 0, 1);
-      const p = s.curve.getPointAt(k), t = s.curve.getTangentAt(k);
-      const phi = s.reverse ? Math.atan2(t.z, t.x) : Math.atan2(-t.z, -t.x);   // forks lead when reversing, trail when driving forward
-      setForklift(p.x, p.z, phi);
-      carriedFollow(phi);
-      if (s.len - s.s < 0.02) m.i++;
-    } else if (s.type === 'lift' || s.type === 'lower') {
-      m.lift = s.to;
-      s.t = (s.t || 0) + dt;
-      carriedFollow(heading);
-      if (s.t >= s.dur && Math.abs(liftY - s.to) < 0.02) {
-        if (s.type === 'lift') m.carried = cell.takePallet();
-        else {
-          cell.placePallet(m.carried, m.slot);
-          m.carried = null;
-          cell.respawnPallet();                                  // a fresh pallet for the arm
-        }
-        m.i++;
-      }
-    } else if (s.type === 'clear') {
-      if (!trainTooClose(m.join[0], m.join[1], s.radius)) m.i++;   // wait off the lane until the tugger train has passed
+  const blockedF = () => (amr.position.z < 1.3 && trainNear(amr.position.x, amr.position.z, 2.6)) ||
+    (lifterBot && Math.hypot(lifterBot.root.position.x - amr.position.x, lifterBot.root.position.z - amr.position.z) < 2.8);
+
+  /* What the forklift should do next. It works the single pallet slot of whichever mobile rack stands at the hand-off. */
+  function nextFTask() {
+    const rk = cell.rackAt('H'), o = cell.out, sl = rk && rk.slot;
+    if (F.carried) {
+      if (F.carried.userData.loaded) { const s = o.loaded.find((x) => !x.pallet && !x.lock); return s && { mode: 'drop', slot: s, rack: false }; }
+      return (sl && !sl.pallet && !sl.lock) ? { mode: 'drop', slot: sl, rack: true } : null;        // bring an empty pallet into the rack
     }
+    if (sl && sl.pallet && sl.pallet.userData.full && !sl.lock) return { mode: 'pick', slot: sl, rack: true };   // loaded pallet out of the rack
+    if (sl && !sl.pallet && !sl.lock) { const e = o.empty.find((x) => x.pallet && !x.lock); if (e) return { mode: 'pick', slot: e, rack: false }; }
+    return null;
   }
-  function endMission() {
-    const j = mission.join;
-    mission = null;
-    u = nearestU(j[0], j[1]);
+  /* One dock: reverse forks-first into the slot from the band north of the rack, lift or lower, drive out forward. */
+  function dockSteps(task, cx, cz) {
+    const st = task.slot, x = st.x, z0 = st.z + 0.85, steps = [];
+    let sx = cx, sz = cz;
+    if (cx > x - 2.8) { steps.push(pathStep([[cx, cz], [(cx + x - 3.0) / 2, 0.82], [x - 3.0, 0.85]], FWD, false)); sx = x - 3.0; sz = 0.85; }
+    const pick = task.mode === 'pick';
+    const hIns = task.rack ? (pick ? 0.78 : 0.86) : (pick ? 0.0 : 0.25);   // rack: fork bottom stays >= 3 cm above the beams (top 0.80)
+    steps.push({ type: 'lift', to: hIns });
+    steps.push(pathStep([[sx, sz], [x - 1.9, 0.8], [x - 0.8, 0.76], [x - 0.12, z0 + 0.4], [x, z0 + 0.25], [x, z0]], REV, true));
+    if (task.rack && pick) steps.push({ type: 'lift', to: 0.86, when: (y) => y >= 0.805, fn: () => { F.carried = cell.take(st); } });
+    else if (task.rack) steps.push({ type: 'lift', to: 0.78, when: (y) => y <= 0.81, fn: () => { cell.place(st, F.carried); F.carried = null; } });
+    else if (pick) steps.push({ type: 'lift', to: 0.25, when: (y) => y >= 0.03, fn: () => { F.carried = cell.take(st); } });
+    else steps.push({ type: 'lift', to: 0.0, when: (y) => y <= 0.02, fn: () => { cell.place(st, F.carried); F.carried = null; } });
+    steps.push(pathStep([[x, z0], [x, z0 + 0.9], [x - 0.35, z0 + 1.2], [x - 1.3, 0.92]], FWD, false));
+    steps.push({ type: 'lift', to: () => (F.carried ? 0.25 : 0.1) });
+    F.bx = x - 1.3; F.bz = 0.92;
+    steps.push({ type: 'call', fn: planNextF });
+    return steps;
+  }
+  function planNextF() {
+    const task = nextFTask();
+    if (task) {
+      task.slot.lock = 'F';
+      F.steps.push(...dockSteps(task, F.bx, F.bz));
+      return;
+    }
+    // nothing left to do: loop back onto the lane (wait until the tugger train is clear)
+    const cx = F.bx, jx = cx + 1.6;
+    F.steps.push({ type: 'wait', cond: () => !trainTooClose(jx, 2.35, 22) });
+    F.steps.push(pathStep([[cx, F.bz], [cx - 1.0, 0.9], [cx - 1.8, 1.4], [cx - 1.9, 1.95], [cx - 1.2, 2.3], [cx, 2.35], [jx, 2.35]], FWD, false));
+    F.steps.push({ type: 'call', fn: () => { F.busy = false; u = nearestU(jx, 2.35); prevU = u; } });
+  }
+  function startF(wheel) {
+    F.busy = true; F.steps = []; F.i = 0;
+    const px = wheel.x;
+    F.steps.push(pathStep([[px, 2.35], [px + 2.5, 2.35], [px + 3.7, 1.95], [px + 4.25, 1.55], [px + 3.7, 1.0], [px + 2.0, 0.82]], FWD, false));
+    F.bx = px + 2.0; F.bz = 0.82;
+    F.steps.push({ type: 'call', fn: planNextF });
+  }
+
+  function placeAmr(dt) {
+    if (F.busy) runSteps(F, dt, poseF, blockedF);
+    else {
+      if (!reduceMotion) u = (u - dt * 0.011 + 1) % 1;
+      const p = spline.getPointAt(u);
+      const t = spline.getTangentAt(u);
+      setForklift(p.x, p.z, Math.atan2(t.z, t.x));                // forks point along the tangent; the forklift drives the other way
+      // Leave the loop for the rack / outbound band when there is work to do
+      if (cell && !reduceMotion && nextFTask()) {
+        const before = (prevU - uDepart + 1) % 1, after = (u - uDepart + 1) % 1;
+        if (before < 0.02 && after > 0.9) startF(p);
+      }
+    }
     prevU = u;
+    if (lidar && !reduceMotion) lidar.rotation.y += dt * 4;
+    // Fork height: cycles on the loop while empty; held at carry height with a pallet; tasks set it explicitly
+    const want = F.busy ? F.lift : (F.carried ? 0.25 : (reduceMotion ? 0.3 : 0.43 * (1 - Math.cos(performance.now() / 1000 * 0.45))));
+    F.liftY += (want - F.liftY) * (1 - Math.exp(-4 * dt));
+    if (lifter) lifter.position.y = F.liftY;
+    carryF();
+  }
+
+  /* ---------------- MAG lifter: drives under a mobile rack and moves it between the arm (S), the hand-off (H) and the spare spot (E) ----------------
+     Racks and lifter always point east (the lifter drives in along the rack's X axis), so every move is a straight or gently curved
+     drive, forward or in reverse, never a turn on the spot. */
+  const LP = [20.9, -3.0];     // parking spot, front east
+  function poseL(p, t, rev) {
+    const fx = rev ? -t.x : t.x, fz = rev ? -t.z : t.z;
+    L.x = p.x; L.z = p.z; L.phi = Math.atan2(fz, fx);
+    lifterBot.root.position.set(p.x, 0, p.z);
+    lifterBot.root.rotation.y = -L.phi;
+  }
+  const rackLift = () => Math.max(0, lifterBot.deckY + L.liftY - 0.66);      // the rack rises once the deck touches its lift pad
+  function planL() {
+    const SX = cell.station.x, SZ = cell.station.z, H = cell.handoff, E = cell.emptyStation;
+    const rS = cell.rackAt('S'), rH = cell.rackAt('H'), rE = cell.rackAt('E');
+    const ready = (r) => r && r.slot.pallet && !r.slot.pallet.userData.full && !r.slot.lock;
+    const fNear = Math.hypot(amr.position.x - H.x, amr.position.z - H.z) < 5.5;
+    // curve between the hand-off and the row z = -3 at x = 18.8 (all points are on the way, nothing else stands there)
+    // straight and centred on the rack until the lifter's whole body is clear of the legs (x >= H + 2.6), then curve down to the row
+    const hCurve = [[H.x, H.z], [H.x + 1.0, H.z], [H.x + 2.0, H.z], [H.x + 2.6, H.z], [H.x + 3.4, H.z - 0.3], [18.0, -2.2], [18.9, -2.85], [19.8, -3.0]];
+    // the spare rack sits on z = E.z: come in straight along it for the last 2.6 m
+    const eIn = [[19.8, -3.0], [19.0, -3.0], [18.1, -3.3], [E.x + 2.6, E.z], [E.x + 1.0, E.z], [E.x, E.z]];
+    const pick = (r) => ({ type: 'lift', to: 0.24, when: () => rackLift() > 0.001, fn: () => { r.at = 'moving'; L.rack = r; } });
+    const put = (r, name, pos) => ({ type: 'lift', to: 0, when: () => rackLift() <= 0.001, fn: () => { cell.setRackPose(r, pos.x, pos.z, 0, 0); r.at = name; L.rack = null; } });
+    const done = { type: 'call', fn: () => { L.busy = false; } };
+    let steps = null;
+    if (rS && cell.palletReady && !rH) {                                // A: full rack at the arm -> hand-off
+      steps = [
+        pathStep([[LP[0], LP[1]], [SX, SZ]], 1.2, false), pick(rS),
+        pathStep([[SX, SZ], [20.5, -3.0]].concat(hCurve.slice().reverse().slice(1)), 1.0, true), put(rS, 'H', H),
+        pathStep(hCurve.slice(0, -1).concat([[LP[0], LP[1]]]), 1.3, false), done];
+    } else if (!rS && rE && ready(rE)) {                                // B: spare rack (with its pallet) -> arm
+      steps = [
+        pathStep([[LP[0], LP[1]]].concat(eIn.slice(1)), 1.2, true), pick(rE),
+        pathStep(eIn.slice().reverse().concat([[LP[0], LP[1]], [SX, SZ]]), 1.2, false), put(rE, 'S', cell.station),
+        pathStep([[SX, SZ], [LP[0], LP[1]]], 1.0, true), done];
+    } else if (rH && ready(rH) && !rE && !F.carried && !(F.busy && fNear)) {   // C: serviced rack at the hand-off -> spare spot
+      steps = [
+        pathStep([[LP[0], LP[1]], [20.5, -3.0]].concat(hCurve.slice().reverse().slice(1)), 1.1, true), pick(rH),
+        pathStep(hCurve, 1.2, false), pathStep(eIn, 1.0, true), put(rH, 'E', E),
+        pathStep(eIn.slice().reverse().concat([[LP[0], LP[1]]]), 1.3, false), done];
+    }
+    if (!steps) return;
+    L.steps = steps; L.i = 0; L.busy = true;
+  }
+  function updateL(dt) {
+    if (!lifterBot) return;
+    if (L.busy) runSteps(L, dt, poseL, null); else planL();
+    L.liftY += (L.lift - L.liftY) * (1 - Math.exp(-3 * dt));
+    lifterBot.lift.position.y = L.liftY;
+    lifterBot.beams.rotation.y += reduceMotion ? 0 : dt * 5;
+    if (L.rack) cell.setRackPose(L.rack, L.x, L.z, -L.phi, rackLift());   // the rack rides on the deck, yawing with the lifter
   }
 
   /* ---------------- tugger train: follows the same route, never closes on the forklift ---------------- */
@@ -356,8 +449,11 @@
     const ahead = ((uT - u + 1) % 1) * routeLen;                 // arc length from tugger to forklift, along travel
     const tailLen = tug.hitchX + tug.pitch * (tug.trolleys.length - 1) + 1.7;
     const behind = ((u - (uT + tailLen / routeLen) + 2) % 1) * routeLen;   // forklift approaching the train tail
-    const hold = !mission && ahead < SAFE_GAP + 2.5;              // forklift too close in front: wait (off-loop missions yield by position instead)
-    const rate = !mission && behind < SAFE_GAP ? 1.5 : 1;       // forklift closing from behind: move off
+    const vx = amr.position.x - tug.root.position.x, vz = amr.position.z - tug.root.position.z;
+    const fx = Math.cos(tugHeading), fz = Math.sin(tugHeading), along = vx * fx + vz * fz, lat = Math.abs(-vx * fz + vz * fx);
+    const forkliftAhead = F.busy && along > -1.5 && along < 6.0 && lat < 1.0;   // forklift on / crossing the lane right in front
+    const hold = forkliftAhead || (!F.busy && ahead < SAFE_GAP + 2.5);              // forklift too close in front: wait (off-loop missions yield by position instead)
+    const rate = !F.busy && behind < SAFE_GAP ? 1.5 : 1;       // forklift closing from behind: move off
     if (!reduceMotion && !hold) uT = (uT - dt * 0.011 * rate + 1) % 1;
 
     const t = spline.getTangentAt(uT);
@@ -487,9 +583,10 @@
     last = now;
     if (!ready || document.hidden || paused) return;
 
-    if (cell && !reduceMotion) cell.update(dt);
+    if (cell && !reduceMotion) { cell.update(dt); updateL(dt); }
     placeAmr(dt);
     placeTugger(dt);
+    /*DBG*/ if (window.__dbg && window.__dbg.locked) { const Lk = window.__dbg.locked; camera.position.set(Lk[0], Lk[1], Lk[2]); camera.lookAt(Lk[3], Lk[4], Lk[5]); renderer.render(scene, camera); return; }
     const speed = desiredPose(now / 1000);
     const k = 1 - Math.exp(-speed * dt);
     camPos.lerp(pose.p, k);
@@ -498,6 +595,27 @@
     camera.lookAt(camTarget);
     renderer.render(scene, camera);
   }
+
+
+
+
+
+  /*DBG*/ window.__dbg = { cnt: { F: 0, L: 0, Lc: 0 }, at: {}, steps: 0,
+  /*DBG*/   verts(o) { o.updateMatrixWorld(true); const r = []; o.traverse((m) => { if (m.isMesh && !m.isLineSegments) { const g = m.geometry, p = g.attributes.position; const step = Math.max(1, Math.floor(p.count / 400)); for (let i = 0; i < p.count; i += step) r.push(new THREE.Vector3().fromBufferAttribute(p, i).applyMatrix4(m.matrixWorld)); } }); return r; },
+  /*DBG*/   hit(rack, V, tol) { rack.group.updateMatrixWorld(true); const inv = rack.group.matrixWorld.clone().invert(); const boxes = []; rack.group.children.forEach((m) => { if (!m.isMesh) return; if (m.geometry.parameters && m.geometry.parameters.width === 0.7) return; const q = m.geometry.parameters; boxes.push([m.position.x - q.width / 2 - tol, m.position.x + q.width / 2 + tol, m.position.y - q.height / 2 - tol, m.position.y + q.height / 2 + tol, m.position.z - q.depth / 2 - tol, m.position.z + q.depth / 2 + tol]); }); let n = 0, first = null; V.forEach((v) => { const l = v.clone().applyMatrix4(inv); for (const b of boxes) if (l.x > b[0] && l.x < b[1] && l.y > b[2] && l.y < b[3] && l.z > b[4] && l.z < b[5]) { n++; if (!first) first = [+l.x.toFixed(2), +l.y.toFixed(2), +l.z.toFixed(2)]; break; } }); return { n, first }; },
+  /*DBG*/   step(sec) { for (let t = 0; t < sec; t += 0.05) { if (cell) { cell.update(0.05); updateL(0.05); } placeAmr(0.05); placeTugger(0.05); this.steps++; this.gaps();
+  /*DBG*/     cell.racks.forEach((r) => { const dF = Math.hypot(amr.position.x - r.x, amr.position.z - r.z), dL = Math.hypot(L.x - r.x, L.z - r.z);
+  /*DBG*/       if (dF < 3.6) { const o = this.hit(r, this.verts(amr), 0.01); if (o.n) { this.cnt.F++; this.at.F = this.at.F || [o.first, amr.position.x.toFixed(1), amr.position.z.toFixed(1), r.at, F.i, this.steps]; } }
+  /*DBG*/       if (dL < 2.6 && !(L.rack === r)) { const o = this.hit(r, this.verts(lifterBot.root), 0.01); if (o.n) { this.cnt.L++; this.at.L = this.at.L || [o.first, L.x.toFixed(1), L.z.toFixed(1), r.at, L.i, L.liftY.toFixed(2)]; } }
+  /*DBG*/       if (dL < 2.6 && L.rack === r) { const o = this.hit(r, this.verts(lifterBot.root), 0.01); if (o.n) { this.cnt.Lc++; this.at.Lc = this.at.Lc || [o.first, L.x.toFixed(1), L.z.toFixed(1), r.at, L.i, L.liftY.toFixed(2)]; } } }); } },
+  /*DBG*/   cam() { this.locked = Array.from(arguments); },
+  /*DBG*/   mn: { FL: 1e9, FT: 1e9, LT: 1e9, TR: 1e9 }, cyc: { pick: 0, drop: 0, move: 0, lastRack: '' },
+  /*DBG*/   pts(o, xs, zs) { o.updateMatrixWorld(true); const r = []; xs.forEach((x) => zs.forEach((z) => r.push(o.localToWorld(new THREE.Vector3(x, 0, z))))); return r; },
+  /*DBG*/   dist(A, B) { let m = 1e9; A.forEach((a) => B.forEach((b) => { m = Math.min(m, Math.hypot(a.x - b.x, a.z - b.z)); })); return m; },
+  /*DBG*/   gaps() { const Fp = this.pts(amr, [-1.15, -0.6, 0, 0.4, 0.85], [-0.55, 0, 0.55]), Lp = this.pts(lifterBot.root, [-0.67, 0, 0.67], [-0.53, 0, 0.53]); const Tp = this.pts(tug.root, [-0.67, 0, 0.67], [-0.53, 0, 0.53]); tug.trolleys.forEach((tr) => Tp.push(...this.pts(tr, [0, -0.4, -0.8, -1.2, -1.6], [-0.43, 0, 0.43]))); const Rp = []; cell.racks.forEach((r) => Rp.push(...this.pts(r.group, [-1.05, -0.5, 0, 0.5, 1.05], [-0.66, 0, 0.66]))); const d = { FL: this.dist(Fp, Lp), FT: this.dist(Fp, Tp), LT: this.dist(Lp, Tp), TR: this.dist(Tp, Rp) }; Object.keys(d).forEach((k) => { if (d[k] < this.mn[k]) this.mn[k] = d[k]; }); },
+  /*DBG*/   state() { return JSON.stringify({ racks: cell.racks.map((r) => r.at + ':' + (r.slot.pallet ? (r.slot.pallet.userData.full ? 'full' : 'p' + (r.slot.pallet.userData.boxes || []).length) : 'none')).join(' '), out: cell.out.loaded.concat(cell.out.empty).map((b) => (b.pallet ? (b.pallet.userData.loaded ? 'L' : 'e') : '.')).join(''), F: F.busy ? 'task' : 'route', L: L.busy ? 'trip' : 'idle', gaps: Object.fromEntries(Object.entries(this.mn).map(([k, v]) => [k, +v.toFixed(2)])) }); },
+  /*DBG*/   stats() { return JSON.stringify({ stepsWithContact: this.cnt, firstAt: this.at, steps: this.steps }); }
+  /*DBG*/ };
 
   /* ---------------- start ---------------- */
   readScroll();
