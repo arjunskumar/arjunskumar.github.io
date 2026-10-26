@@ -116,12 +116,12 @@
   /* ---------------- scene ---------------- */
   function build(world) {
     try {
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
     } catch (e) {
       console.warn('3D backdrop disabled (WebGL unavailable):', e);
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
     scene = new THREE.Scene();
     scene.background = new THREE.Color(BG);
     scene.fog = new THREE.Fog(BG, 140, 420);
@@ -139,7 +139,8 @@
     const g = world.geometry;
     const srcP = g.attributes.position.array;
     const srcC = g.attributes.color ? g.attributes.color.array : null;
-    const stride = small ? 2 : 1;
+    const targetPoints = small ? 90000 : 150000;
+    const stride = Math.max(1, Math.round((srcP.length / 3) / targetPoints));
     const n = Math.floor(srcP.length / 3 / stride);
     const pos = new Float32Array(n * 3);
     const col = new Float32Array(n * 3);
@@ -153,7 +154,7 @@
     pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     pg.setAttribute('color', new THREE.BufferAttribute(col, 3));
     scene.add(new THREE.Points(pg, new THREE.PointsMaterial({
-      size: small ? 2.6 : 2.4, vertexColors: true, sizeAttenuation: false, transparent: true, opacity: 1
+      size: small ? 2.6 : 2.4, vertexColors: true, sizeAttenuation: false, transparent: false, depthWrite: true
     })));
 
     const grid = new THREE.GridHelper(240, 80, 0x1f2a44, 0x11161f);
@@ -577,11 +578,15 @@
   }
 
   /* ---------------- loop ---------------- */
+  let lastFrameTime = 0;
   function frame(now) {
     requestAnimationFrame(frame);
+    if (!ready || document.hidden || paused) return;
+
+    if (now && now - lastFrameTime < 15.5) return; // 60 FPS cap (prevents overheating on 120Hz/144Hz displays)
+    lastFrameTime = now;
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    if (!ready || document.hidden || paused) return;
 
     if (cell && !reduceMotion) { cell.update(dt); updateL(dt); }
     placeAmr(dt);

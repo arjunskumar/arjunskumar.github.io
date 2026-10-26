@@ -235,11 +235,11 @@
       camera = new THREE.PerspectiveCamera(45, width / height, 0.2, 600);
       setCameraPreset('iso');
 
-      // 3. Renderer Setup
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+      // 3. Renderer Setup (High-performance config: no MSAA on points, pixel ratio capped, shadowMap disabled)
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: 'high-performance' });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.shadowMap.enabled = true;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
+      renderer.shadowMap.enabled = false;
       container.innerHTML = '';
       container.appendChild(renderer.domElement);
 
@@ -1012,20 +1012,20 @@
     });
   }
 
-  /* --- Load Real 3D LiDAR SLAM PCD Point Cloud --- */
+  /* --- Load Real 3D LiDAR SLAM Flat Binary Point Cloud --- */
   function loadWarehousePCD() {
     if (typeof PCDLoader === 'undefined') return;
 
-    const stride = window.innerWidth < 768 ? 2 : 1;
+    const stride = window.innerWidth < 768 ? 3 : 2;
 
     PCDLoader.load(
-      'assets/data/warehouse_amazon.pcd',
+      'assets/data/warehouse_points_i16.bin',
       (res) => {
         isRealDataset = res.isBinary;
         applyPointCloudGeometry(res.geometry, res.pointCount);
       },
       (err) => {
-        console.info('PCD notice: procedural fallback active.');
+        console.info('PCD notice: procedural fallback active.', err);
       },
       stride
     );
@@ -1084,8 +1084,8 @@
       size: pointSize,
       vertexColors: true,
       sizeAttenuation: false,
-      transparent: true,
-      opacity: 0.9
+      transparent: false,
+      depthWrite: true
     });
 
     pointCloudMesh = new THREE.Points(geometry, pointMaterial);
@@ -1733,10 +1733,16 @@
   }
 
   /* --- Authentic Forklift Tricycle Autonomy & Kinematics Loop --- */
-  function animate() {
+  let lastViewerFrame = 0;
+  function animate(now) {
     requestAnimationFrame(animate);
 
     if (!isVisibleInViewport && !isGameMode) return;
+
+    if (now) {
+      if (now - lastViewerFrame < 15.5) return; // 60 FPS cap (saves GPU on 120Hz/144Hz displays)
+      lastViewerFrame = now;
+    }
 
     if (isGameMode && forkliftGroup) {
       updateGameTeleop();

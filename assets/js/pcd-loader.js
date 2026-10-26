@@ -164,13 +164,99 @@
     };
   }
 
+  function parseFlatBinary(buffer, stride) {
+    stride = stride || 1;
+    if (!buffer || buffer.byteLength < 8) return null;
+    const u32 = new Uint32Array(buffer, 0, 3);
+    const count = u32[0];
+    if (count <= 0 || count > 50000000) return null;
+
+    const f32Header = new Float32Array(buffer, 4, 1);
+    const scale = f32Header[0];
+    const isInt16 = scale > 0.0001 && scale < 1.0 && (buffer.byteLength >= 12 + count * 6);
+
+    if (isInt16) {
+      const hasIntensity = u32[2] === 1;
+      const rawI16 = new Int16Array(buffer, 12, count * 3);
+      const rawU8 = hasIntensity && (buffer.byteLength >= 12 + count * 6 + count)
+        ? new Uint8Array(buffer, 12 + count * 6, count)
+        : null;
+
+      const loadedCount = Math.floor(count / stride);
+      const positions = new Float32Array(loadedCount * 3);
+      const intensities = rawU8 ? new Float32Array(loadedCount) : null;
+
+      let out = 0;
+      for (let i = 0; i < count; i += stride) {
+        const i3 = i * 3;
+        const out3 = out * 3;
+        positions[out3]     = rawI16[i3] * scale;
+        positions[out3 + 1] = rawI16[i3 + 1] * scale;
+        positions[out3 + 2] = rawI16[i3 + 2] * scale;
+        if (intensities && rawU8) {
+          intensities[out] = rawU8[i] / 255.0;
+        }
+        out++;
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      if (intensities) {
+        geometry.setAttribute('intensity', new THREE.BufferAttribute(intensities, 1));
+      }
+      geometry.computeBoundingBox();
+      geometry.computeBoundingSphere();
+      return { geometry, pointCount: loadedCount, isBinary: true, rawPoints: count };
+    }
+
+    // Float32 format: count (uint32), hasIntensity (uint32)
+    const hasIntensity = u32[1] === 1;
+    const rawF32 = new Float32Array(buffer, 8, count * 3);
+    const rawInten = hasIntensity && (buffer.byteLength >= 8 + count * 16)
+      ? new Float32Array(buffer, 8 + count * 12, count)
+      : null;
+
+    if (stride === 1) {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(rawF32, 3));
+      if (rawInten) {
+        geometry.setAttribute('intensity', new THREE.BufferAttribute(rawInten, 1));
+      }
+      geometry.computeBoundingBox();
+      geometry.computeBoundingSphere();
+      return { geometry, pointCount: count, isBinary: true, rawPoints: count };
+    } else {
+      const loadedCount = Math.floor(count / stride);
+      const positions = new Float32Array(loadedCount * 3);
+      const intensities = rawInten ? new Float32Array(loadedCount) : null;
+      let out = 0;
+      for (let i = 0; i < count; i += stride) {
+        const i3 = i * 3;
+        const out3 = out * 3;
+        positions[out3]     = rawF32[i3];
+        positions[out3 + 1] = rawF32[i3 + 1];
+        positions[out3 + 2] = rawF32[i3 + 2];
+        if (intensities && rawInten) intensities[out] = rawInten[i];
+        out++;
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      if (intensities) geometry.setAttribute('intensity', new THREE.BufferAttribute(intensities, 1));
+      geometry.computeBoundingBox();
+      geometry.computeBoundingSphere();
+      return { geometry, pointCount: loadedCount, isBinary: true, rawPoints: count };
+    }
+  }
+
   function parseArrayBuffer(buffer, stride) {
     const headerChunk = new Uint8Array(buffer, 0, Math.min(buffer.byteLength, 2048));
     const headerText = new TextDecoder('ascii').decode(headerChunk);
 
     const dataPos = headerText.search(/DATA\s+(binary|ascii)/i);
     if (dataPos === -1) {
-      throw new Error('Invalid PCD: DATA keyword not found');
+      const flatRes = parseFlatBinary(buffer, stride);
+      if (flatRes) return flatRes;
+      throw new Error('Invalid Point Cloud buffer: neither PCD header nor flat binary detected');
     }
 
     const newlinePos = headerText.indexOf('\n', dataPos);
