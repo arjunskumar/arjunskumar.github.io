@@ -496,17 +496,16 @@
     work(time, p) {
       if (!tug) { pose.p.set(10 - p * 12, 7.5, 13); pose.t.set(0, 1, 2.5); return; }
       const fx = Math.cos(tugHeading), fz = Math.sin(tugHeading);       // tugger forward (+X local)
-      const mid = tug.trolleys[1].position;
-      // Shot 1 (first half of the chapter): close on the auto-latch hitch between tugger and trolley 1
-      const hx = tug.root.position.x - 1.10 * fx, hz = tug.root.position.z - 1.10 * fz;
-      const th1 = tugHeading + Math.PI / 2 + 0.5;
-      // Shot 2: side-on along the whole train
-      const th2 = tugHeading + Math.PI / 2 + (p - 0.5) * 0.9;
-      const k = smooth((p - 0.35) / 0.3);
-      V[0].set(hx + 2.1 * Math.cos(th1), 1.5, hz + 2.1 * Math.sin(th1));
-      V[1].set(hx, 0.4, hz);
-      V[2].set(mid.x + 8.5 * Math.cos(th2), 3.2, mid.z + 8.5 * Math.sin(th2));
-      V[3].set(mid.x + 1.6 * fx, 0.8, mid.z + 1.6 * fz);
+      const head = tug.root.position, mid = tug.trolleys[1].position;
+      // Shot 1: elevated three-quarter view ahead of the tugger, looking back along the train
+      const th1 = tugHeading + 0.85;
+      // Shot 2: higher and broadside, drifting along the whole train (clears the racks between lanes)
+      const th2 = tugHeading + Math.PI / 2 + (p - 0.5) * 0.7;
+      const k = smooth((p - 0.3) / 0.4);
+      V[0].set(head.x + 7.5 * Math.cos(th1), 5.2, head.z + 7.5 * Math.sin(th1));
+      V[1].set(head.x - 1.8 * fx, 0.6, head.z - 1.8 * fz);
+      V[2].set(mid.x + 9.5 * Math.cos(th2), 8.5, mid.z + 9.5 * Math.sin(th2));
+      V[3].set(mid.x + 0.6 * fx, 0.5, mid.z + 0.6 * fz);
       pose.p.lerpVectors(V[0], V[2], k);
       pose.t.lerpVectors(V[1], V[3], k);
     },
@@ -569,14 +568,33 @@
     }
   }
 
+  let shotName = 'hero';
   function desiredPose(time) {
     if (heroP < 1 && document.body.classList.contains('on-hero')) {
       heroPose(heroP, time);
+      shotName = 'hero';
       return 5;
     }
     const name = chapter && chapter.dataset.cam;
     (POSES[name] || POSES.intro)(time, chapterP);
+    shotName = name;
     return 2.6;
+  }
+
+  /* Lens shift: slides the rendered subject beside the copy instead of under it, without moving the
+     camera. Fractions of the viewport, +x = right, +y = down. Wide screens shift sideways (copy is on the
+     left), tall screens shift vertically (copy is stacked). Chapters not listed stay centred. */
+  const FRAMING = {
+    wide: { hero: [0.2, 0], intro: [0.06, 0.26], factory: [0.3, 0.04], contact: [0, 0.12] },
+    tall: { hero: [0, -0.16], intro: [0, 0.3], factory: [0, 0.22], contact: [0, 0.16] }
+  };
+  const lens = { x: 0, y: 0 };
+  function applyFraming(k) {
+    const w = window.innerWidth, h = window.innerHeight;
+    const f = FRAMING[w / h > 1.1 ? 'wide' : 'tall'][shotName] || [0, 0];
+    lens.x += (f[0] - lens.x) * k;
+    lens.y += (f[1] - lens.y) * k;
+    camera.setViewOffset(w, h, -lens.x * w, -lens.y * h, w, h);
   }
 
   /* ---------------- loop ---------------- */
@@ -607,6 +625,7 @@
     camTarget.lerp(pose.t, k);
     camera.position.copy(camPos);
     camera.lookAt(camTarget);
+    applyFraming(k);
     renderer.render(scene, camera);
   }
 

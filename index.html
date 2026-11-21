@@ -175,7 +175,7 @@
             <p class="stat-note">Production 3D LiDAR SLAM on GTSAM iSAM2, deployed across a commercial cleaning-robot fleet.</p>
           </div>
           <div class="stat" role="listitem">
-            <div class="stat-num stat-text">weeks <span class="arrow">→</span> few minutes</div>
+            <div class="stat-num stat-text">weeks <span class="arrow">→</span> few&nbsp;minutes</div>
             <div class="stat-label">to deploy a new site</div>
             <p class="stat-note">Online 3D SLAM replaced offline rosbag recording and hand-corrected pose graphs.</p>
           </div>
@@ -202,13 +202,13 @@
       </div>
       <div class="split-body">
         <article class="entry">
-          <div class="entry-when">Jan 2026 – present</div>
+          <div class="entry-when">Jan 2026 – <span class="now">present</span></div>
           <div class="entry-main">
             <h3>Botsync</h3>
             <p class="entry-org">Bangalore, India</p>
 
             <div class="role">
-              <h4>Technical Lead, Robotics <span class="role-when">Oct 2026 – present</span></h4>
+              <h4>Technical Lead, Robotics <span class="role-when">Oct 2026 – <span class="now">present</span></span></h4>
               <ul>
                 <li>Promoted to <strong>Technical Lead, Robotics</strong>, leading the AMR engineering team and the mapping and localization stack.</li>
               </ul>
@@ -226,7 +226,7 @@
         </article>
 
         <article class="entry">
-          <div class="entry-when">Aug 2025 – present</div>
+          <div class="entry-when">Aug 2025 – <span class="now">present</span></div>
           <div class="entry-main">
             <h3>Volunteer Instructor, Robotics</h3>
             <p class="entry-org">Entri.App · Remote · part-time</p>
@@ -382,7 +382,7 @@
       <div class="modal-bar"><span class="modal-meta">Botsync, 2026 · production</span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
       <div class="modal-body">
         <h3 id="p-slam-t">Real-time online 3D SLAM pipeline</h3>
-        <img class="modal-gif" src="assets/img/work/slam-pipeline.gif" alt="Animated preview (mock): Real-time online 3D SLAM pipeline" width="640" height="360" loading="lazy">
+        <img class="modal-gif" src="assets/img/work/slam-pipeline.gif" alt="Schematic animation: Real-time online 3D SLAM pipeline" width="640" height="360" loading="lazy">
         <p>Replaced manual mapping workflows that required recording rosbags and hand-correcting pose graphs offline. AMRs now generate 3D maps online in real time, <strong>cutting site deployment from weeks to a few minutes</strong>.</p>
         <div class="tags"><span class="tag">3D LiDAR</span><span class="tag">GTSAM</span><span class="tag">iSAM2</span><span class="tag">C++20</span><span class="tag">ROS 2</span></div>
         <figure class="modal-figure">
@@ -406,7 +406,7 @@
       <rect width="1000" height="480" fill="url(#diag-grid)"/>
 
       <!-- Top System Title Header -->
-      <g font-family="'EB Garamond', Georgia, serif" font-weight="600">
+      <g font-family="'Inter Tight', Inter, sans-serif" font-weight="600">
         <text x="30" y="36" font-size="16" fill="currentColor" letter-spacing="0">
           SYSTEM ARCHITECTURE: FULL-STACK REAL-TIME 3D LiDAR SLAM PIPELINE
         </text>
@@ -422,14 +422,14 @@
         <!-- Stage Box -->
         <rect width="210" height="360" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>
         <rect width="210" height="28" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
-        <text x="12" y="19" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">
+        <text x="12" y="19" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">
           1. SENSOR INGESTION
         </text>
 
         <!-- Block 1: 3D LiDAR -->
         <g transform="translate(15, 45)">
           <rect width="180" height="60" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="12" y="24" font-family="'EB Garamond', Georgia, serif" font-size="12" font-weight="600" fill="currentColor">3D LiDAR Stream</text>
+          <text x="12" y="24" font-family="'Inter Tight', Inter, sans-serif" font-size="12" font-weight="600" fill="currentColor">3D LiDAR Stream</text>
           <text x="12" y="44" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">10-20 Hz Raw Packets</text>
           <circle cx="165" cy="22" r="4" fill="var(--accent)"/>
         </g>
@@ -437,21 +437,21 @@
         <!-- Block 2: IMU Pre-integration -->
         <g transform="translate(15, 125)">
           <rect width="180" height="60" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="12" y="24" font-family="'EB Garamond', Georgia, serif" font-size="12" font-weight="600" fill="currentColor">6-DoF IMU Sensor</text>
+          <text x="12" y="24" font-family="'Inter Tight', Inter, sans-serif" font-size="12" font-weight="600" fill="currentColor">6-DoF IMU Sensor</text>
           <text x="12" y="44" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">200 Hz High-Rate Acc/Gyr</text>
         </g>
 
         <!-- Block 3: Wheel Odometry -->
         <g transform="translate(15, 205)">
           <rect width="180" height="60" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="12" y="24" font-family="'EB Garamond', Georgia, serif" font-size="12" font-weight="600" fill="currentColor">Wheel Odometry</text>
+          <text x="12" y="24" font-family="'Inter Tight', Inter, sans-serif" font-size="12" font-weight="600" fill="currentColor">Wheel Odometry</text>
           <text x="12" y="44" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Differential Planar Encoders</text>
         </g>
 
         <!-- Block 4: Motion Deskewing -->
         <g transform="translate(15, 285)">
           <rect width="180" height="55" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"/>
-          <text x="12" y="22" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="var(--accent)">Deskewing Pipeline</text>
+          <text x="12" y="22" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Deskewing Pipeline</text>
           <text x="12" y="40" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Continuous IMU Interpolation</text>
         </g>
       </g>
@@ -465,21 +465,21 @@
       <g transform="translate(280, 80)">
         <rect width="215" height="360" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>
         <rect width="215" height="28" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
-        <text x="12" y="19" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">
+        <text x="12" y="19" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">
           2. FRONT-END ODOMETRY
         </text>
 
         <!-- Voxel Downsampling -->
         <g transform="translate(15, 45)">
           <rect width="185" height="55" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="12" y="22" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Voxel Filter &amp; Normals</text>
+          <text x="12" y="22" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">Voxel Filter &amp; Normals</text>
           <text x="12" y="40" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Adaptive Octree Leaf (PCL)</text>
         </g>
 
         <!-- Scan-to-Map Matching -->
         <g transform="translate(15, 120)">
           <rect width="185" height="70" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="12" y="24" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Scan-to-Map Matching</text>
+          <text x="12" y="24" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">Scan-to-Map Matching</text>
           <text x="12" y="42" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Point-to-Plane ICP / NDT</text>
           <text x="12" y="58" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--accent)">Covariance Estimation Σ</text>
         </g>
@@ -487,7 +487,7 @@
         <!-- Keyframe Decision Logic -->
         <g transform="translate(15, 210)">
           <rect width="185" height="65" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="12" y="22" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Keyframe Decider</text>
+          <text x="12" y="22" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">Keyframe Decider</text>
           <text x="12" y="40" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">Δd &gt; 0.4m  ||  Δθ &gt; 15°</text>
           <text x="12" y="54" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Generates Pose Node xᵢ</text>
         </g>
@@ -495,7 +495,7 @@
         <!-- Submap Manager -->
         <g transform="translate(15, 295)">
           <rect width="185" height="50" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="12" y="20" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Local Submap Sliding Window</text>
+          <text x="12" y="20" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">Local Submap Sliding Window</text>
           <text x="12" y="38" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--muted)">K-Nearest Keyframe Buffer</text>
         </g>
       </g>
@@ -509,14 +509,14 @@
       <g transform="translate(535, 80)">
         <rect width="225" height="360" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"/>
         <rect width="225" height="28" fill="var(--accent)" stroke="var(--accent)" stroke-width="1"/>
-        <text x="12" y="19" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="var(--accent-ink)">
+        <text x="12" y="19" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="var(--accent-ink)">
           3. GTSAM iSAM2 FACTOR GRAPH
         </text>
 
         <!-- Factor Graph Nodes Visual -->
         <g transform="translate(15, 45)">
           <rect width="195" height="90" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Factor Graph Construction</text>
+          <text x="10" y="20" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">Factor Graph Construction</text>
 
           <!-- Pose Nodes (x0, x1, x2) -->
           <circle cx="35" cy="55" r="12" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
@@ -542,7 +542,7 @@
         <!-- Bayes Tree Variable Update -->
         <g transform="translate(15, 145)">
           <rect width="195" height="90" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">iSAM2 Bayes Tree Smoothing</text>
+          <text x="10" y="20" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">iSAM2 Bayes Tree Smoothing</text>
           <text x="10" y="38" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">• Incremental QR / Cholesky Factor</text>
           <text x="10" y="54" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">• Relinearization of affected cliques</text>
           <text x="10" y="70" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--accent)">• Zero Z-Drift Elevation Locking</text>
@@ -552,7 +552,7 @@
         <!-- Loop Closure Input Port -->
         <g transform="translate(15, 245)">
           <rect width="195" height="95" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">Loop Closure Integration</text>
+          <text x="10" y="20" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">Loop Closure Integration</text>
           <text x="10" y="38" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Non-linear pose constraint insertion:</text>
           <text x="10" y="56" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--accent)">BetweenFactor(xₘ, xₙ, Tₘₙ)</text>
           <text x="10" y="74" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Full trajectory back-propagation</text>
@@ -568,14 +568,14 @@
       <g transform="translate(800, 80)">
         <rect width="170" height="360" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>
         <rect width="170" height="28" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
-        <text x="10" y="19" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="600" fill="currentColor">
+        <text x="10" y="19" font-family="'Inter Tight', Inter, sans-serif" font-size="11" font-weight="600" fill="currentColor">
           4. MAP &amp; FLEET
         </text>
 
         <!-- Loop Detector Block -->
         <g transform="translate(12, 45)">
           <rect width="146" height="85" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="10.5" font-weight="600" fill="currentColor">Loop Detection</text>
+          <text x="10" y="20" font-family="'Inter Tight', Inter, sans-serif" font-size="10.5" font-weight="600" fill="currentColor">Loop Detection</text>
           <text x="10" y="38" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Scan Context /</text>
           <text x="10" y="52" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Ring Keys Search</text>
           <text x="10" y="70" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--accent)">ICP Fitness Verify</text>
@@ -584,7 +584,7 @@
         <!-- Output 1: Globally Consistent Map -->
         <g transform="translate(12, 145)">
           <rect width="146" height="95" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
-          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="10.5" font-weight="600" fill="currentColor">Globally Consistent 3D Point Cloud</text>
+          <text x="10" y="20" font-family="'Inter Tight', Inter, sans-serif" font-size="10.5" font-weight="600" fill="currentColor">Globally Consistent 3D Point Cloud</text>
           <text x="10" y="48" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Multi-Floor Align</text>
           <text x="10" y="66" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--accent)">Zero Z-Drift Map</text>
           <text x="10" y="84" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--muted)">2D Grid Projection</text>
@@ -593,8 +593,8 @@
         <!-- Output 2: Fleet Autonomy -->
         <g transform="translate(12, 255)">
           <rect width="146" height="85" fill="var(--surface)" stroke="var(--text)" stroke-width="1.5"/>
-          <text x="10" y="20" font-family="'EB Garamond', Georgia, serif" font-size="10.5" font-weight="600" fill="currentColor">Fleet Deployment</text>
-          <text x="10" y="42" font-family="'EB Garamond', Georgia, serif" font-size="13" font-weight="600" fill="var(--accent)">1,800+ AMRs</text>
+          <text x="10" y="20" font-family="'Inter Tight', Inter, sans-serif" font-size="10.5" font-weight="600" fill="currentColor">Fleet Deployment</text>
+          <text x="10" y="42" font-family="'Inter Tight', Inter, sans-serif" font-size="13" font-weight="600" fill="var(--accent)">1,800+ AMRs</text>
           <text x="10" y="60" font-family="'JetBrains Mono', monospace" font-size="8.5" fill="var(--muted)">Weeks → Few Minutes</text>
           <text x="10" y="74" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--muted)">Online 3D SLAM</text>
         </g>
@@ -612,7 +612,7 @@
       <div class="modal-bar"><span class="modal-meta">Botsync, 2026 · internal tool</span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
       <div class="modal-body">
         <h3 id="p-editor-t">Interactive multi-layer 2D/3D map editor</h3>
-        <img class="modal-gif" src="assets/img/work/map-editor.gif" alt="Animated preview (mock): Interactive multi-layer 2D/3D map editor" width="640" height="360" loading="lazy">
+        <img class="modal-gif" src="assets/img/work/map-editor.gif" alt="Schematic animation: Interactive multi-layer 2D/3D map editor" width="640" height="360" loading="lazy">
         <p>Editor for 2D and 3D map layers supporting map merging, coordinate alignment and manual map cleaning, built end to end to unblock and speed up site deployments.</p>
         <ul><li>Multi-map merging and coordinate transformation between maps.</li><li>Manual obstacle-layer editing on top of the 2D and 3D layers.</li></ul>
         <div class="tags"><span class="tag">Map merging</span><span class="tag">Point clouds</span><span class="tag">PCL</span><span class="tag">Transform pipeline</span></div>
@@ -623,7 +623,7 @@
       <div class="modal-bar"><span class="modal-meta">LionsBot, 2022 – 2025 · global scale</span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
       <div class="modal-body">
         <h3 id="p-fleet-t">Fleet autonomy stack with zero Z-drift</h3>
-        <img class="modal-gif" src="assets/img/work/fleet-autonomy.gif" alt="Animated preview (mock): Fleet autonomy stack with zero Z-drift" width="640" height="360" loading="lazy">
+        <img class="modal-gif" src="assets/img/work/fleet-autonomy.gif" alt="Schematic animation: Fleet autonomy stack with zero Z-drift" width="640" height="360" loading="lazy">
         <p>Production 3D LiDAR SLAM built on GTSAM iSAM2, eliminating vertical Z-drift in sparse environments. Deployed across <strong>1,800+ commercial cleaning robots worldwide</strong>.</p>
         <div class="tags"><span class="tag">LiDAR SLAM</span><span class="tag">GTSAM</span><span class="tag">Sensor fusion</span><span class="tag">Commercial AMRs</span></div>
         
@@ -633,7 +633,7 @@
       <div class="modal-bar"><span class="modal-meta">Ignitarium, 2019 – 2022 · embedded</span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
       <div class="modal-body">
         <h3 id="p-edge-t">Edge perception &amp; navigation on TI Jacinto J7</h3>
-        <img class="modal-gif" src="assets/img/work/edge-perception.gif" alt="Animated preview (mock): Edge perception and navigation on TI Jacinto J7" width="640" height="360" loading="lazy">
+        <img class="modal-gif" src="assets/img/work/edge-perception.gif" alt="Schematic animation: Edge perception and navigation on TI Jacinto J7" width="640" height="360" loading="lazy">
         <p>Complete autonomous navigation stack (SLAM, path planning, obstacle avoidance) on the TI Jacinto J7, with custom CNN architectures optimized for real-time 2D/3D detection on resource-constrained ARM and x86 edge targets.</p>
         <div class="tags"><span class="tag">TI Jacinto J7</span><span class="tag">ARM / NEON</span><span class="tag">CNN optimization</span><span class="tag">CUDA / TensorRT</span></div>
         
@@ -807,10 +807,10 @@
       <p class="eyebrow reveal">05 — Methods &amp; tools</p>
       <h2 class="display reveal">The <em>toolbox</em>.</h2>
         <dl class="skills">
-          <div><dt>Estimation &amp; mapping</dt><dd>Factor graphs, iSAM2, LiDAR odometry, scan matching (ICP / NDT), loop closure, IMU pre-integration, VIO, Kalman filtering</dd></div>
-          <div><dt>Programming &amp; ML</dt><dd>C++, Python, PyTorch, CUDA, TensorRT</dd></div>
-          <div><dt>Robotics software</dt><dd>ROS / ROS 2, OpenCV, PCL, GTSAM, g2o, Gazebo</dd></div>
-          <div><dt>Systems &amp; hardware</dt><dd>Git, Docker, CI/CD, Linux (Ubuntu), 2D/3D LiDARs, RGB-D cameras, IMUs, Nvidia Jetson (TX2 / Xavier), TI Jacinto</dd></div>
+          <div><dt>Estimation &amp; mapping</dt><dd><ul class="chips"><li>Factor graphs</li><li>iSAM2</li><li>LiDAR odometry</li><li>Scan matching (ICP / NDT)</li><li>Loop closure</li><li>IMU pre-integration</li><li>VIO</li><li>Kalman filtering</li></ul></dd></div>
+          <div><dt>Programming &amp; ML</dt><dd><ul class="chips"><li>C++</li><li>Python</li><li>PyTorch</li><li>CUDA</li><li>TensorRT</li></ul></dd></div>
+          <div><dt>Robotics software</dt><dd><ul class="chips"><li>ROS / ROS 2</li><li>OpenCV</li><li>PCL</li><li>GTSAM</li><li>g2o</li><li>Gazebo</li></ul></dd></div>
+          <div><dt>Systems &amp; hardware</dt><dd><ul class="chips"><li>Git</li><li>Docker</li><li>CI/CD</li><li>Linux (Ubuntu)</li><li>2D/3D LiDARs</li><li>RGB-D cameras</li><li>IMUs</li><li>Nvidia Jetson (TX2 / Xavier)</li><li>TI Jacinto</li></ul></dd></div>
         </dl>
     </div>
   </section>
@@ -821,14 +821,21 @@
       <p class="eyebrow reveal">06 — Contact</p>
       <h2 class="display display-xl reveal">Let’s <em>talk</em>.</h2>
       <p class="lead reveal">Always glad to talk about SLAM, estimation, fleet autonomy, robotics leadership or open-source work.</p>
+      <div class="contact-cta reveal">
+        <a class="cta cta-primary" href="mailto:arjunskumar22@gmail.com">arjunskumar22@gmail.com</a>
+        <button type="button" class="cta" onclick="copyEmailToClipboard('arjunskumar22@gmail.com', this)">Copy email</button>
+      </div>
       <ul class="link-row reveal">
-        <li><a href="mailto:arjunskumar22@gmail.com">arjunskumar22@gmail.com</a></li>
+        <li><a href="https://linkedin.com/in/arjunskumar" target="_blank" rel="external nofollow noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>
+        <li><a href="https://github.com/arjunskumar" target="_blank" rel="external nofollow noopener">GitHub <span aria-hidden="true">↗</span></a></li>
+        <li><a href="assets/pdf/Arjun_S_Kumar_Resume.pdf" target="_blank" rel="noopener">Résumé (PDF) <span aria-hidden="true">↗</span></a></li>
         <li><a href="tel:+6598605322">+65 9860 5322</a></li>
-        <li><a href="https://linkedin.com/in/arjunskumar" target="_blank" rel="external nofollow noopener">LinkedIn</a></li>
-        <li><a href="https://github.com/arjunskumar" target="_blank" rel="external nofollow noopener">GitHub</a></li>
-        <li><a href="assets/pdf/Arjun_S_Kumar_Resume.pdf" target="_blank" rel="noopener">Résumé</a></li>
       </ul>
-      <footer class="colophon">© 2026 Arjun S. Kumar</footer>
+      <footer class="colophon">
+        <span>© 2026 Arjun S. Kumar</span>
+        <span class="colophon-note">The backdrop is a real warehouse LiDAR scan, rendered live in your browser.</span>
+        <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+      </footer>
     </div>
   </section>
 

@@ -105,6 +105,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) { btn.addEventListener('focus', play); btn.addEventListener('blur', stop); }
   });
 
+  // Pointer spotlight on the glass cards (the CSS reads --mx / --my)
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.stat, .entry, .repo, .skills > div').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', Math.round(e.clientX - r.left) + 'px');
+        el.style.setProperty('--my', Math.round(e.clientY - r.top) + 'px');
+      });
+    });
+  }
+
   // Pop-up windows for Selected work (native <dialog>)
   const openDialog = (dlg) => {
     if (typeof dlg.showModal === 'function') dlg.showModal();
