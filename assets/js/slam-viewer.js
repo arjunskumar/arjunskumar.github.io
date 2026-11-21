@@ -1740,7 +1740,7 @@
     if (!isVisibleInViewport && !isGameMode) return;
 
     if (now) {
-      if (now - lastViewerFrame < 15.5) return; // 60 FPS cap (saves GPU on 120Hz/144Hz displays)
+      if (now - lastViewerFrame < 12.0) return; // Cap at ~80 FPS max on 120Hz/144Hz displays while keeping 60Hz smooth
       lastViewerFrame = now;
     }
 

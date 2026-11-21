@@ -60,7 +60,7 @@ main { position: relative; z-index: 2; }
 
 /* --- Navigation --- */
 .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav); display: flex; align-items: center; justify-content: space-between; padding: 0 max(1.25rem, 4vw);
-  background: rgba(7, 9, 13, .55); backdrop-filter: saturate(160%) blur(18px); -webkit-backdrop-filter: saturate(160%) blur(18px); border-bottom: 1px solid var(--rule); }
+  background: rgba(7, 9, 13, .82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
 .mark { font-family: var(--serif-display); font-weight: 600; font-size: 1.05rem; letter-spacing: -.02em; color: var(--text); }
 .mark:hover { text-decoration: none; opacity: .8; }
 .nav-links { display: flex; align-items: center; gap: clamp(.9rem, 2vw, 1.8rem); font-size: .86rem; }

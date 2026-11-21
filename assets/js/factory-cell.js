@@ -183,9 +183,23 @@
     }
 
     /* ---------------- truck cycle ---------------- */
-    const T = { state: 'arriving', x: TRUCK_DOCK_X + 55, speed: 0, unloaded: 0, feedTimer: 0, wait: 0 };
+    const T = { state: 'unloading', x: TRUCK_DOCK_X, speed: 0, unloaded: 0, feedTimer: 0.1, wait: 0 };
     truck.position.set(T.x, 0, TRUCK_Z);
     loadTruck();
+
+    // Pre-seed cartons on the conveyor belt so the robotic arm moves immediately on load
+    (function seedBelt() {
+      const seedPositions = [PICK_X, PICK_X + 0.85, PICK_X + 1.7];
+      seedPositions.forEach((bx) => {
+        const next = boxes.find((b) => b.state === 'truck');
+        if (!next) return;
+        truck.remove(next.g);
+        group.add(next.g);
+        next.state = 'belt';
+        next.g.position.set(bx, BELT_Y + BOX.y / 2, BELT_Z);
+        next.atStop = (bx <= PICK_X + 0.005);
+      });
+    })();
 
     /* ---------------- pallets ---------------- */
     function makePallet() {

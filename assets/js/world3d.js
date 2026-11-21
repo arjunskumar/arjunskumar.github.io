@@ -15,7 +15,7 @@
   const hero = document.getElementById('top');
   if (!canvas || !hero || typeof THREE === 'undefined') return;
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = false; // keep factory cell and AMR autonomous simulation active
   const small = window.innerWidth < 760;
   const BG = 0x07090d;
 
@@ -121,7 +121,7 @@
       console.warn('3D backdrop disabled (WebGL unavailable):', e);
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
+    renderer.setPixelRatio(1.0);
     scene = new THREE.Scene();
     scene.background = new THREE.Color(BG);
     scene.fog = new THREE.Fog(BG, 140, 420);
@@ -139,7 +139,7 @@
     const g = world.geometry;
     const srcP = g.attributes.position.array;
     const srcC = g.attributes.color ? g.attributes.color.array : null;
-    const targetPoints = small ? 90000 : 150000;
+    const targetPoints = small ? 35000 : 60000;
     const stride = Math.max(1, Math.round((srcP.length / 3) / targetPoints));
     const n = Math.floor(srcP.length / 3 / stride);
     const pos = new Float32Array(n * 3);
@@ -306,14 +306,9 @@
     const near = (p) => (p.x - x) * (p.x - x) + (p.z - z) * (p.z - z) < r2;
     return near(tug.root.position) || tug.trolleys.some((t) => near(t.position));
   }
-  const _tp = new THREE.Vector3();
-  function trainNear(x, z, r) {
-    if (!tug) return false;
-    const r2 = r * r, hit = (o, xs) => xs.some((lx) => { o.updateMatrixWorld(true); _tp.set(lx, 0, 0); o.localToWorld(_tp); return (_tp.x - x) * (_tp.x - x) + (_tp.z - z) * (_tp.z - z) < r2; });
-    return hit(tug.root, [-0.6, 0, 0.6]) || tug.trolleys.some((t) => hit(t, [0, -0.5, -1.0, -1.6]));
-  }
+  const trainNear = (x, z, r) => trainTooClose(x, z, r);
   const blockedF = () => (amr.position.z < 1.3 && trainNear(amr.position.x, amr.position.z, 2.6)) ||
-    (lifterBot && Math.hypot(lifterBot.root.position.x - amr.position.x, lifterBot.root.position.z - amr.position.z) < 2.8);
+    (lifterBot && L.busy && Math.hypot(lifterBot.root.position.x - amr.position.x, lifterBot.root.position.z - amr.position.z) < 2.5);
 
   /* What the forklift should do next. It works the single pallet slot of whichever mobile rack stands at the hand-off. */
   function nextFTask() {
@@ -583,12 +578,15 @@
     requestAnimationFrame(frame);
     if (!ready || document.hidden || paused) return;
 
-    if (now && now - lastFrameTime < 15.5) return; // 60 FPS cap (prevents overheating on 120Hz/144Hz displays)
-    lastFrameTime = now;
-    const dt = Math.min(0.05, (now - last) / 1000);
-    last = now;
+    if (now) {
+      if (now - lastFrameTime < 12.0) return; // Cap at ~80 FPS max on 120Hz/144Hz displays while keeping 60Hz smooth
+      lastFrameTime = now;
+    }
+    const currentTime = now || performance.now();
+    const dt = Math.min(0.05, Math.max(0.001, (currentTime - last) / 1000));
+    last = currentTime;
 
-    if (cell && !reduceMotion) { cell.update(dt); updateL(dt); }
+    if (cell) { cell.update(dt); updateL(dt); }
     placeAmr(dt);
     placeTugger(dt);
     /*DBG*/ if (window.__dbg && window.__dbg.locked) { const Lk = window.__dbg.locked; camera.position.set(Lk[0], Lk[1], Lk[2]); camera.lookAt(Lk[3], Lk[4], Lk[5]); renderer.render(scene, camera); return; }
