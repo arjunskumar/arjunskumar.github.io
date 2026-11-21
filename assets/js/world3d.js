@@ -16,6 +16,8 @@
   if (!canvas || !hero || typeof THREE === 'undefined') return;
 
   const reduceMotion = false; // keep factory cell and AMR autonomous simulation active
+  // prefers-reduced-motion: the robots keep working, but the camera's idle drift and orbits stop
+  const calmCamera = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const small = window.innerWidth < 760;
   const BG = 0x07090d;
 
@@ -68,10 +70,30 @@
 
   function readScroll() {
     const vh = window.innerHeight;
+    const mid = vh * 0.5;
+
+    // Layout reads first, style writes after, so this costs one layout per frame at most
+    const hr = hero.getBoundingClientRect();
+    const heroH = hero.offsetHeight;
+    // Active chapter = the one crossing the viewport's middle
+    let best = null, bestR = null, bestD = Infinity;
+    chapters.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const d = r.top <= mid && r.bottom >= mid ? 0 : Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
+      if (d < bestD) { bestD = d; best = el; bestR = r; }
+    });
+    const sr = stage ? stage.getBoundingClientRect() : null;
+
+    chapter = best;
+    if (bestR) chapterP = clamp((mid - bestR.top) / Math.max(1, bestR.height), 0, 1);
+    // Pause the backdrop while the interactive driving stage is mostly on screen
+    if (sr) {
+      const visible = Math.max(0, Math.min(sr.bottom, vh) - Math.max(sr.top, 0));
+      paused = visible > vh * 0.55 || document.body.classList.contains('game-open');
+    }
 
     // Hero progress + overlay fades
-    const hr = hero.getBoundingClientRect();
-    heroP = clamp(-hr.top / Math.max(1, hero.offsetHeight - vh), 0, 1);
+    heroP = clamp(-hr.top / Math.max(1, heroH - vh), 0, 1);
     document.body.classList.toggle('on-hero', hr.bottom > 80);
     if (heroCopy) {
       const o = 1 - smooth((heroP - 0.03) / 0.12);
@@ -87,31 +109,16 @@
       el.style.opacity = String(o);
       el.style.transform = 'translateY(' + ((1 - o) * 16).toFixed(1) + 'px)';
     });
-
-    // Active chapter = the one crossing the viewport's middle
-    let best = null, bestD = Infinity;
-    chapters.forEach((el) => {
-      const r = el.getBoundingClientRect();
-      const mid = vh * 0.5;
-      const d = r.top <= mid && r.bottom >= mid ? 0 : Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
-      if (d < bestD) { bestD = d; best = el; }
-    });
-    chapter = best;
-    if (best) {
-      const r = best.getBoundingClientRect();
-      chapterP = clamp((vh * 0.5 - r.top) / Math.max(1, r.height), 0, 1);
-    }
-
-    // Pause the backdrop while the interactive driving stage is mostly on screen
-    if (stage) {
-      const sr = stage.getBoundingClientRect();
-      const visible = Math.max(0, Math.min(sr.bottom, vh) - Math.max(sr.top, 0));
-      paused = visible > vh * 0.55 || document.body.classList.contains('game-open');
-    }
     canvas.style.opacity = paused ? '0.25' : '';
   }
-  window.addEventListener('scroll', readScroll, { passive: true });
-  window.addEventListener('resize', readScroll);
+  let scrollQueued = false;
+  const queueScroll = () => {
+    if (scrollQueued) return;
+    scrollQueued = true;
+    requestAnimationFrame(() => { scrollQueued = false; readScroll(); });
+  };
+  window.addEventListener('scroll', queueScroll, { passive: true });
+  window.addEventListener('resize', queueScroll);
 
   /* ---------------- scene ---------------- */
   function build(world) {
@@ -473,12 +480,12 @@
   // pose.p / pose.t are written in place. `time` is seconds; p is progress inside the chapter.
   const POSES = {
     intro(time) {
-      const a = 0.35 + (reduceMotion ? 0 : time * 0.03);
+      const a = 0.35 + (calmCamera ? 0 : time * 0.03);
       pose.p.set(Math.sin(a) * 62, 58, Math.cos(a) * 62 + 6);
       pose.t.set(0, 0, 3);
     },
     results(time, p) {
-      const th = heading + 2.2 + (reduceMotion ? 0 : time * 0.1) + p * 0.8;
+      const th = heading + 2.2 + (calmCamera ? 0 : time * 0.1) + p * 0.8;
       pose.p.set(amr.position.x + 6.5 * Math.cos(th), 3.0, amr.position.z + 6.5 * Math.sin(th));
       pose.t.set(amr.position.x, 1.0, amr.position.z);
     },
@@ -510,12 +517,12 @@
     factory(time, p) {
       // Overview of the cell, then in on the arm and pallet
       V[0].set(12 + p * 6, 10 - p * 4, 11 - p * 3); V[1].set(27, 0.6, -2.2);
-      V[2].set(25 + Math.sin(time * 0.15) * 2, 4.6, 3.2); V[3].set(24.2, 1.1, -2.8);
+      V[2].set(25 + (calmCamera ? 0 : Math.sin(time * 0.15) * 2), 4.6, 3.2); V[3].set(24.2, 1.1, -2.8);
       const k = smooth((p - 0.35) / 0.4);
       pose.p.lerpVectors(V[0], V[2], k); pose.t.lerpVectors(V[1], V[3], k);
     },
     skills(time) {
-      const th = heading - 0.7 - (reduceMotion ? 0 : time * 0.07);
+      const th = heading - 0.7 - (calmCamera ? 0 : time * 0.07);
       pose.p.set(amr.position.x + 3.8 * Math.cos(th), 1.5, amr.position.z + 3.8 * Math.sin(th));
       pose.t.set(amr.position.x, 1.0, amr.position.z);
     },
@@ -573,14 +580,18 @@
   }
 
   /* ---------------- loop ---------------- */
+  // Frame cap: render at most ~80 fps on 120/144 Hz panels. The remainder carries over, so
+  // 60/90/100 Hz panels are not halved to 30/45/50 fps by a fixed per-frame threshold.
+  const FRAME_MS = 1000 / 80;
   let lastFrameTime = 0;
   function frame(now) {
     requestAnimationFrame(frame);
     if (!ready || document.hidden || paused) return;
 
     if (now) {
-      if (now - lastFrameTime < 12.0) return; // Cap at ~80 FPS max on 120Hz/144Hz displays while keeping 60Hz smooth
-      lastFrameTime = now;
+      const elapsed = now - lastFrameTime;
+      if (elapsed < FRAME_MS) return;
+      lastFrameTime = now - (elapsed % FRAME_MS);
     }
     const currentTime = now || performance.now();
     const dt = Math.min(0.05, Math.max(0.001, (currentTime - last) / 1000));

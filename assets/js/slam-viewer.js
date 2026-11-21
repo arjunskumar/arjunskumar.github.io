@@ -20,132 +20,128 @@
   let loopClosureArc = null;
   let stationsMeshGroup = null;
 
-  // Career Milestone Company Stations along the Warehouse Trajectory (All 7 Organizations)
+  // Career stations along the warehouse route, one per organization. Dates, roles and claims
+  // must match the Experience section of index.html (this data is public in the page source).
   const companyStations = [
     {
       id: 'botsync',
       name: 'BOTSYNC',
       shortName: 'BOTSYNC',
-      tenure: '2022 – PRESENT',
-      loc: 'Bangalore, India 🇮🇳',
-      role: 'Technical Lead - Robotics',
-      tech: ['Heavy AMRs', 'CB Forklifts', '3D LiDAR SLAM', 'iSAM2 / GTSAM', 'syncOS', 'C++20', 'ROS2'],
+      tenure: 'JAN 2026 – PRESENT',
+      loc: 'Bangalore, India',
+      role: 'Technical Lead, Robotics',
+      tech: ['AMR forklifts', '3D LiDAR SLAM', 'GTSAM / iSAM2', 'Map editor', 'C++20', 'ROS 2'],
       color: 0x7fb800,
       hexStr: '#7FB800',
       x: -17 * K,
       z: -1.0 * K,
       bullets: [
-        'Leads AMR autonomy and mapping stack end-to-end for heavy industrial counterbalance forklifts.',
-        'Replaced manual offline rosbags with real-time online 3D SLAM, slashing site deployment time from weeks to a few minutes.',
-        'Architected comprehensive 2D/3D Map Editor tool supporting multi-map alignment and dynamic obstacle layers.'
+        'Leads the AMR engineering team and the mapping and localization stack.',
+        'Replaced offline rosbag mapping with a real-time online 3D SLAM pipeline, cutting site deployment from weeks to a few minutes.',
+        'Built a 2D/3D map editor with multi-map merging, coordinate transformation and obstacle-layer editing.'
       ]
     },
     {
       id: 'lionsbot',
       name: 'LIONSBOT INTERNATIONAL',
       shortName: 'LIONSBOT',
-      tenure: '2021 – 2022',
-      loc: 'Singapore 🇸🇬',
-      role: 'Senior Engineer – Autonomy (1,800+ AMR Fleet)',
-      tech: ['Commercial Cleaning Robots', '3D LiDAR SLAM', 'Fleet Deployments', 'Sensor Calibration', 'ROS'],
+      tenure: 'FEB 2022 – JUL 2025',
+      loc: 'Singapore',
+      role: 'Senior Engineer, Autonomy',
+      tech: ['3D LiDAR SLAM', 'GTSAM / iSAM2', 'Sensor fusion', 'Commercial cleaning robots'],
       color: 0x10b981,
       hexStr: '#10B981',
       x: -6 * K,
       z: -1.0 * K,
       bullets: [
-        'Engineered 3D LiDAR SLAM and multi-sensor localization for commercial autonomous cleaning robots deployed worldwide.',
-        'Supported enterprise fleet operations of 1,800+ AMRs operating in 30+ countries across airport, hospital, and retail facilities.',
-        'Solved localization degradation in glass corridors and high-dynamic pedestrian environments.'
+        'Built a production 3D LiDAR SLAM system with GTSAM iSAM2 optimization.',
+        'Eliminated vertical Z-drift in sparse environments.',
+        'Deployed across 1,800+ commercial cleaning robots worldwide.'
       ]
     },
     {
       id: 'ingeniarius',
       name: 'INGENIARIUS LDA',
       shortName: 'INGENIARIUS',
-      tenure: '2015',
-      loc: 'Coimbra, Portugal 🇵🇹',
-      role: 'Mobile Robotics Intern (Swarm Robotics)',
-      tech: ['Swarm Robotics', 'Multi-Agent Localization', 'ROS', 'Distributed Systems'],
+      tenure: 'JUN – OCT 2016',
+      loc: 'Coimbra, Portugal',
+      role: 'Mobile Robotics Intern',
+      tech: ['Swarm robotics', 'ROS', 'Gazebo', 'Particle swarm optimization'],
       color: 0xec4899,
       hexStr: '#EC4899',
       x: 6 * K,
       z: -1.0 * K,
       bullets: [
-        'Researched decentralized multi-robot coordination and swarm robotics localization.',
-        'Implemented distributed inter-robot communication protocols in ROS for cooperative fleet tasks.',
-        'Collaborated on European research projects bench-testing autonomous multi-agent algorithms.'
+        'Developed and validated swarm exploration algorithms in ROS and Gazebo.',
+        'Extended Darwinian Particle Swarm Optimization for 3× faster search-and-rescue area coverage than baseline PSO.'
       ]
     },
     {
       id: 'ntu',
-      name: 'NTU SINGAPORE',
+      name: 'NANYANG TECHNOLOGICAL UNIVERSITY',
       shortName: 'NTU SINGAPORE',
-      tenure: '2019 – 2021',
-      loc: 'Singapore 🇸🇬',
-      role: 'Research Associate – Robotics & VIO',
-      tech: ['Autonomous Vehicles', '3D LiDAR Odometry', 'VIO', 'Sensor Fusion', 'Kalman Filtering'],
+      tenure: 'AUG 2018 – APR 2019',
+      loc: 'Singapore',
+      role: 'Research Associate, Robotics',
+      tech: ['Micro aerial vehicles', 'VINS-Mono', 'ROVIO', 'Jetson TX2', 'Pixhawk'],
       color: 0x06b6d4,
       hexStr: '#06B6D4',
       x: 17 * K,
       z: -1.0 * K,
       bullets: [
-        'Researched tightly-coupled Visual-Inertial Odometry (VIO) and LiDAR-inertial state estimation on electric AV platforms.',
-        'Developed real-time sensor fusion and extrinsic spatiotemporal calibration routines.',
-        'Published experimental robotics benchmarks in prestigious peer-reviewed conferences.'
+        'Designed and built a micro aerial vehicle with stereo cameras and a Pixhawk flight controller.',
+        'Benchmarked VINS-Mono and ROVIO visual-inertial odometry on an onboard Jetson TX2 for GPS-denied flight.'
       ]
     },
     {
       id: 'ignitarium',
       name: 'IGNITARIUM TECHNOLOGIES',
       shortName: 'IGNITARIUM',
-      tenure: '2018 – 2019',
-      loc: 'Bangalore / Kochi, India 🇮🇳',
-      role: 'Senior Engineer – ML & Edge Robotics',
-      tech: ['Edge AI', 'NVIDIA Jetson', 'TensorRT', 'Embedded ROS', 'Computer Vision', 'CUDA'],
+      tenure: 'APR 2019 – JAN 2022',
+      loc: 'Kerala, India',
+      role: 'Senior Engineer, Machine Learning & Robotics',
+      tech: ['TI Jacinto J7', 'SLAM', 'Path planning', 'CNN optimization', 'ARM / x86'],
       color: 0x8b5cf6,
       hexStr: '#8B5CF6',
       x: 12 * K,
       z: 4.8 * K,
       bullets: [
-        'Designed real-time deep learning perception pipelines running at low latency on NVIDIA Jetson edge accelerators.',
-        'Engineered TensorRT-optimized inference for 3D obstacle detection and robotic arm guidance.',
-        'Bridged embedded computer vision outputs with ROS control loops for industrial clients.'
+        'Built an autonomous navigation stack on the TI Jacinto J7: SLAM, path planning and real-time obstacle avoidance.',
+        'Optimized custom CNNs for real-time 2D/3D object detection on ARM and x86 edge targets.'
       ]
     },
     {
       id: 'addverb',
       name: 'ADDVERB TECHNOLOGIES',
       shortName: 'ADDVERB',
-      tenure: '2016 – 2018',
-      loc: 'Noida / Pune, India 🇮🇳',
-      role: 'Robotics Engineer – 3D Perception & Manipulation',
-      tech: ['Warehouse Automation', 'AGVs', 'Mobile Manipulators', 'Point Clouds / PCL', 'Pallet Detection'],
+      tenure: 'JAN – JUL 2018',
+      loc: 'Noida, India',
+      role: 'Robotics Engineer',
+      tech: ['RGB-D perception', 'Bin picking', 'ROS', 'PCL', 'ABB / UR arms'],
       color: 0x3b82f6,
       hexStr: '#3B82F6',
       x: 0 * K,
       z: 4.8 * K,
       bullets: [
-        'Developed 3D point cloud perception algorithms for automated pallet localization and robotic bin picking.',
-        'Programmed industrial AGVs, shuttle systems, and mobile manipulators in high-throughput distribution centers.',
-        'Integrated custom safety field systems and optical docking algorithms for warehouse operations.'
+        'Built an RGB-D bin-picking solution reaching an 80% pick success rate with ROS and PCL.',
+        'Integrated it with ABB and Universal Robots manipulators.'
       ]
     },
     {
       id: 'ey',
       name: 'ERNST & YOUNG (EY)',
-      shortName: 'ERNST & YOUNG',
-      tenure: '2016',
-      loc: 'Europe / India 🌐',
-      role: 'Robotics Consultant & Master Thesis',
-      tech: ['Robotics Advisory', 'Automation Strategy', 'RPA', 'Industrial ROI', 'Process Optimization'],
+      shortName: 'EY',
+      tenure: 'JAN – DEC 2017',
+      loc: 'Kerala, India',
+      role: 'Robotics Consultant & Master’s Thesis',
+      tech: ['Microsoft HoloLens', 'RGB-D sensors', 'CNTK', 'Crack detection'],
       color: 0xf59e0b,
       hexStr: '#F59E0B',
       x: -12 * K,
       z: 4.8 * K,
       bullets: [
-        'Completed Master thesis on evaluating robotic technologies and economic feasibility across modern industries.',
-        'Advised global manufacturing and supply chain enterprises on robotic automation roadmaps and ROI modeling.',
-        'Synthesized technical benchmark assessments for next-gen warehouse mobile robotics.'
+        'Delivered industrial proof-of-concept perception solutions with Microsoft HoloLens, RGB-D sensors and CNTK.',
+        'Thesis research on neural-network surface-crack detection reached 89% accuracy.'
       ]
     }
   ];
@@ -275,25 +271,24 @@
     // 6. Build Counterbalance (CB) Forklift AMR (Tricycle Kinematics)
     buildCBForkliftAMR();
 
-    // 7. Build Factor Graph Trajectory & Keyframe Nodes
-    buildFactorGraphTrajectory();
-
-    // 7.5. Build 3D Career Milestone Company Stations
-    buildCompanyStations();
-
-    // 7.6. Build 3D Organization Cargo Pallets & Delivery Bay
-    buildOrganizationPallets();
-    buildDeliveryBay();
+    // 7. Route, career stations, pallets and delivery bay exist only for the interactive stage.
+    //    The headless backdrop needs just the AMR model, the cloud and the station data.
+    if (!headless) {
+      buildFactorGraphTrajectory();
+      buildCompanyStations();
+      buildOrganizationPallets();
+      buildDeliveryBay();
+    }
 
     // 8. Point cloud: full scan for the interactive stage, a precomputed ~1 MB cloud for the backdrop
     if (headless) loadHeroCloud();
     else loadWarehousePCD();
 
-    // 9. UI Controls & Mission Bindings
+    if (headless) return;
+
+    // 9. UI Controls & Mission Bindings (stage only: no global key listeners on the landing page)
     setupViewerControls();
     setupMissionControls();
-
-    if (headless) return;
 
     // 10. Viewport Visibility Tracking
     if ('IntersectionObserver' in window) {
@@ -1733,6 +1728,7 @@
   }
 
   /* --- Authentic Forklift Tricycle Autonomy & Kinematics Loop --- */
+  const VIEWER_FRAME_MS = 1000 / 80;   // ~80 fps cap; the remainder carries over so 90/100 Hz panels are not halved
   let lastViewerFrame = 0;
   function animate(now) {
     requestAnimationFrame(animate);
@@ -1740,8 +1736,9 @@
     if (!isVisibleInViewport && !isGameMode) return;
 
     if (now) {
-      if (now - lastViewerFrame < 12.0) return; // Cap at ~80 FPS max on 120Hz/144Hz displays while keeping 60Hz smooth
-      lastViewerFrame = now;
+      const elapsed = now - lastViewerFrame;
+      if (elapsed < VIEWER_FRAME_MS) return;
+      lastViewerFrame = now - (elapsed % VIEWER_FRAME_MS);
     }
 
     if (isGameMode && forkliftGroup) {

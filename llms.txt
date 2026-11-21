@@ -2,11 +2,11 @@
 
 > Technical Lead, Robotics at Botsync (Bangalore, India), since October 2026. 8+ years building 3D LiDAR SLAM, factor-graph state estimation and perception systems. His autonomy stacks run on 1,800+ commercial robots worldwide.
 
-Canonical page: https://arjunskumar.github.io/portfolio/
+Canonical page: https://arjunskumar.github.io/
 Contact: arjunskumar22@gmail.com
 LinkedIn: https://linkedin.com/in/arjunskumar
 GitHub: https://github.com/arjunskumar
-Résumé (PDF): https://arjunskumar.github.io/portfolio/assets/pdf/Arjun_S_Kumar_Resume.pdf
+Résumé (PDF): https://arjunskumar.github.io/assets/pdf/Arjun_S_Kumar_Resume.pdf
 
 ## Headline results
 - 1,800+ robots running his autonomy stack (production 3D LiDAR SLAM on GTSAM iSAM2, commercial cleaning-robot fleet at LionsBot).

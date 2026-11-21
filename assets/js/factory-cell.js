@@ -202,11 +202,14 @@
     })();
 
     /* ---------------- pallets ---------------- */
+    // Pallets are created and shipped forever, so they share geometry (removing a mesh from the
+    // scene does not free its GPU buffers; per-pallet geometry would grow without bound).
+    const PAL_GEO = { deck: boxGeo(PAL.x, 0.03, PAL.z), side: boxGeo(PAL.x, 0.09, 0.06), mid: boxGeo(PAL.x, 0.09, 0.07) };
     function makePallet() {
       const g = new THREE.Group();
       const deck = new THREE.Group();
-      mesh(boxGeo(PAL.x, 0.03, PAL.z), mat.pallet, 0, PAL.h - 0.015, 0, deck);
-      [[-0.36, 0.06], [0, 0.07], [0.36, 0.06]].forEach(([z, w]) => mesh(boxGeo(PAL.x, 0.09, w), mat.pallet, 0, 0.05, z, deck));   // stringers run along the fork direction
+      mesh(PAL_GEO.deck, mat.pallet, 0, PAL.h - 0.015, 0, deck);
+      [[-0.36, PAL_GEO.side], [0, PAL_GEO.mid], [0.36, PAL_GEO.side]].forEach(([z, geo]) => mesh(geo, mat.pallet, 0, 0.05, z, deck));   // stringers run along the fork direction
       g.add(deck);
       group.add(g);
       return g;
